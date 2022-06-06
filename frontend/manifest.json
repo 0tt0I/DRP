@@ -1,0 +1,23 @@
+{
+    "name": "DRP app TODO",
+    "short_name": "DRP TODO",
+    "icons": [
+        {
+            "src": "/public/coffee-icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+
+        {
+            "src": "/public/coffee-icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+
+    "theme_color": "#FFFFFF",
+    "background_color": "#FFFFFF",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait"
+}
