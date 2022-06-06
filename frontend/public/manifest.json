@@ -3,15 +3,17 @@
     "short_name": "DRP TODO",
     "icons": [
         {
-            "src": "/public/coffee-icon-192.png",
+            "src": "coffee-icon-192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+	    "purpose": "any maskable"
         },
 
         {
-            "src": "/public/coffee-icon.png",
+            "src": "coffee-icon.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+	    "purpose": "any maskable"
         }
     ],
 
