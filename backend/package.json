@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -p .",
     "start": "node ./dist",
-    "test": "echo test"
+    "test": "jest"
   },
   "devDependencies": {
     "jest": "^28.1.0"
