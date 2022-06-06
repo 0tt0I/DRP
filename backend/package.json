@@ -8,5 +8,8 @@
     "build": "tsc -p .",
     "start": "node ./dist",
     "test": "echo test"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0"
   }
 }
