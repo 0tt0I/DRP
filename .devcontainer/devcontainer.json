@@ -16,7 +16,7 @@
 	"extensions": [],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [3000],
 
 
 	// Replace when using a ptrace-based debugger like C++, Go, and Rust
@@ -25,5 +25,5 @@
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "cd backend && npm ci"
+	"postCreateCommand": "cd api && npm ci && cd ../app && npm ci"
 }
