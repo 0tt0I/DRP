@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16",
     "typescript": "^4.7.3"
   }
 }
