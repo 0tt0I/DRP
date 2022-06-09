@@ -1,6 +1,10 @@
 import Head from "next/head"
+import { useState } from "react";
 
 function Login() {
+
+    const [login, setLogin] = useState(false);
+
     return (
         <div>
             <Head>
@@ -23,7 +27,7 @@ function Login() {
                 <button> Submit </button>
 
                 <div>
-                    <button> Sign Up Here </button>
+                    <button type="submit"> Sign Up Here </button>
                 </div>
             </form>
         </div>
