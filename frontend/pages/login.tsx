@@ -63,7 +63,7 @@ function Login() {
                 <button onClick={() => setLogin(true)}> Submit </button>
 
                 <div>
-                    <button type="submit"> Sign Up Here </button>
+                    <button onClick={() => setLogin(false)} type="submit"> Sign Up Here </button>
                 </div>
             </form>
         </div>
