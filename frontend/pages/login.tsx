@@ -1,6 +1,7 @@
 import Head from "next/head"
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import useAuth from "../hooks/useAuth";
 
 // typescript interface for form input
 interface Inputs {
@@ -13,6 +14,8 @@ function Login() {
     //react state to check whether user clicked login
     const [login, setLogin] = useState(false);
 
+    const {signIn, signUp} = useAuth()
+
     //form hooks
     const {
         register,
@@ -22,11 +25,11 @@ function Login() {
       } = useForm<Inputs>()
     
     //authenticate if user signed in
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const onSubmit: SubmitHandler<Inputs> = async ({email, password}) => {
         if (login) {
-            // await signIn(email, password)
+            await signIn(email, password)
         } else {
-            // await signUp(email, password)
+            await signUp(email, password)
         }
     }
 
