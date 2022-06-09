@@ -45,6 +45,7 @@ export const AuthProvider = ({children}: ProviderProps) => {
 
     const [loading, setLoading] = useState(false)
     const [user, setUser] = useState<User | null>(null)
+    const [error, setError] = useState(null)
     const router = useRouter()
 
     const signUp = async (email: string, password: string) => {
@@ -85,6 +86,16 @@ export const AuthProvider = ({children}: ProviderProps) => {
         .finally(() => setLoading(false)) //set loading to false
     }
 
-    // return AuthProvider component
-    return null
+    //memoized value for user's session, don't recompute if it's the same user
+    const memoizedVal = useMemo(() => ({
+        user, signUp, signIn, loading, logout, error
+    }), [user, loading])
+
+    // return AuthContext component
+    return <AuthContext.Provider value={memoizedVal}> {children} </AuthContext.Provider>
+}
+
+
+export default function useAuth() {
+    return useContext(AuthContext)
 }
