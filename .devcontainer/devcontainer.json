@@ -13,7 +13,11 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	// Note that some extensions may not work in Alpine Linux. See https://aka.ms/vscode-remote/linux.
-	"extensions": [],
+	"extensions": [
+		"dbaeumer.vscode-eslint",
+		"eg2.vscode-npm-script",
+		"christian-kohler.npm-intellisense"
+	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [3000, 3001],
