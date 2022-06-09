@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "ts-node --project tsconfig.server.json server/server.ts",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
     "nlint": "next lint",
     "lint": "eslint . --ext .ts"
