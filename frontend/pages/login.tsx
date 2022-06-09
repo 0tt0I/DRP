@@ -10,7 +10,7 @@ interface Inputs {
 
 function Login() {
 
-    //react state to check whether signing up or not
+    //react state to check whether user clicked login
     const [login, setLogin] = useState(false);
 
     //form hooks
@@ -21,7 +21,14 @@ function Login() {
         formState: { errors },
       } = useForm<Inputs>()
     
-    const onSubmit: SubmitHandler<Inputs> = async (data) => { console.log(data) }
+    //authenticate if user signed in
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+        if (login) {
+            // await signIn(email, password)
+        } else {
+            // await signUp(email, password)
+        }
+    }
 
     //HTML elements of the page
     //handleSubmit validates input, register gets data
@@ -50,7 +57,7 @@ function Login() {
                     </label>
                 </div>
 
-                <button> Submit </button>
+                <button onClick={() => setLogin(true)}> Submit </button>
 
                 <div>
                     <button type="submit"> Sign Up Here </button>
