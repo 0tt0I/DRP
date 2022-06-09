@@ -43,10 +43,34 @@ interface ProviderProps {
 
 export const AuthProvider = ({children}: ProviderProps) => {
 
+    //states used throughout the hooks
     const [loading, setLoading] = useState(false)
     const [user, setUser] = useState<User | null>(null)
     const [error, setError] = useState(null)
+    const [initialLoading, setInitialLoading] = useState(true) //used to block UI
     const router = useRouter()
+
+
+    //hook to persist login state
+    useEffect(
+        () =>
+          onAuthStateChanged(auth, (user) => {
+            if (user) {
+              // Logged in, persist state
+              setUser(user)
+              setLoading(false)
+            } else {
+              // Not logged in, route to login page
+              setUser(null)
+              setLoading(true)
+              router.push('/login')
+            }
+    
+            setInitialLoading(false) //block UI
+          }),
+        [auth]
+      )
+
 
     const signUp = async (email: string, password: string) => {
         setLoading(true) //user is signing up
@@ -92,7 +116,11 @@ export const AuthProvider = ({children}: ProviderProps) => {
     }), [user, loading])
 
     // return AuthContext component
-    return <AuthContext.Provider value={memoizedVal}> {children} </AuthContext.Provider>
+    return (
+    <AuthContext.Provider value={memoizedVal}> 
+        {!initialLoading && children} 
+    </AuthContext.Provider>
+    )
 }
 
 
