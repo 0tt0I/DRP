@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 
 // TODO: Replace with environment config
-const port = 3000
+const port = 3080
 
 const app = express()
 app.use(cors())
