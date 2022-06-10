@@ -1,9 +1,16 @@
 import '../styles/styles.css'
-import React from 'react'
-import type { AppProps } from 'next/app'
+import { AuthProvider } from '../hooks/useAuth'
 
-function MyApp ({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+function MyApp({ Component, pageProps }) {
+
+  //wrap entire application in authentication
+  
+  return ( 
+  <AuthProvider>
+    <Component {...pageProps} />
+  </AuthProvider>
+  )
+  
 }
 
-module.exports = MyApp
+export default MyApp

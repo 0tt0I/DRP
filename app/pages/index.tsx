@@ -1,20 +1,20 @@
-import type { NextPage } from 'next'
-import React, { useEffect, useState } from 'react'
-import { getApi } from '../services/templateService'
+import useAuth from "../hooks/useAuth"
 
-const Home: NextPage = () => {
-  const [name, setName] = useState('')
+export default function Home() {
 
-  useEffect(() => {
-    const f = async () => { setName((await getApi()).name) }
-    f()
-  }, [])
+  const {logout, loading} = useAuth()
+
+  if (loading) {
+    return null
+  }
 
   return (
-    <h1>
-      Welcome {name}, to <a href="https://nextjs.org">Next.js!</a>
-    </h1>
+    <div>
+      <h1 className="text-3xl font-bold underline">
+        Hello DRP!
+      </h1>
+      <button onClick={logout}>Logout</button>
+    </div>
+    
   )
 }
-
-export default Home
