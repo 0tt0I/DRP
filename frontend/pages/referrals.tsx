@@ -41,6 +41,10 @@ export default function Referrals() {
       <h1 className="text-3xl font-bold underline">
         Referrals
       </h1>
+
+      <input placeholder="Place: " />
+      <input placeholder="Referral: " />
+      <button> Add Referral </button>
       <div>
         {referrals.map((ref) => {
           return (
