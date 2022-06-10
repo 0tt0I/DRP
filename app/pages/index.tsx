@@ -13,7 +13,7 @@ export default function Home () {
   return (
     <div>
       <h1 className="text-3xl font-bold underline">
-        Hello DRP!
+        Hello DRP 18!
       </h1>
       <div>
         <button onClick={logout}>Logout</button>
