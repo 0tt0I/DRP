@@ -75,7 +75,7 @@ export default function Referrals() {
         {referrals.map((ref) => {
           return (
             <div>
-              {" "}
+              <br></br>
               <h1>Place: {ref.place}</h1>
               <h1>Review: {ref.review}</h1>
               <h1>Date: {ref.date}</h1>
@@ -84,6 +84,7 @@ export default function Referrals() {
           )
         })}
       </div>
+      <br></br>
       <button onClick={() => router.push("/")}>Back To Home</button>
     </div>
     
