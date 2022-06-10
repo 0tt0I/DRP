@@ -1,7 +1,7 @@
-import { collection, getDocs } from '@firebase/firestore';
+import { addDoc, getDocs } from '@firebase/firestore';
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react';
-import { createCollection } from '../firebase';
+import { auth, createCollection } from '../firebase';
 
 //type for document - todo!() move into types folder?
 interface Referral {
@@ -20,6 +20,27 @@ export default function Referrals() {
 
   //get collections reference from firestore
   const collectionsRef = createCollection<Referral>("referrals");
+
+
+  //states for input fields
+  const [newPlace, setNewPlace] = useState("");
+  const [newReferral, setNewReferral] = useState("");
+
+
+
+  const createReferral = async () => {
+
+    //get current time and format correctly
+    const current = new Date();
+    const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+
+    //get user email (shouldn't be null as user already logged in)
+    const email = auth.currentUser?.email;
+
+    //add doc to firestore
+    await addDoc(collectionsRef, {place: newPlace, referral: newReferral, date: date, userEmail: email})
+
+  }
 
   //api call to firestore to run on page load
   useEffect(() => {
@@ -42,9 +63,14 @@ export default function Referrals() {
         Referrals
       </h1>
 
-      <input placeholder="Place: " />
-      <input placeholder="Referral: " />
-      <button> Add Referral </button>
+      <input
+        placeholder="Place: "
+        onChange={(event) => setNewPlace(event.target.value)}/>
+      <input 
+        placeholder="Referral: " 
+        onChange={(event) => setNewReferral(event.target.value)}/>
+      <button onClick={createReferral}> Add Referral </button>
+
       <div>
         {referrals.map((ref) => {
           return (
