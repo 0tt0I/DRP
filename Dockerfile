@@ -43,8 +43,10 @@ COPY ./app/pages /workspace/app/pages/
 COPY ./app/services /workspace/app/services/
 COPY ./app/public /workspace/app/public/
 COPY ./app/styles /workspace/app/styles/
+COPY ./app/hooks /workspace/app/hooks/
 COPY ./app/tsconfig.json /workspace/app/
 COPY ./app/.eslintrc.json /workspace/app/
+COPY ./app/firebase.ts /workspace/app/firebase.ts
 RUN npm run build
 
 # Transpile backend to javascript
@@ -65,6 +67,8 @@ FROM api_deps AS fullstack_local_deploy
 WORKDIR /workspace/api
 COPY --from=api_builder /workspace/api/dist/ /workspace/api/dist/
 COPY --from=app_builder /workspace/app/out/ /workspace/app/out
+COPY --from=app_deps /workspace/app/node_modules/ /workspace/app/node_modules/
+COPY --from=api_deps /workspace/api/node_modules/ /workspace/api/node_modules/
 EXPOSE 3080
 CMD ["npm", "run", "start"]
 
