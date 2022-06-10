@@ -1,9 +1,9 @@
-import { useRouter } from "next/router"
-import useAuth from "../hooks/useAuth"
+import React from 'react'
+import { useRouter } from 'next/router'
+import useAuth from '../hooks/useAuth'
 
-export default function Home() {
-
-  const {logout, loading} = useAuth()
+export default function Home () {
+  const { logout, loading } = useAuth()
   const router = useRouter()
 
   if (loading) {
@@ -19,9 +19,9 @@ export default function Home() {
         <button onClick={logout}>Logout</button>
       </div>
       <div>
-        <button onClick={() => router.push("/referrals")}>Referrals</button>
+        <button onClick={() => router.push('/referrals')}>Referrals</button>
       </div>
     </div>
-    
+
   )
 }
