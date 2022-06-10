@@ -1,7 +1,7 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.234.0/containers/alpine/.devcontainer/base.Dockerfile
 
 ARG VARIANT="3.15"
-FROM mcr.microsoft.com/vscode/devcontainers/base:0-alpine-${VARIANT} AS devcontainer
+FROM mcr.microsoft.com/vscode/devcontainers/base:0-alpine-${VARIANT} AS devcontainer_base
 RUN apk update \
     && apk add --no-cache nodejs npm
 
@@ -24,10 +24,10 @@ COPY ./app/package* /workspace/app/
 WORKDIR /workspace/app/
 RUN npm ci --omit=dev
 
-# Devcontainer has the same starting point
-# FROM devcontainer_base AS devcontainer
-# COPY --from=api_deps ./api/node_modules/ /workspace/api/node_modules
-# COPY --from=app_deps ./app/node_modules/ /workspace/app/node_modules
+# Devcontainer with the installed dependencies
+FROM devcontainer_base AS devcontainer
+COPY --from=api_deps /workspace/api/node_modules /workspace/api/node_modules/
+COPY --from=app_deps /workspace/app/node_modules /workspace/app/node_modules/
 
 # Development api dependencies
 FROM app_deps AS app_deps_all
