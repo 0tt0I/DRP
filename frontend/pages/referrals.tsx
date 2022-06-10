@@ -7,7 +7,7 @@ import { auth, createCollection } from '../firebase';
 interface Referral {
   date: string,
   place: string,
-  referral: string,
+  review: string,
   userEmail: string,
 }
 
@@ -24,7 +24,7 @@ export default function Referrals() {
 
   //states for input fields
   const [newPlace, setNewPlace] = useState("");
-  const [newReferral, setNewReferral] = useState("");
+  const [newReview, setNewReview] = useState("");
 
 
 
@@ -38,7 +38,7 @@ export default function Referrals() {
     const email = auth.currentUser?.email;
 
     //add doc to firestore
-    await addDoc(collectionsRef, {place: newPlace, referral: newReferral, date: date, userEmail: email})
+    await addDoc(collectionsRef, {place: newPlace, review: newReview, date: date, userEmail: email})
 
   }
 
@@ -67,8 +67,8 @@ export default function Referrals() {
         placeholder="Place: "
         onChange={(event) => setNewPlace(event.target.value)}/>
       <input 
-        placeholder="Referral: " 
-        onChange={(event) => setNewReferral(event.target.value)}/>
+        placeholder="Review: " 
+        onChange={(event) => setNewReview(event.target.value)}/>
       <button onClick={createReferral}> Add Referral </button>
 
       <div>
@@ -77,7 +77,7 @@ export default function Referrals() {
             <div>
               {" "}
               <h1>Place: {ref.place}</h1>
-              <h1>Referral: {ref.referral}</h1>
+              <h1>Review: {ref.review}</h1>
               <h1>Date: {ref.date}</h1>
               <h1>User Email: {ref.userEmail}</h1>
             </div>
