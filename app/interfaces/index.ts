@@ -13,7 +13,8 @@ export type ReferralInfo = {
 }
 
 export type User = {
-  id: number
-  name: string
+  id: number,
+  name: string,
+  avatarUrl: string | undefined,
   referrals: ReferralInfo[]
 }

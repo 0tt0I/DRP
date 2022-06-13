@@ -33,7 +33,7 @@ const NoRefs = (<div className='no-referrals'>
 </div>)
 
 export const ReferralListDisplay = ({ refs: refArr }: ReferralProps) => (
-  <div className={'w-80 h-64 bg-stone-500 grid grid-cols-1 ' + (refArr.length === 0 ? 'grid-rows-1' : 'grid-rows-3')}>
+  <div className={'referral-list-display ' + (refArr.length === 0 ? 'grid-rows-1' : 'grid-rows-3')}>
     {refArr.length === 0 ? NoRefs : refArr.slice(0, 3).map(ReferralDisplay)}
   </div>
 )

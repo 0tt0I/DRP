@@ -25,3 +25,7 @@
 .referral-display {
     @apply rounded-lg bg-slate-300 grid grid-rows-1 grid-cols-3 grid-flow-row-dense w-72 m-2 p-2 place-self-center
 }
+
+.referral-list-display {
+    @apply w-80 h-64 bg-stone-500 grid grid-cols-1
+}
