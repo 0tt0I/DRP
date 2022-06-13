@@ -11,7 +11,7 @@ type ListDetailProps = {
 const ListDetail = ({ item: user }: ListDetailProps) => (
   <div>
     <h1>Detail for {user.name}</h1>
-    <div className="w-80">
+    <div className='w-80'>
       <UserTitlebar user={user} />
       <ReferralListDisplay refs={user.referrals} />
     </div>
