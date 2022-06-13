@@ -2,8 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 .input {
     @apply w-full rounded px-5 py-3.5 focus:bg-[#354732];
+}
+
+.user-titlebar {
+    @apply bg-stone-800 grid grid-flow-col-dense grid-cols-1 grid-rows-2 w-80 h-32 p-4 rounded-tl-lg rounded-tr-lg
+}
+
+.user-titlebar > p {
+    @apply font-bold text-slate-100 place-self-center
+}
+
+.no-referrals {
+    @apply bg-slate-300 grid grid-rows-1 grid-cols-1 rounded-lg w-64 h-24 place-self-center text-rose-700 font-bold
+}
+
+.no-referrals > p {
+    @apply place-self-center text-center
+}
+
+.referral-display {
+    @apply rounded-lg bg-slate-300 grid grid-rows-1 grid-cols-3 grid-flow-row-dense w-72 m-2 p-2 place-self-center
+}
+
+.referral-list-display {
+    @apply w-80 h-64 bg-stone-500 grid grid-cols-1
 }
