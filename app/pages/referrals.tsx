@@ -1,19 +1,12 @@
-import { addDoc, getDocs, updateDoc } from '@firebase/firestore'
+import { addDoc, DocumentData, getDocs, QueryDocumentSnapshot, updateDoc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Camera from '../components/Camera'
 import { auth, createCollection, db, storage } from '../firebase'
 import { ref, getDownloadURL, uploadString } from "@firebase/storage"
-import { doc } from 'firebase/firestore'
-
-// type for document - todo!() move into types folder?
-interface Referral {
-  date: string,
-  place: string,
-  review: string,
-  userEmail: string,
-  image: string
-}
+import { collection, doc } from 'firebase/firestore'
+import { Referral, Businesses } from '../types/FirestoreCollections'
+import { Combobox } from '@headlessui/react'
 
 export default function Referrals () {
   const router = useRouter()
@@ -93,16 +86,53 @@ export default function Referrals () {
     getUsers()
   }, [])
 
-  // display each referral from state
+
+  //state for list of business names
+  const [businesses, setBusinesses] = useState<string[]>([])
+
+  //get all business docs
+  const query = getDocs(collection(db, "businesses")).then((snapshot) => {
+
+    const nameList: string[] = []
+
+    snapshot.forEach((doc) => {
+      console.log(doc.data().name)
+      nameList.push(doc.data().name)
+    });
+
+    setBusinesses(nameList)
+  });
+    
+  // states for dropdown menu
+  const [selectedBusiness, setSelectedBusiness] = useState(businesses[0])
+
+  //updating dropdown menu as user types
+  const filteredBusinesses = (
+    newPlace === ''
+      ? businesses
+      : (businesses).filter((business) => {
+          return business.toLowerCase().includes(newPlace.toLowerCase())
+        })
+  )
+
+  // display each referral from state, use combobox for dropdown menu
   return (
     <div>
       <h1 className="text-3xl font-bold underline">
         Referrals
       </h1>
 
-      <input
-        placeholder="Place: "
-        onChange={(event) => setNewPlace(event.target.value)}/>
+      <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
+      <Combobox.Input onChange={(event) => setNewPlace(event.target.value)} />
+      <Combobox.Options>
+        {filteredBusinesses.map((business) => (
+          <Combobox.Option key={business} value={business}>
+            {business}
+          </Combobox.Option>
+        ))}
+      </Combobox.Options>
+    </Combobox>
+
       <input
         placeholder="Review: "
         onChange={(event) => setNewReview(event.target.value)}/>
