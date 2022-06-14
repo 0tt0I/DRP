@@ -1,6 +1,7 @@
 import { addDoc, getDocs } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import Camera from '../components/Camera'
 import { auth, createCollection } from '../firebase'
 
 // type for document - todo!() move into types folder?
@@ -23,6 +24,10 @@ export default function Referrals () {
   // states for input fields
   const [newPlace, setNewPlace] = useState('')
   const [newReview, setNewReview] = useState('')
+
+
+  // imageRef state from Camera component
+  const [imageRef, setImageRef] = useState("");
 
   const createReferral = async () => {
     // get current time and format correctly
@@ -78,6 +83,8 @@ export default function Referrals () {
         })}
       </div>
       <br></br>
+      <Camera imageRef={setImageRef}/> 
+      <h1>{imageRef}</h1>
       <button onClick={() => router.push('/')}>Back To Home</button>
     </div>
 

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 
 
@@ -9,9 +9,13 @@ const videoConstraints = {
     facingMode: "user",
 };
 
+//interface for props to communicate imageRef back to parent
+interface PropsInterface {
+    imageRef: Dispatch<SetStateAction<string>>;
+}
 
 //react component for camera
-function Camera() {
+export default function Camera(props: PropsInterface) {
 
     //reference to webcam
     const cameraRef = useRef<Webcam>(null);
@@ -23,9 +27,15 @@ function Camera() {
 
         const currentRef = cameraRef.current;
 
+        //gets screenshot if valid
         if (currentRef) {
             const imageSrc = currentRef.getScreenshot();
             setImage(imageSrc);
+
+            //sends back imageRef if valid
+            if (imageSrc) {
+                props.imageRef(imageSrc);
+            }
         }
 
     }, [cameraRef])
@@ -51,5 +61,3 @@ function Camera() {
         </div>
     )
 }
-
-export default Camera;
