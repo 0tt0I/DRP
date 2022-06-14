@@ -55,6 +55,13 @@ export default function Camera(props: PropsInterface) {
             className="cameraCapture_button"
             onClick={capture}
             > TAKE PICTURE </button>
+            <button 
+            className="cameraClear_button"
+            onClick={() => {
+                props.imageRef("")
+                setImage(null)
+            }}
+            > CLEAR PICTURE </button>
             {image && (
                 <img src={image} />
             )}

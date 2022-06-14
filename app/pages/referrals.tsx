@@ -25,20 +25,34 @@ export default function Referrals () {
   const [newPlace, setNewPlace] = useState('')
   const [newReview, setNewReview] = useState('')
 
+  //state for input field error
+  const [inputValidation, setInputValidation] = useState('')
+
 
   // imageRef state from Camera component
-  const [imageRef, setImageRef] = useState("");
+  const [imageRef, setImageRef] = useState('');
 
   const createReferral = async () => {
-    // get current time and format correctly
-    const current = new Date()
-    const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`
 
-    // get user email (shouldn't be null as user already logged in)
-    const email = auth.currentUser?.email
+    if (newPlace === '' || newReview === '' || imageRef === '') {
 
-    // add doc to firestore
-    await addDoc(collectionsRef, { place: newPlace, review: newReview, date, userEmail: email })
+      //set error message to be displayed   
+      setInputValidation("Fill in all fields and take a picture!")
+   
+    } else {
+      // set input validation back to empty
+      setInputValidation("")
+      
+      // get current time and format correctly
+      const current = new Date()
+      const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`
+
+      // get user email (shouldn't be null as user already logged in)
+      const email = auth.currentUser?.email
+
+      // add doc to firestore
+      await addDoc(collectionsRef, { place: newPlace, review: newReview, date, userEmail: email })
+    }
   }
 
   // api call to firestore to run on page load
@@ -66,7 +80,10 @@ export default function Referrals () {
       <input
         placeholder="Review: "
         onChange={(event) => setNewReview(event.target.value)}/>
+      <Camera imageRef={setImageRef}/> 
+
       <button onClick={createReferral}> Add Referral </button>
+      <h1>{inputValidation}</h1>
 
       <div>
         {referrals.map((ref) => {
@@ -83,7 +100,7 @@ export default function Referrals () {
         })}
       </div>
       <br></br>
-      <Camera imageRef={setImageRef}/> 
+      
       <h1>{imageRef}</h1>
       <button onClick={() => router.push('/')}>Back To Home</button>
     </div>
