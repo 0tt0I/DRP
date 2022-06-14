@@ -6,7 +6,7 @@ import {
   signOut,
   User
 } from 'firebase/auth'
-import { addDoc, doc, setDoc } from 'firebase/firestore'
+import { addDoc, doc, getDoc, setDoc } from 'firebase/firestore'
 
 // re-routing for next
 import { useRouter } from 'next/router'
@@ -82,7 +82,6 @@ export const AuthProvider = ({ children }: ProviderProps) => {
         // create business document in relevant collection a re-route to right page
         if (isBusiness) {
 
-          const collectionsRef = createCollection<Businesses>("businesses")
           await setDoc(doc(db, "businesses", auth.currentUser!.uid), {
             name: "todo!() name"
           });
@@ -105,9 +104,20 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
     // create firebase entry, and push user to home screen using next router
     await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         setUser(userCredential.user)
-        router.push('/')
+
+        //getting document if exists from businesses collection
+        const docRef = doc(db, "businesses", auth.currentUser!.uid);
+        const docSnap = await getDoc(docRef);
+
+        //push to business landing page if valid
+        if (docSnap.exists()) {
+          router.push("/business-home")
+        } else {
+          router.push('/')
+        }
+        
         setLoading(false)
       })
       .catch((error) => alert(error.message)) // catch errors
