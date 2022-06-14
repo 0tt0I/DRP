@@ -1,7 +1,10 @@
-import { addDoc, getDocs } from '@firebase/firestore'
+import { addDoc, getDocs, updateDoc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { auth, createCollection } from '../firebase'
+import Camera from '../components/Camera'
+import { auth, createCollection, db, storage } from '../firebase'
+import { ref, getDownloadURL, uploadString } from "@firebase/storage"
+import { doc } from 'firebase/firestore'
 
 // type for document - todo!() move into types folder?
 interface Referral {
@@ -9,6 +12,7 @@ interface Referral {
   place: string,
   review: string,
   userEmail: string,
+  image: string
 }
 
 export default function Referrals () {
@@ -24,16 +28,57 @@ export default function Referrals () {
   const [newPlace, setNewPlace] = useState('')
   const [newReview, setNewReview] = useState('')
 
+  //state for input field error
+  const [inputValidation, setInputValidation] = useState('')
+
+
+  // imageRef state from Camera component
+  const [imageRef, setImageRef] = useState('');
+
   const createReferral = async () => {
-    // get current time and format correctly
-    const current = new Date()
-    const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`
 
-    // get user email (shouldn't be null as user already logged in)
-    const email = auth.currentUser?.email
+    if (newPlace === '' || newReview === '' || imageRef === '') {
 
-    // add doc to firestore
-    await addDoc(collectionsRef, { place: newPlace, review: newReview, date, userEmail: email })
+      //set error message to be displayed   
+      setInputValidation("Fill in all fields and take a picture!")
+   
+    } else {
+      // set input validation back to empty
+      setInputValidation("")
+
+      // get current time and format correctly
+      const current = new Date()
+      const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`
+
+      // get user email (shouldn't be null as user already logged in)
+      const userEmail = auth.currentUser!.email
+
+      //null check
+      if (userEmail) {
+        // add doc to firestore
+        const docRef = await addDoc(collectionsRef, 
+          { place: newPlace, review: newReview, date, userEmail, image: ""})
+
+        // get the image storage bucket from firebase storage
+        const imageStorage = ref(storage, `referrals/${docRef.id}/image`)
+
+
+        //upload image, then update firestore document with image's download URL
+        await uploadString(imageStorage, imageRef, 'data_url').then(
+          async snapshot => {
+            const downloadURL = await getDownloadURL(imageStorage);
+            
+            await updateDoc(doc(db, "referrals", docRef.id), {
+              image: downloadURL
+            })
+          }
+        )
+
+        //set taken image to empty again
+        setImageRef("")
+      }
+      
+    }
   }
 
   // api call to firestore to run on page load
@@ -61,7 +106,10 @@ export default function Referrals () {
       <input
         placeholder="Review: "
         onChange={(event) => setNewReview(event.target.value)}/>
+      <Camera imageRef={setImageRef}/> 
+
       <button onClick={createReferral}> Add Referral </button>
+      <h1>{inputValidation}</h1>
 
       <div>
         {referrals.map((ref) => {
@@ -73,11 +121,14 @@ export default function Referrals () {
               <h1>Review: {ref.review}</h1>
               <h1>Date: {ref.date}</h1>
               <h1>User Email: {ref.userEmail}</h1>
+              <img src={ref.image}/>
             </div>
           )
         })}
       </div>
       <br></br>
+      
+      <h1>{imageRef}</h1>
       <button onClick={() => router.push('/')}>Back To Home</button>
     </div>
 

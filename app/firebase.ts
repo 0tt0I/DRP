@@ -1,15 +1,16 @@
 import { initializeApp, getApp, getApps } from "firebase/app";
 import { collection, CollectionReference, DocumentData, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAL653H2KXSc6a4pmERyXJ-9dNHxELjy3M",
-  authDomain: "mira-drp-7c877.firebaseapp.com",
-  projectId: "mira-drp-7c877",
-  storageBucket: "mira-drp-7c877.appspot.com",
-  messagingSenderId: "348382514122",
-  appId: "1:348382514122:web:5feb84099d5aa33b811d33",
-  measurementId: "G-0CVVGJBR78" 
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 }
 
 // Initialize Firebase
@@ -18,10 +19,11 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
 const db = getFirestore()
 const auth = getAuth()
+const storage = getStorage()
 
 export const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(db, collectionName) as CollectionReference<T>
 }
 
 export default app
-export { db, auth }
+export { db, auth, storage }
