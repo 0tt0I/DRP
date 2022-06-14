@@ -7,7 +7,7 @@
     "build": "next build && next export",
     "start": "next start",
     "nlint": "next lint",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint --ext=.ts,.tsx ."
   },
   "dependencies": {
     "@headlessui/react": "^1.6.4",
