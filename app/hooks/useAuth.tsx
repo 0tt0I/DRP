@@ -6,6 +6,7 @@ import {
   signOut,
   User
 } from 'firebase/auth'
+import { addDoc, doc, setDoc } from 'firebase/firestore'
 
 // re-routing for next
 import { useRouter } from 'next/router'
@@ -13,12 +14,13 @@ import { useRouter } from 'next/router'
 // react state hooks
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import { auth } from '../firebase'
+import { auth, createCollection, db } from '../firebase'
+import { Businesses } from '../types/FirestoreCollections'
 
 // AuthContext type, promises signify the completion of an async function
 interface IAuth {
   user: User | null
-  signUp: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string, isBusiness: boolean) => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   error: string | null
@@ -68,15 +70,31 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     [auth]
   )
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, isBusiness: boolean) => {
     setLoading(true) // user is signing up
 
     // create firebase entry, and push user to home screen using next router
     await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
+
         setUser(userCredential.user)
-        router.push('/')
+
+        // create business document in relevant collection a re-route to right page
+        if (isBusiness) {
+
+          const collectionsRef = createCollection<Businesses>("businesses")
+          await setDoc(doc(db, "businesses", auth.currentUser!.uid), {
+            name: "todo!() name"
+          });
+
+          router.push("business-home")
+
+        } else {
+          router.push('/')
+        }        
+        
         setLoading(false)
+
       })
       .catch((error) => alert(error.message)) // catch errors
       .finally(() => setLoading(false)) // always set loading back to false
