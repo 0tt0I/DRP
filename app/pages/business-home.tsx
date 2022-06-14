@@ -1,4 +1,6 @@
+import router from 'next/router'
 import React from 'react'
+import { isBusiness } from '../firebase'
 import useAuth from '../hooks/useAuth'
 
 export default function BusinessHome () {
@@ -8,6 +10,10 @@ export default function BusinessHome () {
   // blocks if loading
   if (loading) {
     return null
+  }
+
+  if (!isBusiness()) {
+    router.push('/')
   }
 
   return (
