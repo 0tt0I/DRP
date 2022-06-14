@@ -18,4 +18,8 @@ app.get('/', (_req, res) => {
   res.sendFile(pathJoin(__dirname, '../app/out/index.html'))
 })
 
+app.post('/api/business-qr-scan', (_req, res) => {
+  res.status(200).json({ discount: 'Placeholder'})
+} )
+
 app.listen(port, () => console.log(`Listening on port ${port}`))

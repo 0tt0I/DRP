@@ -1,6 +1,7 @@
 import RenderResult from 'next/dist/server/render-result';
 import React, { useState } from 'react';
 import { QrReader } from 'react-qr-reader';
+import { checkNewCustomer } from '../services/businessQrScan';
 
 export default function QRScanner () {
   const [data, setData] = useState("no result");
@@ -8,9 +9,10 @@ export default function QRScanner () {
   return (
     <>
       <QrReader
-        onResult={(result, error) => {
+        onResult={async (result, error) => {
           if (result) {
-            setData(result.getText());
+            setData(result.getText())
+            setData((await checkNewCustomer(data)).discount)
           }
 
           if (!!error) {
