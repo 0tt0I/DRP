@@ -38,6 +38,7 @@ FROM api_deps AS api_deps_all
 RUN npm i
 
 # Use next export to build de-hydrated html files
+
 FROM app_deps_all AS app_builder
 COPY ./app/pages /workspace/app/pages/
 COPY ./app/services /workspace/app/services/
