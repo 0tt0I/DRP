@@ -25,6 +25,7 @@ export const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(db, collectionName) as CollectionReference<T>
 }
 
+//pre: user has logged in
 export const isBusiness = () => {
   const docRef = doc(db, "businesses", auth.currentUser!.uid)
   const docSnap = getDoc(docRef).then((snap) => {
