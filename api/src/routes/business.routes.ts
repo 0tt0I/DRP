@@ -6,4 +6,4 @@ import {
 
 export const businessRouter = Router();
 
-businessRouter.get("/qr-scan", businessQRScanController);
+businessRouter.post("/qr-scan", businessQRScanController);

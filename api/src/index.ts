@@ -1,6 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import { join as pathJoin } from 'path'
+import {
+  json as bodyParserJson,
+  urlencoded as bodyParserUrlEncoded,
+} from "body-parser";
 
 import { router } from './routes'
 
@@ -10,6 +14,9 @@ const port = 3080
 const app = express()
 app.use(express.static(pathJoin(__dirname, '../../app/out')))
 app.use(cors())
+app.use(bodyParserJson());
+app.use(bodyParserUrlEncoded({ extended: true }));
+
 
 app.use('/api', router)
 

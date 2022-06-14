@@ -11,8 +11,7 @@ export default function QRScanner () {
       <QrReader
         onResult={async (result, error) => {
           if (result) {
-            setData(result.getText())
-            setData((await checkNewCustomer(data)).discount)
+            setData((await checkNewCustomer(result.getText())).discount)
           }
 
           if (!!error) {
