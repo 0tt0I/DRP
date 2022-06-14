@@ -13,6 +13,9 @@ function Login () {
   // react state to check whether user clicked login
   const [login, setLogin] = useState(false)
 
+  // react state for whether the sign up is for a business
+  const [isBusiness, setIsBusiness] = useState(false)
+
   const { signIn, signUp } = useAuth()
 
   // form hooks
@@ -30,7 +33,7 @@ function Login () {
     if (login) {
       await signIn(email, password)
     } else {
-      await signUp(email, password)
+      await signUp(email, password, isBusiness)
     }
   }
 
@@ -65,6 +68,13 @@ function Login () {
 
         <div>
           <button onClick={() => setLogin(false)} type="submit"> Sign Up Here </button>
+        </div>
+        <div>
+          <button onClick={() => {
+              setLogin(false)
+              setIsBusiness(true)
+            }
+          } type="submit"> Business Sign Up </button>
         </div>
       </form>
     </div>
