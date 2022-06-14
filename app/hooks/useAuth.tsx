@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
 // react state hooks
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import { auth, db } from '../firebase'
+import { auth, db , isBusiness} from '../firebase'
 
 // AuthContext type, promises signify the completion of an async function
 interface IAuth {
@@ -102,12 +102,9 @@ export const AuthProvider = ({ children }: ProviderProps) => {
       .then(async (userCredential) => {
         setUser(userCredential.user)
 
-        // getting document if exists from businesses collection
-        const docRef = doc(db, 'businesses', auth.currentUser!.uid)
-        const docSnap = await getDoc(docRef)
-
         // push to business landing page if valid
-        if (docSnap.exists()) {
+
+        if (isBusiness()) {
           router.push('/business-home')
         } else {
           router.push('/')
