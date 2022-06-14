@@ -32,6 +32,9 @@ export default function Referrals () {
   // imageRef state from Camera component
   const [imageRef, setImageRef] = useState('')
 
+  // state for list of business names
+  const [businesses, setBusinesses] = useState<string[]>([])
+
   const createReferral = async () => {
     if (newPlace === '' || newReview === '' || imageRef === '') {
       // set error message to be displayed
@@ -83,24 +86,29 @@ export default function Referrals () {
     }
 
     getUsers()
-  }, [])
 
-  // state for list of business names
-  const [businesses, setBusinesses] = useState<string[]>([])
+    // get all business docs
+    // TODO: Fix this unused variable
+    // eslint-disable-next-line no-unused-vars
 
-  // get all business docs
-  // TODO: Fix this unused variable
-  // eslint-disable-next-line no-unused-vars
-  const _query = getDocs(collection(db, 'businesses')).then((snapshot) => {
-    const nameList: string[] = []
-
-    snapshot.forEach((doc) => {
-      console.log(doc.data().name)
-      nameList.push(doc.data().name)
+    getDocs(collection(db, 'businesses')).then((snapshot) => {
+      const nameList: string[] = []
+  
+      snapshot.forEach((doc) => {
+        console.log(doc.data().name)
+        nameList.push(doc.data().name)
+      })
+  
+      setBusinesses(nameList)
     })
 
-    setBusinesses(nameList)
-  })
+
+  }, [])
+
+  
+
+  
+  
 
   // states for dropdown menu
   const [selectedBusiness, setSelectedBusiness] = useState(businesses[0])
