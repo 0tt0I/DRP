@@ -71,9 +71,9 @@ function Login () {
         </div>
         <div>
           <button onClick={() => {
-              setLogin(false)
-              setIsBusiness(true)
-            }
+            setLogin(false)
+            setIsBusiness(true)
+          }
           } type="submit"> Business Sign Up </button>
         </div>
       </form>

@@ -1,11 +1,11 @@
-import { addDoc, DocumentData, getDocs, QueryDocumentSnapshot, updateDoc } from '@firebase/firestore'
+import { addDoc, getDocs, updateDoc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Camera from '../components/Camera'
 import { auth, createCollection, db, storage } from '../firebase'
-import { ref, getDownloadURL, uploadString } from "@firebase/storage"
+import { ref, getDownloadURL, uploadString } from '@firebase/storage'
 import { collection, doc } from 'firebase/firestore'
-import { Referral, Businesses } from '../types/FirestoreCollections'
+import { Referral } from '../types/FirestoreCollections'
 import { Combobox } from '@headlessui/react'
 
 export default function Referrals () {
@@ -21,23 +21,19 @@ export default function Referrals () {
   const [newPlace, setNewPlace] = useState('')
   const [newReview, setNewReview] = useState('')
 
-  //state for input field error
+  // state for input field error
   const [inputValidation, setInputValidation] = useState('')
 
-
   // imageRef state from Camera component
-  const [imageRef, setImageRef] = useState('');
+  const [imageRef, setImageRef] = useState('')
 
   const createReferral = async () => {
-
     if (newPlace === '' || newReview === '' || imageRef === '') {
-
-      //set error message to be displayed   
-      setInputValidation("Fill in all fields and take a picture!")
-   
+      // set error message to be displayed
+      setInputValidation('Fill in all fields and take a picture!')
     } else {
       // set input validation back to empty
-      setInputValidation("")
+      setInputValidation('')
 
       // get current time and format correctly
       const current = new Date()
@@ -46,31 +42,29 @@ export default function Referrals () {
       // get user email (shouldn't be null as user already logged in)
       const userEmail = auth.currentUser!.email
 
-      //null check
+      // null check
       if (userEmail) {
         // add doc to firestore
-        const docRef = await addDoc(collectionsRef, 
-          { place: newPlace, review: newReview, date, userEmail, image: ""})
+        const docRef = await addDoc(collectionsRef,
+          { place: newPlace, review: newReview, date, userEmail, image: '' })
 
         // get the image storage bucket from firebase storage
         const imageStorage = ref(storage, `referrals/${docRef.id}/image`)
 
-
-        //upload image, then update firestore document with image's download URL
+        // upload image, then update firestore document with image's download URL
         await uploadString(imageStorage, imageRef, 'data_url').then(
           async snapshot => {
-            const downloadURL = await getDownloadURL(imageStorage);
-            
-            await updateDoc(doc(db, "referrals", docRef.id), {
+            const downloadURL = await getDownloadURL(imageStorage)
+
+            await updateDoc(doc(db, 'referrals', docRef.id), {
               image: downloadURL
             })
           }
         )
 
-        //set taken image to empty again
-        setImageRef("")
+        // set taken image to empty again
+        setImageRef('')
       }
-      
     }
   }
 
@@ -86,33 +80,32 @@ export default function Referrals () {
     getUsers()
   }, [])
 
-
-  //state for list of business names
+  // state for list of business names
   const [businesses, setBusinesses] = useState<string[]>([])
 
-  //get all business docs
-  const query = getDocs(collection(db, "businesses")).then((snapshot) => {
-
+  // get all business docs
+  // eslint-disable-next-line no-unused-vars
+  const query = getDocs(collection(db, 'businesses')).then((snapshot) => {
     const nameList: string[] = []
 
     snapshot.forEach((doc) => {
       console.log(doc.data().name)
       nameList.push(doc.data().name)
-    });
+    })
 
     setBusinesses(nameList)
-  });
-    
+  })
+
   // states for dropdown menu
   const [selectedBusiness, setSelectedBusiness] = useState(businesses[0])
 
-  //updating dropdown menu as user types
+  // updating dropdown menu as user types
   const filteredBusinesses = (
     newPlace === ''
       ? businesses
       : (businesses).filter((business) => {
-          return business.toLowerCase().includes(newPlace.toLowerCase())
-        })
+        return business.toLowerCase().includes(newPlace.toLowerCase())
+      })
   )
 
   // display each referral from state, use combobox for dropdown menu
@@ -122,24 +115,35 @@ export default function Referrals () {
         Referrals
       </h1>
 
-      <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
-      <Combobox.Input onChange={(event) => setNewPlace(event.target.value)} />
-      <Combobox.Options>
-        {filteredBusinesses.map((business) => (
-          <Combobox.Option key={business} value={business}>
-            {business}
-          </Combobox.Option>
-        ))}
-      </Combobox.Options>
-    </Combobox>
+      <div className="grid grid-rows-4 grid-cols-1 grid-flow-col-dense">
+        <h3>Make a Referral</h3>
 
-      <input
-        placeholder="Review: "
-        onChange={(event) => setNewReview(event.target.value)}/>
-      <Camera imageRef={setImageRef}/> 
+        <div className="grid grid-cols-2 grid-rows-1 grid-flow-row-dense">
+          <div className="grid grid-rows-1 grid-cols-2 grid-flow-row-dense">
+            <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
+              <Combobox.Input onChange={(event) => setNewPlace(event.target.value)} />
+              <Combobox.Options>
+                {filteredBusinesses.map((business) => (
+                  <Combobox.Option key={business} value={business}>
+                    {business}
+                  </Combobox.Option>
+                ))}
+              </Combobox.Options>
+            </Combobox>
 
-      <button onClick={createReferral}> Add Referral </button>
-      <h1>{inputValidation}</h1>
+            <input
+              placeholder="Review: "
+              onChange={(event) => setNewReview(event.target.value)}/>
+          </div>
+        </div>
+
+        <Camera imageRef={setImageRef}/>
+
+        <div>
+          <button onClick={createReferral}> Add Referral </button>
+          <h1>{inputValidation}</h1>
+        </div>
+      </div>
 
       <div>
         {referrals.map((ref) => {
@@ -157,7 +161,7 @@ export default function Referrals () {
         })}
       </div>
       <br></br>
-      
+
       <h1>{imageRef}</h1>
       <button onClick={() => router.push('/')}>Back To Home</button>
     </div>
