@@ -50,7 +50,6 @@ COPY ./app/hooks /workspace/app/hooks/
 COPY ./app/tsconfig.json /workspace/app/
 COPY ./app/.eslintrc.json /workspace/app/
 COPY ./app/firebase.ts /workspace/app/firebase.ts
-COPY ./app/.env /workspace/app/.env
 RUN npm run build
 
 # Transpile backend to javascript
