@@ -5,15 +5,10 @@ import Camera from '../components/Camera'
 import { auth, createCollection, db, storage } from '../firebase'
 import { ref, getDownloadURL, uploadString } from "@firebase/storage"
 import { doc } from 'firebase/firestore'
+import { Referral, Businesses } from '../types/FirestoreCollections'
 
 // type for document - todo!() move into types folder?
-interface Referral {
-  date: string,
-  place: string,
-  review: string,
-  userEmail: string,
-  image: string
-}
+
 
 export default function Referrals () {
   const router = useRouter()
