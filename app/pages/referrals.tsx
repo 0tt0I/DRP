@@ -23,7 +23,7 @@ export default function Referrals () {
   const [newReview, setNewReview] = useState('')
 
   // state for input field error
-  const [inputValidation, setInputValidation] = useState('')
+  const [inputValidation, setInputValidation] = useState('...')
 
   // imageRef state from Camera component
   const [imageRef, setImageRef] = useState('')
@@ -34,7 +34,7 @@ export default function Referrals () {
       setInputValidation('Fill in all fields and take a picture!')
     } else {
       // set input validation back to empty
-      setInputValidation('')
+      setInputValidation('Success!')
 
       // get current time and format correctly
       const current = new Date()
@@ -112,14 +112,16 @@ export default function Referrals () {
   // display each referral from state, use combobox for dropdown menu
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">
+      <h1 className="text-6xl font-bold underline">
         Referrals
       </h1>
 
-      <div className="grid grid-rows-4 grid-cols-1 grid-flow-col-dense">
-        <h3>Make a Referral</h3>
+      <br />
 
-        <div className="grid grid-cols-2 grid-rows-1 grid-flow-row-dense">
+      <div className="bg-violet-300 rounded-lg flex flex-col m-2 p-2 gap-2 w-fit">
+        <h2 className="font-bold text-center text-4xl text-violet-800">Make a Referral</h2>
+
+        <div className="grid gap-2 grid-cols-2 grid-rows-1 grid-flow-row-dense">
           <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
             <Combobox.Input onChange={(event) => setNewPlace(event.target.value)} />
             <Combobox.Options>
@@ -138,10 +140,11 @@ export default function Referrals () {
 
         <Camera imageRef={setImageRef}/>
 
-        <div>
-          <button onClick={createReferral}> Add Referral </button>
-          <h1>{inputValidation}</h1>
+        <div className="place-self-center">
+          <button onClick={createReferral} className=" bg-violet-800 hover:bg-violet-600 text-white font-bold p-2 rounded-lg">ADD REFERRAL</button>
         </div>
+
+        <h1 className="bg-white font-bold text-violet-600 p-2 rounded-lg text-center">{inputValidation}</h1>
       </div>
 
       <div>
