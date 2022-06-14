@@ -7,6 +7,7 @@ import { ref, getDownloadURL, uploadString } from '@firebase/storage'
 import { collection, doc } from 'firebase/firestore'
 import { Referral } from '../types/FirestoreCollections'
 import { Combobox } from '@headlessui/react'
+import { createHash } from 'crypto'
 
 export default function Referrals () {
   const router = useRouter()
@@ -89,7 +90,7 @@ export default function Referrals () {
     const nameList: string[] = []
 
     snapshot.forEach((doc) => {
-      console.log(doc.data().name)
+      // console.log(doc.data().name)
       nameList.push(doc.data().name)
     })
 
@@ -119,22 +120,20 @@ export default function Referrals () {
         <h3>Make a Referral</h3>
 
         <div className="grid grid-cols-2 grid-rows-1 grid-flow-row-dense">
-          <div className="grid grid-rows-1 grid-cols-2 grid-flow-row-dense">
-            <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
-              <Combobox.Input onChange={(event) => setNewPlace(event.target.value)} />
-              <Combobox.Options>
-                {filteredBusinesses.map((business) => (
-                  <Combobox.Option key={business} value={business}>
-                    {business}
-                  </Combobox.Option>
-                ))}
-              </Combobox.Options>
-            </Combobox>
+          <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
+            <Combobox.Input onChange={(event) => setNewPlace(event.target.value)} />
+            <Combobox.Options>
+              {filteredBusinesses.map((business) => (
+                <Combobox.Option key={business} value={business}>
+                  {business}
+                </Combobox.Option>
+              ))}
+            </Combobox.Options>
+          </Combobox>
 
-            <input
-              placeholder="Review: "
-              onChange={(event) => setNewReview(event.target.value)}/>
-          </div>
+          <input
+            placeholder="Review: "
+            onChange={(event) => setNewReview(event.target.value)}/>
         </div>
 
         <Camera imageRef={setImageRef}/>
@@ -148,8 +147,7 @@ export default function Referrals () {
       <div>
         {referrals.map((ref) => {
           return (
-            // eslint-disable-next-line react/jsx-key
-            <div>
+            <div key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}>
               <br></br>
               <h1>Place: {ref.place}</h1>
               <h1>Review: {ref.review}</h1>
