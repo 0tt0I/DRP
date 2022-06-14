@@ -1,5 +1,5 @@
 import { initializeApp, getApp, getApps } from 'firebase/app'
-import { collection, CollectionReference, DocumentData, getFirestore } from 'firebase/firestore'
+import { collection, CollectionReference, doc, DocumentData, getDoc, getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
 
@@ -23,6 +23,20 @@ const storage = getStorage()
 
 export const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(db, collectionName) as CollectionReference<T>
+}
+
+export const isBusiness = () => {
+  const docRef = doc(db, "businesses", auth.currentUser!.uid)
+  const docSnap = getDoc(docRef).then((snap) => {
+    if (snap.exists()) {
+      return true
+    } else {
+      return false
+    }
+  })
+
+  //return false by default
+  return false
 }
 
 export default app
