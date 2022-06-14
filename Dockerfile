@@ -42,6 +42,8 @@ FROM app_deps_all AS app_builder
 COPY ./app/pages /workspace/app/pages/
 COPY ./app/services /workspace/app/services/
 COPY ./app/public /workspace/app/public/
+COPY ./app/components /workspace/app/components/
+COPY ./app/interfaces /workspace/app/interfaces/
 COPY ./app/styles /workspace/app/styles/
 COPY ./app/hooks /workspace/app/hooks/
 COPY ./app/tsconfig.json /workspace/app/
