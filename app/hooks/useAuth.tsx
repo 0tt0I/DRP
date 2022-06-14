@@ -35,7 +35,7 @@ const AuthContext = createContext<IAuth>({
   logout: async () => {},
   error: null,
   loading: false,
-  isBusiness: null,
+  isBusiness: null
 })
 
 // interface for the props from the provider
@@ -72,21 +72,6 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     [auth]
   )
 
-  //pre: user has logged in
-  const checkIfBusiness = () => {
-    const docRef = doc(db, "businesses", auth.currentUser!.uid)
-    const docSnap = getDoc(docRef).then((snap) => {
-      if (snap.exists()) {
-        setIsBusiness(true)
-      } else {
-        setIsBusiness(false)
-      }
-    })
-
-    //return null by default
-    setIsBusiness(null)
-  }
-
   const signUp = async (email: string, password: string, businessSignUp: boolean) => {
     setLoading(true) // user is signing up
 
@@ -94,7 +79,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     await createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         setUser(userCredential.user)
-        
+
         // create business document in relevant collection a re-route to right page
         if (businessSignUp) {
           await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
@@ -104,11 +89,9 @@ export const AuthProvider = ({ children }: ProviderProps) => {
           setIsBusiness(true)
           router.push('business-home')
         } else {
-
           setIsBusiness(false)
           router.push('/')
         }
-        
         setLoading(false)
       })
       .catch((error) => alert(error.message)) // catch errors
@@ -123,7 +106,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
       .then(async (userCredential) => {
         setUser(userCredential.user)
 
-        const docRef = doc(db, "businesses", auth.currentUser!.uid)
+        const docRef = doc(db, 'businesses', auth.currentUser!.uid)
         getDoc(docRef).then((snap) => {
           if (snap.exists()) {
             setIsBusiness(true)
@@ -150,7 +133,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
       .catch((error) => alert(error.message)) // catch errors
       .finally(() => setLoading(false)) // set loading to false
 
-    router.push("/login")
+    router.push('/login')
   }
 
   // memoized value for user's session, don't recompute if it's the same user

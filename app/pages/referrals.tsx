@@ -10,9 +10,8 @@ import { Combobox } from '@headlessui/react'
 import useAuth from '../hooks/useAuth'
 
 export default function Referrals () {
-
   const router = useRouter()
-  const {isBusiness} = useAuth()
+  const { isBusiness } = useAuth()
 
   if (isBusiness) {
     router.push('/business-home')
@@ -95,26 +94,16 @@ export default function Referrals () {
 
     getDocs(collection(db, 'businesses')).then((snapshot) => {
       const nameList: string[] = []
-  
       snapshot.forEach((doc) => {
         console.log(doc.data().name)
         nameList.push(doc.data().name)
       })
-  
       setBusinesses(nameList)
     })
-
-
   }, [])
-
-  
-
-  
-  
 
   // states for dropdown menu
   const [selectedBusiness, setSelectedBusiness] = useState(businesses[0])
-
   // updating dropdown menu as user types
   const filteredBusinesses = (
     newPlace === ''

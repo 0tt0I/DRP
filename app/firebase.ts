@@ -1,5 +1,5 @@
 import { initializeApp, getApp, getApps } from 'firebase/app'
-import { collection, CollectionReference, doc, DocumentData, getDoc, getFirestore } from 'firebase/firestore'
+import { collection, CollectionReference, DocumentData, getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
 
