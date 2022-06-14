@@ -1,17 +1,16 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import useAuth from '../hooks/useAuth'
-import { isBusiness } from '../firebase'
 
 export default function Home () {
-  const { logout, loading } = useAuth()
+  const { logout, loading, isBusiness } = useAuth()
   const router = useRouter()
 
   if (loading) {
     return null
   }
 
-  if (isBusiness()) {
+  if (isBusiness) {
     router.push('/business-home')
   }
 

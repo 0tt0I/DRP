@@ -2,17 +2,19 @@ import { addDoc, getDocs, updateDoc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Camera from '../components/Camera'
-import { auth, createCollection, db, isBusiness, storage } from '../firebase'
+import { auth, createCollection, db, storage } from '../firebase'
 import { ref, getDownloadURL, uploadString } from '@firebase/storage'
 import { collection, doc } from 'firebase/firestore'
 import { Referral } from '../types/FirestoreCollections'
 import { Combobox } from '@headlessui/react'
+import useAuth from '../hooks/useAuth'
 
 export default function Referrals () {
 
   const router = useRouter()
+  const {isBusiness} = useAuth()
 
-  if (isBusiness()) {
+  if (isBusiness) {
     router.push('/business-home')
   }
 
