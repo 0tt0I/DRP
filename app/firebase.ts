@@ -25,20 +25,5 @@ export const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(db, collectionName) as CollectionReference<T>
 }
 
-//pre: user has logged in
-export const isBusiness = () => {
-  const docRef = doc(db, "businesses", auth.currentUser!.uid)
-  const docSnap = getDoc(docRef).then((snap) => {
-    if (snap.exists()) {
-      return true
-    } else {
-      return false
-    }
-  })
-
-  //return false by default
-  return false
-}
-
 export default app
 export { db, auth, storage }
