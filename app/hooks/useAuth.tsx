@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
 // react state hooks
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import { auth, db , isBusiness} from '../firebase'
+import { auth, db } from '../firebase'
 
 // AuthContext type, promises signify the completion of an async function
 interface IAuth {
@@ -24,6 +24,7 @@ interface IAuth {
   logout: () => Promise<void>
   error: string | null
   loading: boolean
+  isBusiness: boolean | null
 }
 
 // default AuthContext
@@ -33,7 +34,8 @@ const AuthContext = createContext<IAuth>({
   signIn: async () => {},
   logout: async () => {},
   error: null,
-  loading: false
+  loading: false,
+  isBusiness: null,
 })
 
 // interface for the props from the provider
@@ -47,6 +49,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
   const [user, setUser] = useState<User | null>(null)
   const [error] = useState(null)
   const [initialLoading, setInitialLoading] = useState(true) // used to block UI
+  const [isBusiness, setIsBusiness] = useState<boolean | null>(null)
   const router = useRouter()
 
   // hook to persist login state
@@ -69,25 +72,43 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     [auth]
   )
 
-  const signUp = async (email: string, password: string, isBusiness: boolean) => {
+  //pre: user has logged in
+  const checkIfBusiness = () => {
+    const docRef = doc(db, "businesses", auth.currentUser!.uid)
+    const docSnap = getDoc(docRef).then((snap) => {
+      if (snap.exists()) {
+        setIsBusiness(true)
+      } else {
+        setIsBusiness(false)
+      }
+    })
+
+    //return null by default
+    setIsBusiness(null)
+  }
+
+  const signUp = async (email: string, password: string, businessSignUp: boolean) => {
     setLoading(true) // user is signing up
 
     // create firebase entry, and push user to home screen using next router
     await createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         setUser(userCredential.user)
-
+        
         // create business document in relevant collection a re-route to right page
-        if (isBusiness) {
+        if (businessSignUp) {
           await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
             name: 'todo!() name'
           })
 
+          setIsBusiness(true)
           router.push('business-home')
         } else {
+
+          setIsBusiness(false)
           router.push('/')
         }
-
+        
         setLoading(false)
       })
       .catch((error) => alert(error.message)) // catch errors
@@ -102,13 +123,16 @@ export const AuthProvider = ({ children }: ProviderProps) => {
       .then(async (userCredential) => {
         setUser(userCredential.user)
 
-        // push to business landing page if valid
-
-        if (isBusiness()) {
-          router.push('/business-home')
-        } else {
-          router.push('/')
-        }
+        const docRef = doc(db, "businesses", auth.currentUser!.uid)
+        getDoc(docRef).then((snap) => {
+          if (snap.exists()) {
+            setIsBusiness(true)
+            router.push('/business-home')
+          } else {
+            setIsBusiness(false)
+            router.push('/')
+          }
+        })
 
         setLoading(false)
       })
@@ -121,15 +145,18 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
     signOut(auth).then(() => {
       setUser(null) // set user to null
+      setIsBusiness(null)
     })
       .catch((error) => alert(error.message)) // catch errors
       .finally(() => setLoading(false)) // set loading to false
+
+    router.push("/login")
   }
 
   // memoized value for user's session, don't recompute if it's the same user
   const memoizedVal = useMemo(() => ({
-    user, signUp, signIn, loading, logout, error
-  }), [user, loading])
+    user, signUp, signIn, loading, logout, error, isBusiness
+  }), [user, loading, isBusiness])
 
   // return AuthContext component
   return (
