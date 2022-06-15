@@ -5,6 +5,13 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:0-alpine-${VARIANT} AS devconta
 RUN apk update \
     && apk add --no-cache nodejs npm
 
+# Devcontainer with the installed dependencies
+FROM devcontainer_base AS devcontainer
+COPY ./api/package* /workspace/api/
+COPY ./app/package* /workspace/app/
+RUN cd /workspace/api && npm i 
+RUN cd /workspace/app && npm i 
+
 FROM alpine:latest AS base
 
 # Baseline dependencies, node and npm used by everything
@@ -18,27 +25,27 @@ COPY ./api/package* /workspace/api/
 WORKDIR /workspace/api/
 RUN npm ci --omit=dev
 
+# Development api dependencies
+FROM api_deps AS api_deps_all
+RUN npm i
+
+# Transpile backend to javascript
+FROM api_deps_all AS api_builder
+COPY ./api/src /workspace/api/src
+COPY ./api/tsconfig.json /workspace/api
+RUN npm run build
+
 # Deployed app dependencies
 FROM deps AS app_deps
 COPY ./app/package* /workspace/app/
 WORKDIR /workspace/app/
 RUN npm ci --omit=dev
 
-# Devcontainer with the installed dependencies
-FROM devcontainer_base AS devcontainer
-COPY --from=api_deps /workspace/api/node_modules /workspace/api/node_modules/
-COPY --from=app_deps /workspace/app/node_modules /workspace/app/node_modules/
-
-# Development api dependencies
+# Development app dependencies
 FROM app_deps AS app_deps_all
 RUN npm i
 
-# Development app dependencies
-FROM api_deps AS api_deps_all
-RUN npm i
-
 # Use next export to build de-hydrated html files
-
 FROM app_deps_all AS app_builder
 COPY ./app/pages /workspace/app/pages/
 COPY ./app/services /workspace/app/services/
@@ -52,12 +59,6 @@ COPY ./app/tsconfig.json /workspace/app/
 COPY ./app/.eslintrc.json /workspace/app/
 COPY ./app/firebase.ts /workspace/app/firebase.ts
 COPY ./app/.env /workspace/app/.env
-RUN npm run build
-
-# Transpile backend to javascript
-FROM api_deps_all AS api_builder
-COPY ./api/src /workspace/api/src
-COPY ./api/tsconfig.json /workspace/api
 RUN npm run build
 
 # Standalone backend deployment
@@ -76,5 +77,3 @@ COPY --from=app_deps /workspace/app/node_modules/ /workspace/app/node_modules/
 COPY --from=api_deps /workspace/api/node_modules/ /workspace/api/node_modules/
 EXPOSE 3080
 CMD ["npm", "run", "start"]
-
-# TODO: Fullstack production deploy
