@@ -56,12 +56,12 @@ export default function Camera (props: PropsInterface) {
 
       <div className="col-span-2 grid grid-cols-2 row-span-1 gap-2 place-content-center">
         <button
-          className="cameraCapture_button font-bold rounded-lg bg-violet-800 hover:bg-violet-600 text-white p-2 place-self-end"
+          className="cameraCapture_button general-button place-self-end"
           onClick={capture}
-        >TAKE PICTURE</button>
+        >&nbsp;TAKE PICTURE&nbsp;</button>
 
         <button
-          className="cameraClear_button font-bold rounded-lg bg-violet-800 hover:bg-violet-600 text-white p-2 place-self-start"
+          className="cameraClear_button general-button place-self-start"
           onClick={() => {
             props.imageRef('')
             setImage(null)

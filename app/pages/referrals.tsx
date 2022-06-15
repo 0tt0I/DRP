@@ -111,61 +111,80 @@ export default function Referrals () {
 
   // display each referral from state, use combobox for dropdown menu
   return (
-    <div>
-      <h1 className="text-6xl font-bold underline">
-        Referrals
-      </h1>
+    <div className="relative flex flex-col gap-8 w-screen items-center p-4">
+      <div className="bg-violet-300 rounded-lg flex flex-col p-4 gap-2">
+        <h2 className="font-bold text-center text-4xl text-violet-800">
+          Make a Referral
+        </h2>
 
-      <br />
+        <div className="gap-2 flex flex-col bg-violet-400 p-2 rounded-lg">
+          <label>
+            <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
+              <Combobox.Input onChange={(event) => setNewPlace(event.target.value)} className="input" placeholder="Location Name: " />
+              <Combobox.Options>
+                {filteredBusinesses.map((business) => (
+                  <Combobox.Option key={business} value={business}>
+                    {business}
+                  </Combobox.Option>
+                ))}
+              </Combobox.Options>
+            </Combobox>
+          </label>
 
-      <div className="bg-violet-300 rounded-lg flex flex-col m-2 p-2 gap-2 w-fit">
-        <h2 className="font-bold text-center text-4xl text-violet-800">Make a Referral</h2>
-
-        <div className="grid gap-2 grid-cols-2 grid-rows-1 grid-flow-row-dense">
-          <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
-            <Combobox.Input onChange={(event) => setNewPlace(event.target.value)} />
-            <Combobox.Options>
-              {filteredBusinesses.map((business) => (
-                <Combobox.Option key={business} value={business}>
-                  {business}
-                </Combobox.Option>
-              ))}
-            </Combobox.Options>
-          </Combobox>
-
-          <input
-            placeholder="Review: "
-            onChange={(event) => setNewReview(event.target.value)}/>
+          <label>
+            <input
+              placeholder="Review: "
+              className="input"
+              onChange={(event) => setNewReview(event.target.value)}/>
+          </label>
         </div>
 
         <Camera imageRef={setImageRef}/>
 
         <div className="place-self-center">
-          <button onClick={createReferral} className=" bg-violet-800 hover:bg-violet-600 text-white font-bold p-2 rounded-lg">ADD REFERRAL</button>
+          <button onClick={createReferral} className="general-button">ADD REFERRAL</button>
         </div>
 
         <h1 className="bg-white font-bold text-violet-600 p-2 rounded-lg text-center">{inputValidation}</h1>
       </div>
 
-      <div>
-        {referrals.map((ref) => {
-          return (
-            <div key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}>
-              <br></br>
-              <h1>Place: {ref.place}</h1>
-              <h1>Review: {ref.review}</h1>
-              <h1>Date: {ref.date}</h1>
-              <h1>User Email: {ref.userEmail}</h1>
-              <img src={ref.image}/>
-            </div>
-          )
-        })}
+      <div className="flex flex-col gap-4 p-4 rounded-lg bg-violet-200">
+        <h1 className="font-bold text-center text-4xl text-violet-800">Current Referrals</h1>
+        {referrals.map(ReferralEntry)}
       </div>
-      <br></br>
 
-      <h1>{imageRef}</h1>
-      <button onClick={() => router.push('/')}>Back To Home</button>
+      <button onClick={() => router.push('/')} className="general-button">
+        Back To Home
+      </button>
     </div>
+  )
+}
 
+// <h1>{imageRef}</h1>
+
+function ReferralEntry (ref: Referral) {
+  return (
+    <div
+      key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
+      className="flex flex-col gap-4 place-content-center p-4 bg-violet-300 rounded-lg max-w-fit">
+      <div className="flex flex-row gap-4 place-content-start">
+        <img src={ref.image} className="object-scale-down h-60 place-self-center rounded-lg" />
+
+        <div className="grid grid-rows-6 grid-flow-col-dense place-content-center gap-2">
+          <h1 className="font-bold text-violet-900">PLACE</h1>
+          <h1 className="font-bold text-violet-900 w-32">USER EMAIL</h1>
+          <h1 className="font-bold text-violet-900">DATE</h1>
+          <h1 className="font-bold text-violet-900 row-span-3">REVIEW</h1>
+          <p>{ref.place}</p>
+          <p>{ref.userEmail}</p>
+          <p>{ref.date}</p>
+          <p className="row-span-3 w-60">{ref.review}</p>
+        </div>
+      </div>
+
+      <div className="general-button">
+        USE REFERRAL
+      </div>
+    </div>
   )
 }
