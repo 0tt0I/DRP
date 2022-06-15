@@ -1,15 +1,16 @@
-import { useRouter } from "next/router"
-import useAuth from "../hooks/useAuth"
+import React from 'react'
+import useAuth from '../hooks/useAuth'
+import { useRouter } from 'next/router'
 
-export default function BusinessHome() {
-    //states for logged in from useAuth hook
-    const { logout, loading } = useAuth()
-    const router = useRouter()
+export default function BusinessHome () {
+  // states for logged in from useAuth hook
+  const { logout, loading } = useAuth()
+  const router = useRouter()
 
-    //blocks if loading
-    if (loading) {
-        return null
-    }
+  // blocks if loading
+  if (loading) {
+    return null
+  }
 
     return (
         <div>
@@ -18,7 +19,7 @@ export default function BusinessHome() {
                 <button onClick={logout}>Logout</button>
             </div>
             <div>
-                <button onClick={() => router.push("/qr-scanner")}>Scan Discount Code</button>
+                <button onClick={() => router.push('/qr-scanner')}>Scan Discount Code</button>
             </div>
         </div>
     )

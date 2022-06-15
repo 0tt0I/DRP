@@ -6,7 +6,7 @@ import {
   signOut,
   User
 } from 'firebase/auth'
-import { addDoc, doc, getDoc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 
 // re-routing for next
 import { useRouter } from 'next/router'
@@ -14,8 +14,7 @@ import { useRouter } from 'next/router'
 // react state hooks
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import { auth, createCollection, db } from '../firebase'
-import { Businesses } from '../types/FirestoreCollections'
+import { auth, db } from '../firebase'
 
 // AuthContext type, promises signify the completion of an async function
 interface IAuth {
@@ -76,24 +75,20 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     // create firebase entry, and push user to home screen using next router
     await createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-
         setUser(userCredential.user)
 
         // create business document in relevant collection a re-route to right page
         if (isBusiness) {
+          await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
+            name: 'todo!() name'
+          })
 
-          await setDoc(doc(db, "businesses", auth.currentUser!.uid), {
-            name: "todo!() name"
-          });
-
-          router.push("business-home")
-
+          router.push('business-home')
         } else {
           router.push('/')
-        }        
-        
-        setLoading(false)
+        }
 
+        setLoading(false)
       })
       .catch((error) => alert(error.message)) // catch errors
       .finally(() => setLoading(false)) // always set loading back to false
@@ -107,17 +102,17 @@ export const AuthProvider = ({ children }: ProviderProps) => {
       .then(async (userCredential) => {
         setUser(userCredential.user)
 
-        //getting document if exists from businesses collection
-        const docRef = doc(db, "businesses", auth.currentUser!.uid);
-        const docSnap = await getDoc(docRef);
+        // getting document if exists from businesses collection
+        const docRef = doc(db, 'businesses', auth.currentUser!.uid)
+        const docSnap = await getDoc(docRef)
 
-        //push to business landing page if valid
+        // push to business landing page if valid
         if (docSnap.exists()) {
-          router.push("/business-home")
+          router.push('/business-home')
         } else {
           router.push('/')
         }
-        
+
         setLoading(false)
       })
       .catch((error) => alert(error.message)) // catch errors
