@@ -55,9 +55,10 @@ COPY ./app/interfaces /workspace/app/interfaces/
 COPY ./app/types /workspace/app/types/
 COPY ./app/styles /workspace/app/styles/
 COPY ./app/hooks /workspace/app/hooks/
-COPY ./app/tsconfig.json /workspace/app/
-COPY ./app/.eslintrc.json /workspace/app/
 COPY ./app/firebase.ts /workspace/app/firebase.ts
+COPY ./app/tsconfig.json /workspace/app/
+COPY ./app/tailwind.config.js /workspace/app/tailwind.config.js
+COPY ./app/postcss.config.js /workspace/app/postcss.config.js
 COPY ./app/.env /workspace/app/.env
 RUN npm run build
 
@@ -72,7 +73,7 @@ CMD ["npm", "run", "start"]
 FROM api_deps AS fullstack_local_deploy
 WORKDIR /workspace/api
 COPY --from=api_builder /workspace/api/dist/ /workspace/api/dist/
-COPY --from=app_builder /workspace/app/out/ /workspace/app/out
+COPY --from=app_builder /workspace/app/out/ /workspace/app/out/
 COPY --from=app_deps /workspace/app/node_modules/ /workspace/app/node_modules/
 COPY --from=api_deps /workspace/api/node_modules/ /workspace/api/node_modules/
 EXPOSE 8080
