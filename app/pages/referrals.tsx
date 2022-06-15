@@ -162,25 +162,30 @@ function ReferralEntry (ref: Referral) {
   return (
     <div
       key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
-      className="flex flex-col gap-4 place-content-center p-4 bg-violet-300 rounded-lg max-w-fit">
+      className="flex flex-col gap-4 place-content-center p-4 bg-violet-300 rounded-lg max-w-max">
       <div className="flex flex-row gap-4 place-content-start">
-        <img src={ref.image} className="object-scale-down h-60 place-self-center rounded-lg" />
+        <img
+          src={ref.image}
+          className="aspect-square object-contain h-60 place-self-center rounded-lg bg-violet-400 p-1" />
 
-        <div className="grid grid-rows-6 grid-flow-col-dense place-content-center gap-2 w-fit">
+        <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
           <h1 className="font-bold text-violet-900">PLACE</h1>
+          <p className="col-span-2">{ref.place}</p>
+
           <h1 className="font-bold text-violet-900 w-32">USER EMAIL</h1>
+          <p className="col-span-2">{ref.userEmail}</p>
+
           <h1 className="font-bold text-violet-900">DATE</h1>
+          <p className="col-span-2">{ref.date}</p>
+
           <h1 className="font-bold text-violet-900 row-span-3">REVIEW</h1>
-          <p>{ref.place}</p>
-          <p>{ref.userEmail}</p>
-          <p>{ref.date}</p>
-          <p className="row-span-3 w-60">{ref.review}</p>
+          <p className="col-span-2 row-span-3 w-60">{ref.review}</p>
         </div>
       </div>
 
-      <div className="general-button">
+      <button className="general-button">
         USE REFERRAL
-      </div>
+      </button>
     </div>
   )
 }

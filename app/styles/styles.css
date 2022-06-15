@@ -31,21 +31,25 @@
 }
 
 .general-button {
-    @apply bg-violet-700 hover:bg-violet-600 p-2 rounded-lg text-white font-bold transition duration-200 text-center
+    @apply bg-violet-700 hover:bg-violet-600 p-2 rounded-lg text-white font-bold transition duration-200 text-center;
 }
 
 .home-div {
-    @apply relative flex flex-col gap-4 grid-flow-row-dense h-screen w-screen items-center justify-center
+    @apply relative flex flex-col gap-4 grid-flow-row-dense h-screen w-screen items-center justify-center;
 }
 
 .home-subdiv {
-    @apply place-self-center flex flex-col gap-4 bg-violet-300 p-4 rounded-lg
+    @apply place-self-center flex flex-col gap-4 bg-violet-300 p-4 rounded-lg;
 }
 
 .home-subdiv > h1 {
-    @apply text-3xl text-violet-900 font-bold text-center
+    @apply text-3xl text-violet-900 font-bold text-center;
 }
 
 .home-buttondiv {
-    @apply flex flex-row gap-4 place-content-center
+    @apply flex flex-row gap-4 place-content-center;
+}
+
+.ref-info {
+    @apply break-all;
 }
