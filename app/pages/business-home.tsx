@@ -17,6 +17,9 @@ export default function BusinessHome() {
             <div>
                 <button onClick={logout}>Logout</button>
             </div>
+            <div>
+                <button onClick={() => router.push("/qr-scanner")}>Scan Discount Code</button>
+            </div>
         </div>
     )
 }

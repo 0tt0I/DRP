@@ -1,6 +1,7 @@
 import RenderResult from 'next/dist/server/render-result';
 import React, { useEffect, useState } from 'react';
 import { OnResultFunction, QrReader } from 'react-qr-reader';
+import { auth } from '../firebase';
 import { checkNewCustomer } from '../services/businessQrScan';
 
 
@@ -20,15 +21,24 @@ export default function QRScanner () {
 
     useEffect(() => {
         async function updateData() {
-            const newCust = (await checkNewCustomer(qrString)).newUser
-            if (newCust == -1) {
-                setData("Invalid QR-code")
-            } else {
-                if (newCust) {
-                    setData("This is a new customer! Treat them to a discount")
-                } else {
+            const newCust = (await checkNewCustomer(
+                qrString,
+                (auth.currentUser) ? auth.currentUser!.uid : '')).newUser
+
+            switch (newCust) {
+                case -1:
+                    setData("Invalid QR-code")
+                    break;
+                case 0:
                     setData("This customer has had a discount before...")
-                }
+                    break;
+                case 1:
+                    setData("This is a new customer! Treat them to a discount")
+                    break;
+                case 2:
+                    setData("This referral is for a different business.")
+                default:
+                    break;
             }
         }
 
