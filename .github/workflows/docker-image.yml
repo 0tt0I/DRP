@@ -41,11 +41,17 @@ jobs:
         password: ${{ secrets.GCR_JSON_KEY }}
     - run: docker push gcr.io/mira-drp-7c877/i_app_builder
 
-
-#   build-deploy:
-#     runs-on: ubuntu-latest
-#     needs: [build-api, build-app]
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Build the Docker image
-#       run: docker build . --file Dockerfile --target=fullstack_local_deploy --tag i_fullstack_local_deploy:$(date +%s)
+  build-deploy:
+    runs-on: ubuntu-latest
+    needs: [build-api, build-app]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: docker/login-action@v2
+      with:
+        registry: gcr.io
+        username: _json_key
+        password: ${{ secrets.GCR_JSON_KEY }}
+    - run: docker pull gcr.io/mira-drp-7c877/i_api_builder
+    - run: docker pull gcr.io/mira-drp-7c877/i_app_builder
+    # - name: Build the Docker image
+    #   run: docker build . --file Dockerfile --target=fullstack_local_deploy --tag i_fullstack_local_deploy:$(date +%s)
