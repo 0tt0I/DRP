@@ -53,5 +53,5 @@ jobs:
         password: ${{ secrets.GCR_JSON_KEY }}
     - run: docker pull gcr.io/mira-drp-7c877/i_api_builder
     - run: docker pull gcr.io/mira-drp-7c877/i_app_builder
-    # - name: Build the Docker image
-    #   run: docker build . --file Dockerfile --target=fullstack_local_deploy --tag i_fullstack_local_deploy:$(date +%s)
+    - run: DOCKER_BUILDKIT=1 docker build --target=fullstack_local_deploy --tag gcr.io/mira-drp-7c877/i_fullstack_local_deploy .
+    - run: docker push gcr.io/mira-drp-7c877/i_fullstack_local_deploy
