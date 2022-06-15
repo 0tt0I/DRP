@@ -4,7 +4,7 @@ import { db } from '../plugins/firebase'
 import { doc, getDoc, setDoc} from "@firebase/firestore"
 
 export async function businessQRScanController(_req: Request, res: Response) {
-    var discountString
+    var newCust
 
     const user_business_id: String = _req.body.user_business_id
     const id_array = user_business_id.split('-')
@@ -16,14 +16,14 @@ export async function businessQRScanController(_req: Request, res: Response) {
         const custsDocSnap = await getDoc(custsDocRef)
         console.log("finished awaiting")
         if (custsDocSnap.exists()) {
-            discountString = "This user has already visited your business"
+            newCust = 0
         } else {
             await setDoc(custsDocRef, {})
-            discountString = "This user is new! Treat them to a discount"
+            newCust = 1
         }
     } else {
-        discountString = "Invalid QR-code"
+        newCust = -1
     }
 
-    res.status(200).json({ discount: discountString})
+    res.status(200).json({ newUser: newCust})
 }
