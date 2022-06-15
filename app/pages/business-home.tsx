@@ -12,15 +12,15 @@ export default function BusinessHome () {
     return null
   }
 
-    return (
-        <div>
-            <h1>Hello Business!</h1>
-            <div>
-                <button onClick={logout}>Logout</button>
-            </div>
-            <div>
-                <button onClick={() => router.push('/qr-scanner')}>Scan Discount Code</button>
-            </div>
-        </div>
-    )
+  return (
+    <div>
+      <h1>Hello Business!</h1>
+      <div>
+        <button onClick={logout}>Logout</button>
+      </div>
+      <div>
+        <button onClick={() => router.push('/qr-scanner')}>Scan Discount Code</button>
+      </div>
+    </div>
+  )
 }

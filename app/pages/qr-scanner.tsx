@@ -37,7 +37,7 @@ export default function QRScanner () {
 
   // Run something...
   useEffect(() => {
-    async function updateData() {
+    async function updateData () {
       const newCust = (await checkNewCustomer(
         decodeResult,
         (auth.currentUser) ? auth.currentUser!.uid : '')).newUser
