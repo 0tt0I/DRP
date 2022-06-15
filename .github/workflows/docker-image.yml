@@ -7,43 +7,43 @@ on:
     branches: [ "main", "dev" ]
 
 jobs:
-  # build-api:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - run: DOCKER_BUILDKIT=1 docker build --target=api_builder --tag gcr.io/mira-drp-7c877/i_api_builder .
-  #   - uses: docker/login-action@v2
-  #     with:
-  #       registry: gcr.io
-  #       username: _json_key
-  #       password: ${{ secrets.GCR_JSON_KEY }}
-  #   - run: docker push gcr.io/mira-drp-7c877/i_api_builder
-  #   
-  # build-app:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - run: | 
-  #       touch ./app/.env
-  #       echo NEXT_PUBLIC_FIREBASE_API_KEY='${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}' >> ./app/.env
-  #       echo NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN='${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}' >> ./app/.env
-  #       echo NEXT_PUBLIC_FIREBASE_PROJECT_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}' >> ./app/.env
-  #       echo NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET='${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}' >> ./app/.env
-  #       echo NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}' >> .env
-  #       echo NEXT_PUBLIC_FIREBASE_APP_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}' >> ./app/.env
-  #       echo NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}' >> ./app/.env
-  #       cat ./app/.env
-  #   - run: DOCKER_BUILDKIT=1 docker build --target=app_builder --tag gcr.io/mira-drp-7c877/i_app_builder .
-  #   - uses: docker/login-action@v2
-  #     with:
-  #       registry: gcr.io
-  #       username: _json_key
-  #       password: ${{ secrets.GCR_JSON_KEY }}
-  #   - run: docker push gcr.io/mira-drp-7c877/i_app_builder
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: DOCKER_BUILDKIT=1 docker build --target=api_builder --tag gcr.io/mira-drp-7c877/i_api_builder .
+    - uses: docker/login-action@v2
+      with:
+        registry: gcr.io
+        username: _json_key
+        password: ${{ secrets.GCR_JSON_KEY }}
+    - run: docker push gcr.io/mira-drp-7c877/i_api_builder
+    
+  build-app:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: | 
+        touch ./app/.env
+        echo NEXT_PUBLIC_FIREBASE_API_KEY='${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}' >> ./app/.env
+        echo NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN='${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}' >> ./app/.env
+        echo NEXT_PUBLIC_FIREBASE_PROJECT_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}' >> ./app/.env
+        echo NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET='${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}' >> ./app/.env
+        echo NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}' >> .env
+        echo NEXT_PUBLIC_FIREBASE_APP_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}' >> ./app/.env
+        echo NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}' >> ./app/.env
+        cat ./app/.env
+    - run: DOCKER_BUILDKIT=1 docker build --target=app_builder --tag gcr.io/mira-drp-7c877/i_app_builder .
+    - uses: docker/login-action@v2
+      with:
+        registry: gcr.io
+        username: _json_key
+        password: ${{ secrets.GCR_JSON_KEY }}
+    - run: docker push gcr.io/mira-drp-7c877/i_app_builder
 
   build-deploy:
     runs-on: ubuntu-latest
-  #  needs: [build-api, build-app]
+    needs: [build-api, build-app]
     steps:
     - uses: actions/checkout@v3
     - run: | 
