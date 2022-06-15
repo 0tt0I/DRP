@@ -169,7 +169,7 @@ function ReferralEntry (ref: Referral) {
       <div className="flex flex-row gap-4 place-content-start">
         <img src={ref.image} className="object-scale-down h-60 place-self-center rounded-lg" />
 
-        <div className="grid grid-rows-6 grid-flow-col-dense place-content-center gap-2">
+        <div className="grid grid-rows-6 grid-flow-col-dense place-content-center gap-2 w-fit">
           <h1 className="font-bold text-violet-900">PLACE</h1>
           <h1 className="font-bold text-violet-900 w-32">USER EMAIL</h1>
           <h1 className="font-bold text-violet-900">DATE</h1>
