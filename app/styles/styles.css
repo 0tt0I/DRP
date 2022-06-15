@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .input {
-    @apply w-full rounded px-5 py-3.5 focus:bg-[#354732];
+    @apply w-full rounded px-5 py-3.5 focus:bg-[#e6e6e6];
 }
 
 .user-titlebar {

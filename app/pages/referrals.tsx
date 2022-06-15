@@ -69,7 +69,11 @@ export default function Referrals () {
     }
   }
 
+  // state for list of business names
+  const [businesses, setBusinesses] = useState<string[]>([])
+
   // api call to firestore to run on page load
+  // get all user referrals and businesses
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(collectionsRef)
@@ -78,25 +82,18 @@ export default function Referrals () {
       setReferrals(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     }
 
+    const getBusinesses = async () => {
+      const nameList: string[] = []
+
+      const data = await getDocs(collection(db, 'businesses'))
+      data.forEach(businsessDoc => nameList.push(businsessDoc.data().name))
+
+      setBusinesses(nameList)
+    }
+
     getUsers()
+    getBusinesses()
   }, [])
-
-  // state for list of business names
-  const [businesses, setBusinesses] = useState<string[]>([])
-
-  // get all business docs
-  // TODO: Fix this unused variable
-  // eslint-disable-next-line no-unused-vars
-  const _query = getDocs(collection(db, 'businesses')).then((snapshot) => {
-    const nameList: string[] = []
-
-    snapshot.forEach((doc) => {
-      // console.log(doc.data().name)
-      nameList.push(doc.data().name)
-    })
-
-    setBusinesses(nameList)
-  })
 
   // states for dropdown menu
   const [selectedBusiness, setSelectedBusiness] = useState(businesses[0])
