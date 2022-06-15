@@ -24,6 +24,7 @@ interface IAuth {
   logout: () => Promise<void>
   error: string | null
   loading: boolean
+  isBusiness: boolean | null
 }
 
 // default AuthContext
@@ -33,7 +34,8 @@ const AuthContext = createContext<IAuth>({
   signIn: async () => {},
   logout: async () => {},
   error: null,
-  loading: false
+  loading: false,
+  isBusiness: null
 })
 
 // interface for the props from the provider
@@ -47,6 +49,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
   const [user, setUser] = useState<User | null>(null)
   const [error] = useState(null)
   const [initialLoading, setInitialLoading] = useState(true) // used to block UI
+  const [isBusiness, setIsBusiness] = useState<boolean | null>(null)
   const router = useRouter()
 
   // hook to persist login state
@@ -69,7 +72,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     [auth]
   )
 
-  const signUp = async (email: string, password: string, isBusiness: boolean) => {
+  const signUp = async (email: string, password: string, businessSignUp: boolean) => {
     setLoading(true) // user is signing up
 
     // create firebase entry, and push user to home screen using next router
@@ -78,16 +81,17 @@ export const AuthProvider = ({ children }: ProviderProps) => {
         setUser(userCredential.user)
 
         // create business document in relevant collection a re-route to right page
-        if (isBusiness) {
+        if (businessSignUp) {
           await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
             name: 'todo!() name'
           })
 
+          setIsBusiness(true)
           router.push('business-home')
         } else {
+          setIsBusiness(false)
           router.push('/')
         }
-
         setLoading(false)
       })
       .catch((error) => alert(error.message)) // catch errors
@@ -102,16 +106,16 @@ export const AuthProvider = ({ children }: ProviderProps) => {
       .then(async (userCredential) => {
         setUser(userCredential.user)
 
-        // getting document if exists from businesses collection
         const docRef = doc(db, 'businesses', auth.currentUser!.uid)
-        const docSnap = await getDoc(docRef)
-
-        // push to business landing page if valid
-        if (docSnap.exists()) {
-          router.push('/business-home')
-        } else {
-          router.push('/')
-        }
+        getDoc(docRef).then((snap) => {
+          if (snap.exists()) {
+            setIsBusiness(true)
+            router.push('/business-home')
+          } else {
+            setIsBusiness(false)
+            router.push('/')
+          }
+        })
 
         setLoading(false)
       })
@@ -124,15 +128,18 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
     signOut(auth).then(() => {
       setUser(null) // set user to null
+      setIsBusiness(null)
     })
       .catch((error) => alert(error.message)) // catch errors
       .finally(() => setLoading(false)) // set loading to false
+
+    router.push('/login')
   }
 
   // memoized value for user's session, don't recompute if it's the same user
   const memoizedVal = useMemo(() => ({
-    user, signUp, signIn, loading, logout, error
-  }), [user, loading])
+    user, signUp, signIn, loading, logout, error, isBusiness
+  }), [user, loading, isBusiness])
 
   // return AuthContext component
   return (
