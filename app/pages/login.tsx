@@ -45,13 +45,14 @@ function Login () {
   return (
     <div className="relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent">
       <Head>
-        <title> Login Page</title>
+        <title>Login Page</title>
         <link rel="icon" href="coffee-icon.png" />
       </Head>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Sign In Page</h1>
-        <div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 bg-violet-300 rounded-lg p-4 min-w-max">
+        <h1 className="font-bold text-center text-6xl text-violet-900 p-2">Sign In</h1>
+
+        <div className="flex flex-col gap-2 w-96 bg-violet-400 p-2 rounded-lg">
           <label>
             <input type="email"
               placeholder="Email"
@@ -66,17 +67,23 @@ function Login () {
           </label>
         </div>
 
-        <button onClick={() => setLogin(true)}> Submit </button>
+        <button onClick={() => setLogin(true)} className="general-button">
+          Submit
+        </button>
 
-        <div>
-          <button onClick={() => setLogin(false)} type="submit"> Sign Up Here </button>
-        </div>
-        <div>
+        <div className="grid gap-4 grid-cols-2 place-content-center">
+          <button onClick={() => setLogin(false)} type="submit" className="general-button">
+            User Sign Up
+          </button>
+
           <button onClick={() => {
             setLogin(false)
             setIsBusiness(true)
           }
-          } type="submit"> Business Sign Up </button>
+
+          } type="submit" className="general-button">
+            Business Sign Up
+          </button>
         </div>
       </form>
     </div>

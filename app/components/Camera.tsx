@@ -38,7 +38,7 @@ export default function Camera (props: PropsInterface) {
 
   // set webcam parameters, and run capture function and display
   return (
-    <div className="camera">
+    <div className="camera grid gap-2 grid-cols-2 grid-flow-row-dense place-content-center">
       <Webcam
         audio = {false}
         height = {videoConstraints.height}
@@ -46,21 +46,27 @@ export default function Camera (props: PropsInterface) {
         screenshotFormat = "image/jpeg"
         width = {videoConstraints.width}
         videoConstraints = {videoConstraints}
+        className = "place-self-center"
       />
-      <button
-        className="cameraCapture_button"
-        onClick={capture}
-      > TAKE PICTURE </button>
-      <button
-        className="cameraClear_button"
-        onClick={() => {
-          props.imageRef('')
-          setImage(null)
-        }}
-      > CLEAR PICTURE </button>
+
       {image && (
-        <img src={image} />
+        <img src={image} className="place-self-center" />
       )}
+
+      <div className="col-span-2 grid grid-cols-2 row-span-1 gap-2 place-content-center">
+        <button
+          className="cameraCapture_button general-button place-self-end"
+          onClick={capture}
+        >&nbsp;TAKE PICTURE&nbsp;</button>
+
+        <button
+          className="cameraClear_button general-button place-self-start"
+          onClick={() => {
+            props.imageRef('')
+            setImage(null)
+          }}
+        >CLEAR PICTURE</button>
+      </div>
     </div>
   )
 }

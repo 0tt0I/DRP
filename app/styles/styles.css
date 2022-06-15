@@ -29,3 +29,7 @@
 .referral-list-display {
     @apply w-80 h-64 bg-stone-500 grid grid-cols-1;
 }
+
+.general-button {
+    @apply bg-violet-700 hover:bg-violet-600 p-2 rounded-lg text-white font-bold transition duration-200 text-center
+}
