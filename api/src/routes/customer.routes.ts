@@ -1,5 +1,5 @@
-import { Router } from "express";
+import { Router } from 'express'
 
-export const customerRouter = Router();
+export const customerRouter = Router()
 
 // businessRouter.get("/status", businessStatusController);

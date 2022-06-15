@@ -10,4 +10,4 @@ interface Businesses {
     name: string,
 }
 
-export type {Referral, Businesses}
+export type { Referral, Businesses }

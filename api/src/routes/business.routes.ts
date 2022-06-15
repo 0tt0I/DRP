@@ -1,9 +1,9 @@
-import { Router } from "express";
+import { Router } from 'express'
 
 import {
-    businessQRScanController
+  businessQRScanController
 } from '../controllers/business.controllers'
 
-export const businessRouter = Router();
+export const businessRouter = Router()
 
-businessRouter.post("/qr-scan", businessQRScanController);
+businessRouter.post('/qr-scan', businessQRScanController)
