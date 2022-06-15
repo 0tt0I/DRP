@@ -22,7 +22,13 @@ jobs:
         echo NEXT_PUBLIC_FIREBASE_APP_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}' >> ./app/.env
         echo NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}' >> ./app/.env
         cat ./app/.env
-        docker build . --file Dockerfile --target=api_builder --tag i_api_builder:$(date +%s)
+    - run: docker build . --file Dockerfile --target=base --tag gcr.io/mira-drp-7c877/i_base
+    - uses: docker/login-action@v2
+      with:
+        registry: gcr.io
+        username: _json_key
+        password: ${{ secrets.GCR_JSON_KEY }}
+    - run: docker push gcr.io/mira-drp-7c877/i_base
     
   build-app:
     runs-on: ubuntu-latest
