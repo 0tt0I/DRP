@@ -7,11 +7,11 @@ import {
 } from 'body-parser'
 
 import { router } from './routes'
-
-// TODO: Replace with environment config
-const port = 3080
+import { environmentConfig } from './config/config'
 
 const app = express()
+const port = environmentConfig.port
+
 app.use(express.static(pathJoin(__dirname, '../../app/out')))
 app.use(cors())
 app.use(bodyParserJson())
