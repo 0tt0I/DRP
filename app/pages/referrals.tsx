@@ -33,7 +33,7 @@ export default function Referrals () {
       // set error message to be displayed
       setInputValidation('Fill in all fields and take a picture!')
     } else {
-      // set input validation back to empty
+      // set input validation to success
       setInputValidation('Success!')
 
       // get current time and format correctly
@@ -85,8 +85,9 @@ export default function Referrals () {
   const [businesses, setBusinesses] = useState<string[]>([])
 
   // get all business docs
+  // TODO: Fix this unused variable
   // eslint-disable-next-line no-unused-vars
-  const query = getDocs(collection(db, 'businesses')).then((snapshot) => {
+  const _query = getDocs(collection(db, 'businesses')).then((snapshot) => {
     const nameList: string[] = []
 
     snapshot.forEach((doc) => {
@@ -159,8 +160,6 @@ export default function Referrals () {
     </div>
   )
 }
-
-// <h1>{imageRef}</h1>
 
 function ReferralEntry (ref: Referral) {
   return (

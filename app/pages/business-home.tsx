@@ -1,12 +1,9 @@
-import { useRouter } from 'next/router'
+import React from 'react'
 import useAuth from '../hooks/useAuth'
-import * as React from 'react'
 
 export default function BusinessHome () {
   // states for logged in from useAuth hook
   const { logout, loading } = useAuth()
-  // eslint-disable-next-line no-unused-vars
-  const router = useRouter()
 
   // blocks if loading
   if (loading) {

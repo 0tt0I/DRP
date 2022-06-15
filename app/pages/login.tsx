@@ -22,8 +22,10 @@ function Login () {
   const {
     register,
     handleSubmit,
+    // TODO: Fix this unused variable
     // eslint-disable-next-line no-unused-vars
     watch,
+    // TODO: Fix this unused variable
     // eslint-disable-next-line no-unused-vars
     formState: { errors }
   } = useForm<Inputs>()
@@ -78,6 +80,7 @@ function Login () {
             setLogin(false)
             setIsBusiness(true)
           }
+
           } type="submit" className="general-button">
             Business Sign Up
           </button>

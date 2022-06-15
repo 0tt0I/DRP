@@ -1,6 +1,5 @@
-import { Dispatch, SetStateAction, useCallback, useRef, useState } from 'react'
+import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from 'react'
 import Webcam from 'react-webcam'
-import * as React from 'react'
 
 // add video constraints
 const videoConstraints = {
