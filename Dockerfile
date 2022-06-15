@@ -65,7 +65,7 @@ RUN npm run build
 FROM api_deps AS api_local_deploy
 WORKDIR /workspace/api
 COPY --from=api_builder /workspace/api/dist/ /workspace/api/dist/
-EXPOSE 3080
+EXPOSE 8080
 CMD ["npm", "run", "start"]
 
 # Minimal local full-stack deployment with backend also acting as webserver
@@ -75,5 +75,5 @@ COPY --from=api_builder /workspace/api/dist/ /workspace/api/dist/
 COPY --from=app_builder /workspace/app/out/ /workspace/app/out
 COPY --from=app_deps /workspace/app/node_modules/ /workspace/app/node_modules/
 COPY --from=api_deps /workspace/api/node_modules/ /workspace/api/node_modules/
-EXPOSE 3080
+EXPOSE 8080
 CMD ["npm", "run", "start"]
