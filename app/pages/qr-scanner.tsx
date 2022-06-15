@@ -2,14 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { BrowserCodeReader, BrowserQRCodeReader } from '@zxing/browser'
 import { auth } from '../firebase'
 import { checkNewCustomer } from '../services/businessQrScan'
+import { useRouter } from 'next/router'
 
 export default function QRScanner () {
+  // Request router.
+  const router = useRouter()
+
   // QR code reader.
   const reader = new BrowserQRCodeReader()
 
   // Result box.
-  const [data, setData] = useState('no result')
-  const [decodeResult, setDecodeResult] = useState('')
+  const [queryData, setQueryData] = useState('No Result')
+  const [decodeResult, setDecodeResult] = useState('N/A')
 
   // Video devices.
   const [selectedDevice, setSelectedDevice] = useState('')
@@ -44,16 +48,16 @@ export default function QRScanner () {
 
       switch (newCust) {
       case -1:
-        setData('Invalid QR-code')
+        setQueryData('Invalid QR-code')
         break
       case 0:
-        setData('This customer has had a discount before...')
+        setQueryData('This customer has had a discount before...')
         break
       case 1:
-        setData('This is a new customer! Treat them to a discount')
+        setQueryData('This is a new customer! Treat them to a discount')
         break
       case 2:
-        setData('This referral is for a different business.')
+        setQueryData('This referral is for a different business.')
         break
       default:
         break
@@ -63,12 +67,23 @@ export default function QRScanner () {
   }, [decodeResult])
 
   return (
-    <div>
-      <video id='scanner-preview' width='512' height='512' />
-      <br />
-      {decodeResult}
-      <br />
-      {data}
+    <div className="home-div">
+      <div className="home-subdiv">
+        <h1>Scan a Customer QR Code</h1>
+
+        <video id='scanner-preview' width='512' height='512' className="rounded-lg" />
+
+        <div className="grid grid-rows-2 grid-flow-col gap-2 min-w-fit">
+          <p className="font-bold text-violet-900">RAW DECODED DATA</p>
+          <p className="font-bold text-violet-900 w-32">REMARK</p>
+          <p>{decodeResult}</p>
+          <p className="w-72">{queryData}</p>
+        </div>
+      </div>
+
+      <button onClick={() => router.push('/business-home')} className="general-button">
+        Back To Home
+      </button>
     </div>
   )
 }

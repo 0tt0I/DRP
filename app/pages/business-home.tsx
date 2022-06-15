@@ -13,13 +13,21 @@ export default function BusinessHome () {
   }
 
   return (
-    <div>
-      <h1>Hello Business!</h1>
-      <div>
-        <button onClick={logout}>Logout</button>
-      </div>
-      <div>
-        <button onClick={() => router.push('/qr-scanner')}>Scan Discount Code</button>
+    <div className="home-div">
+      <div className="home-subdiv">
+        <h1>
+          What would you like to do as a business?
+        </h1>
+
+        <div className="home-buttondiv">
+          <button onClick={logout} className="general-button">
+            Log Out
+          </button>
+
+          <button onClick={() => router.push('/qr-scanner')} className="general-button">
+            Scan Discount Code
+          </button>
+        </div>
       </div>
     </div>
   )
