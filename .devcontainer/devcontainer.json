@@ -20,7 +20,7 @@
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [3080, 3000],
+	"forwardPorts": [8080, 3000],
 
 
 	// Replace when using a ptrace-based debugger like C++, Go, and Rust
