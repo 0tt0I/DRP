@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { BrowserCodeReader, BrowserQRCodeReader } from '@zxing/browser'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { BrowserCodeReader, BrowserQRCodeReader, IScannerControls } from '@zxing/browser'
 
 export type QRScannerProps = {
   resultSetter: React.Dispatch<React.SetStateAction<string>>
@@ -7,50 +8,124 @@ export type QRScannerProps = {
   showReset?: boolean
 }
 
-export default function QRScanner (props: QRScannerProps) {
-  // QR code reader.
-  const reader = new BrowserQRCodeReader()
+export type QRScannerState = {
+  selectedDevice: string
+  reader: BrowserQRCodeReader
+  currentControls?: IScannerControls
+}
 
-  // Video devices.
-  const [selectedDevice, setSelectedDevice] = useState('')
-
-  // Initialise video devices.
-  useEffect(() => {
-    const getVideos = async () =>
-      BrowserCodeReader.listVideoInputDevices()
-        .then(
-          devices => setSelectedDevice(devices[0].deviceId)
-        )
-        .catch(err =>
-          console.info(err)
-        )
-
-    getVideos()
-  }, [])
-
-  // Function to run the scanner.
-  const runScanner = () => {
-    // Reset the result.
-    props.resultSetter('')
-
-    // Read a new result.
-    reader.decodeOnceFromVideoDevice(selectedDevice, 'scanner-preview')
-      .then(result => props.resultSetter(result.getText()))
-      .catch(console.info)
-      .finally(props.afterScan)
+export default class QRScanner extends React.Component<QRScannerProps, QRScannerState> {
+  static get propTypes () {
+    return {
+      resultSetter: PropTypes.func,
+      afterScan: PropTypes.func,
+      showReset: PropTypes.bool
+    }
   }
 
-  // Now actually read.
-  useEffect(() => runScanner(), [selectedDevice])
+  public readonly state: QRScannerState
 
-  return (
-    <div className="flex flex-col gap-4">
-      <video id='scanner-preview' width='512' height='512' className="rounded-lg" />
+  resultSetter: React.Dispatch<React.SetStateAction<string>>
+  afterScan: () => void
+  showReset: boolean
 
-      {(props.showReset !== undefined && props.showReset) &&
-        <button className="general-button grow" onClick={runScanner}>
-          Reset
-        </button>}
-    </div>
-  )
+  constructor (props: QRScannerProps) {
+    super(props)
+
+    this.resultSetter = props.resultSetter
+    this.afterScan = props.afterScan ?? (() => { })
+    this.showReset = props.showReset ?? false
+
+    this.state = {
+      selectedDevice: '',
+      reader: new BrowserQRCodeReader(),
+      currentControls: undefined
+    }
+  }
+
+  private runScanner () {
+    const self = this
+    self.resultSetter('')
+
+    // Update controls helper.
+    const updateControls = (newC?: IScannerControls) => {
+      self.setState((state, _) => {
+        return {
+          selectedDevice: state.selectedDevice,
+          reader: state.reader,
+          currentControls: newC
+        }
+      })
+    }
+
+    // Read a new result.
+    const run = async () => {
+      const controls = await self.state.reader.decodeFromVideoDevice(
+        self.state.selectedDevice, 'scanner-preview',
+        (result, _, controls) => {
+          const afterAll = () => {
+            self.afterScan()
+            controls.stop()
+
+            updateControls(undefined)
+          }
+
+          if (result) {
+            self.resultSetter(result.getText())
+            afterAll()
+          }
+        }
+      )
+
+      updateControls(controls)
+    }
+
+    run()
+  }
+
+  componentDidMount () {
+    const self = this
+
+    const run = async () => {
+      await BrowserCodeReader.listVideoInputDevices()
+        .then(
+          devices => self.setState((state, _) => {
+            return {
+              selectedDevice: devices[0].deviceId,
+              reader: state.reader,
+              currentControls: state.currentControls
+            }
+          }))
+        .catch(console.info)
+
+      self.runScanner()
+    }
+
+    run()
+  }
+
+  componentWillUnmount () {
+    // Stop the scan if the component is unmounting.
+    if (this.state.currentControls !== undefined) {
+      this.state.currentControls.stop()
+    }
+  }
+
+  render () {
+    const self = this
+    return (
+      <div className="flex flex-col gap-4">
+        <video
+          id='scanner-preview'
+          width='512'
+          height='512'
+          className="darker-div" />
+
+        {(self.showReset && self.state.currentControls === undefined) &&
+          <button className="general-button grow" onClick={() => this.runScanner()}>
+            Reset
+          </button>}
+      </div>
+    )
+  }
 }
