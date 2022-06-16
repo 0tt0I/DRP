@@ -1,16 +1,18 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { BrowserQRCodeSvgWriter } from '@zxing/browser'
 import { auth } from '../firebase'
 
 export default function BusinessQRCode () {
   const router = useRouter()
   const qrCodeWriter = new BrowserQRCodeSvgWriter()
-  const [qrImage, setQrImage] = useState<SVGSVGElement>()
+  const svg = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const businessUid = auth.currentUser!.uid
-    setQrImage(qrCodeWriter.write(businessUid, 150, 150))
+    if (svg.current) {
+      svg.current.appendChild(qrCodeWriter.write(businessUid, 150, 150))
+    }
   }, [])
 
   return (
@@ -20,9 +22,7 @@ export default function BusinessQRCode () {
               Your Unique Business QR Code
         </h1>
         <div className="place-self-center">
-          <svg
-            className="w-[150px] h-[150px] bg-left"
-            dangerouslySetInnerHTML={{ __html: qrImage ? qrImage.innerHTML : '' }}/>
+          <div className="w-[150px] h-[150px] bg-left" ref={svg}/>
         </div>
 
         <div className="home-buttondiv">
