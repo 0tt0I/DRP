@@ -1,7 +1,7 @@
 import { Dialog } from '@headlessui/react'
 import { addDoc, collection, CollectionReference, getDocs } from 'firebase/firestore'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import HomeButton from '../components/HomeButton'
 import { auth, db } from '../firebase'
 import { Discount } from '../types/FirestoreCollections'
@@ -19,29 +19,26 @@ export default function SetDiscounts () {
   const [newPoints, setNewPoints] = useState(0)
   // state for discount collection ref
 
-  const businessUid = auth.currentUser!.uid
-  const discountCollection = collection(db, 'businesses', businessUid, 'discounts') as CollectionReference<Discount>
+  const businessUid = useRef(auth.currentUser!.uid)
 
   // set state for referrals
   const [discounts, setDiscounts] = useState<Discount[]>([])
 
   useEffect(() => {
     const getDiscounts = async () => {
-      const discountCollection = collection(db, 'businesses', businessUid, 'discounts') as CollectionReference<Discount>
-
+      // impossible but typescript hates me
+      const discountCollection = collection(db, 'businesses', businessUid.current, 'discounts') as CollectionReference<Discount>
       const data = await getDocs(discountCollection)
       // get relevant information from document
       setDiscounts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     }
 
     getDiscounts()
-  })
+  }, [])
 
   const createDiscount = async () => {
     // business should already be logged in
-    const businessUid = auth.currentUser!.uid
-
-    console.log(businessUid)
+    const discountCollection = collection(db, 'businesses', businessUid.current, 'discounts') as CollectionReference<Discount>
 
     const newDiscount = { description: newDescription, points: newPoints }
 
