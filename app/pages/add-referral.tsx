@@ -1,9 +1,10 @@
-import { Combobox } from '@headlessui/react'
-import { getDoc, doc, addDoc, updateDoc, getDocs, collection } from 'firebase/firestore'
+import { Dialog } from '@headlessui/react'
+import { getDoc, doc, addDoc, updateDoc } from 'firebase/firestore'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Camera from '../components/Camera'
+import QRScanner from '../components/QRScanner'
 import { auth, createCollection, db, storage } from '../firebase'
 import { Referral } from '../types/FirestoreCollections'
 
@@ -14,7 +15,6 @@ export default function AddReferral () {
   const collectionsRef = createCollection<Referral>('referrals')
 
   // states for input fields
-  const [newPlace, setNewPlace] = useState('')
   const [newReview, setNewReview] = useState('')
 
   // state for input field error
@@ -23,81 +23,68 @@ export default function AddReferral () {
   // imageRef state from Camera component
   const [imageRef, setImageRef] = useState('')
 
-  // state for list of business names
-  const [businesses, setBusinesses] = useState<[string, string][]>([])
+  // state for business UID
+  const [businessUid, setBusinessUid] = useState('')
 
-  // states for dropdown menu
-  const [selectedBusiness, setSelectedBusiness] = useState(businesses[0])
+  // modal state for popup and info for qr-scan
+  const [qrOpen, setQrOpen] = useState(false)
 
   const createReferral = async () => {
-    if (newPlace === '' || newReview === '' || imageRef === '') {
+    if (newReview === '' || imageRef === '' || businessUid === '') {
+      console.log(businessUid)
       // set error message to be displayed
       setInputValidation('Fill in all fields and take a picture!')
     } else {
-      // set input validation to success
-      setInputValidation('Success!')
+      const businessDoc = (await getDoc(doc(db, 'businesses', businessUid)))
 
-      // get current time and format correctly
-      const current = new Date()
-      const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`
+      if (businessDoc.exists()) {
+        // set input validation to success
+        setInputValidation('Success!')
 
-      // get user email (shouldn't be null as user already logged in)
-      const userEmail = auth.currentUser!.email
+        // get current time and format correctly
+        const current = new Date()
+        const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`
 
-      // null check
-      if (userEmail) {
-        const discountStringField = (await getDoc(doc(db, 'businesses', selectedBusiness[1]))).get('new_customer_discount')
-        const discountString = discountStringField || 'Ask about the discount at the till!'
+        // get user email (shouldn't be null as user already logged in)
+        const userEmail = auth.currentUser!.email
 
-        const newReferral = { place: selectedBusiness[0], review: newReview, date, userEmail, image: '', discount: discountString, businessUid: selectedBusiness[1], customerUid: auth.currentUser!.uid }
+        // null check
+        if (userEmail) {
+          const discountStringField = businessDoc.get('new_customer_discount')
+          const discountString = discountStringField || 'Ask about the discount at the till!'
 
-        // add doc to firestore
-        const docRef = await addDoc(collectionsRef, newReferral)
+          const placeName = businessDoc.get('name')
 
-        // get the image storage bucket from firebase storage
-        const imageStorage = ref(storage, `referrals/${docRef.id}/image`)
+          const newReferral = { place: placeName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: auth.currentUser!.uid }
 
-        // upload image, then update firestore document with image's download URL
-        await uploadString(imageStorage, imageRef, 'data_url').then(
-          async snapshot => {
-            const downloadURL = await getDownloadURL(imageStorage)
+          // add doc to firestore
+          const docRef = await addDoc(collectionsRef, newReferral)
 
-            await updateDoc(doc(db, 'referrals', docRef.id), {
-              image: downloadURL
-            })
-          }
-        )
+          // get the image storage bucket from firebase storage
+          const imageStorage = ref(storage, `referrals/${docRef.id}/image`)
 
-        newReferral.image = imageRef
+          // upload image, then update firestore document with image's download URL
+          await uploadString(imageStorage, imageRef, 'data_url').then(
+            async snapshot => {
+              const downloadURL = await getDownloadURL(imageStorage)
 
-        // set taken image to empty again
-        setImageRef('')
-        router.push('/my-referrals')
+              await updateDoc(doc(db, 'referrals', docRef.id), {
+                image: downloadURL
+              })
+            }
+          )
+
+          newReferral.image = imageRef
+
+          // set taken image to empty again
+          setImageRef('')
+          router.push('/my-referrals')
+        }
+      } else {
+        setInputValidation('Invalid QR code, try scanning again!')
       }
     }
   }
-
-  useEffect(() => {
-    const getBusinesses = async () => {
-      const nameList: [string, string][] = []
-
-      const data = await getDocs(collection(db, 'businesses'))
-      data.forEach(businsessDoc => nameList.push([businsessDoc.data().name, businsessDoc.id]))
-
-      setBusinesses(nameList)
-    }
-
-    getBusinesses()
-  }, [])
-
-  // updating dropdown menu as user types
-  const filteredBusinesses = (
-    newPlace === ''
-      ? businesses
-      : (businesses).filter((business) => {
-        return business[0].toLowerCase().includes(newPlace.toLowerCase())
-      })
-  )
 
   return (
     <div className="relative flex flex-col gap-8 w-screen items-center p-4">
@@ -105,24 +92,42 @@ export default function AddReferral () {
         <h2 className="font-bold text-center text-4xl text-violet-800">
           Make a Referral
         </h2>
+        <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
+          <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
+            <Dialog.Panel className="w-full max-w-md overflow-hidden rounded-lg bg-violet-100 p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
+              <Dialog.Title as="h3" className="font-bold text-center text-2xl text-violet-800">
+              Place
+              </Dialog.Title>
+              <Dialog.Description>
+                <div className="flex flex-col grow text-center">
+                  <p>Ask to scan the QR code at the till to refer:</p>
+                </div>
+              </Dialog.Description>
+
+              <div className="place-self-center">
+                <QRScanner resultSetter={setBusinessUid}/>
+              </div>
+
+              <button className="general-button"
+                onClick={() => {
+                  setQrOpen(false)
+                  console.log(businessUid)
+                  if (businessUid === '') {
+                    setInputValidation('Scan Failed!')
+                  } else {
+                    setInputValidation('Scanned Successfully!')
+                  }
+                }}>Scan</button>
+
+              <button className="general-button"
+                onClick={() => {
+                  setQrOpen(false)
+                }}>Cancel</button>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
 
         <div className="gap-2 flex flex-col bg-violet-400 p-2 rounded-lg">
-          <label>
-            <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
-              <Combobox.Input
-                onChange={(event) => setNewPlace(event.target.value)}
-                displayValue={(business: [string, string]) => selectedBusiness ? selectedBusiness[0] : ''}
-                className="input" placeholder="Location Name: " />
-              <Combobox.Options>
-                {filteredBusinesses.map((business) => (
-                  <Combobox.Option key={business[1]} value={business}>
-                    {business[0]}
-                  </Combobox.Option>
-                ))}
-              </Combobox.Options>
-            </Combobox>
-          </label>
-
           <label>
             <input
               placeholder="Review: "
@@ -130,6 +135,12 @@ export default function AddReferral () {
               onChange={(event) => setNewReview(event.target.value)}/>
           </label>
         </div>
+
+        <button className="general-button" onClick={() => {
+          setQrOpen(true)
+        }}>
+          Add Place
+        </button>
 
         <Camera imageRef={setImageRef}/>
 
