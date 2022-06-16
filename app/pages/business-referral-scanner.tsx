@@ -11,11 +11,16 @@ export default function BusinessReferralScanner () {
   // Result box.
   const [queryData, setQueryData] = useState('No Result')
   const [decodeResult, setDecodeResult] = useState('')
+  const [redemptionButton, setRedemptionButton] = useState(false)
 
   // Run something...
   useEffect(() => {
     async function updateData () {
       if (decodeResult === '') {
+        return
+      } else if (decodeResult === 'mock point redemption') {
+        setQueryData('Rushil has referred 5 new customers!')
+        setRedemptionButton(true)
         return
       }
 
@@ -58,6 +63,14 @@ export default function BusinessReferralScanner () {
       <button onClick={() => router.push('/business-home')} className="general-button">
         Back To Home
       </button>
+      {redemptionButton
+        ? <button onClick={() => {
+          setQueryData('Rushil has no points at the moment')
+          setRedemptionButton(false)
+        }} className="general-button">
+          Redeem Points
+        </button>
+        : null}
     </div>
   )
 }
