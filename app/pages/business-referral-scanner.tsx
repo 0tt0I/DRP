@@ -15,25 +15,22 @@ export default function BusinessReferralScanner () {
   // Run something...
   useEffect(() => {
     async function updateData () {
-      const newCust = (await checkNewCustomer(
+      const jsonResponse = (await checkNewCustomer(
         decodeResult,
-        (auth.currentUser) ? auth.currentUser!.uid : '')).newUser
+        (auth.currentUser) ? auth.currentUser!.uid : ''))
 
-      switch (newCust) {
-      case -1:
+      if (!jsonResponse.qrValid) {
         setQueryData('Invalid QR-code')
-        break
-      case 0:
-        setQueryData('This customer has had a discount before...')
-        break
-      case 1:
-        setQueryData('This is a new customer! Treat them to a discount')
-        break
-      case 2:
+        return
+      }
+      if (!jsonResponse.businessValid) {
         setQueryData('This referral is for a different business.')
-        break
-      default:
-        break
+        return
+      }
+      if (jsonResponse.newCustomer) {
+        setQueryData('This is a new customer! Treat them to a discount')
+      } else {
+        setQueryData('This customer has had a discount before...')
       }
     }
     updateData()
