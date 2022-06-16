@@ -5,7 +5,8 @@ interface Referral {
     userEmail: string,
     image: string,
     discount: string,
-    businessUid: string
+    businessUid: string,
+    customerUid: string,
 }
 
 interface Businesses {
