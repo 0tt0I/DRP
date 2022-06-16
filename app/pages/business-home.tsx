@@ -1,11 +1,13 @@
 import React from 'react'
-import { useRouter } from 'next/router'
 import useAuth from '../hooks/useAuth'
+import { useRouter } from 'next/router'
 
-export default function Home () {
+export default function BusinessHome () {
+  // states for logged in from useAuth hook
   const { logout, loading } = useAuth()
   const router = useRouter()
 
+  // blocks if loading
   if (loading) {
     return null
   }
@@ -14,7 +16,7 @@ export default function Home () {
     <div className="home-div">
       <div className="home-subdiv">
         <h1>
-          What would you like to do?
+          What would you like to do as a business?
         </h1>
 
         <div className="home-buttondiv">
@@ -22,9 +24,14 @@ export default function Home () {
             Log Out
           </button>
 
-          <button onClick={() => router.push('/referrals')} className="general-button">
-            See Referrals
+          <button onClick={() => router.push('/qr-scanner')} className="general-button">
+            Scan Discount Code
           </button>
+
+          <button onClick={() => router.push('/set-discount')} className="general-button">
+            Set Discount Offered
+          </button>
+
         </div>
       </div>
     </div>

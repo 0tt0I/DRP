@@ -1,129 +1,147 @@
-//import hooks from firebase auth
+// import hooks from firebase auth
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
-  User,
+  User
 } from 'firebase/auth'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 
-//re-routing for next
+// re-routing for next
 import { useRouter } from 'next/router'
 
-//react state hooks
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+// react state hooks
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
 
-
-//AuthContext type, promises signify the completion of an async function
+// AuthContext type, promises signify the completion of an async function
 interface IAuth {
   user: User | null
-  signUp: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string, isBusiness: boolean) => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   error: string | null
   loading: boolean
 }
 
-//default AuthContext
-const AuthContext = createContext<IAuth> ({
+// default AuthContext
+const AuthContext = createContext<IAuth>({
   user: null,
   signUp: async () => {},
   signIn: async () => {},
   logout: async () => {},
   error: null,
-  loading: false,
+  loading: false
 })
 
-//interface for the props from the provider
+// interface for the props from the provider
 interface ProviderProps {
   children: React.ReactNode
 }
 
-export const AuthProvider = ({children}: ProviderProps) => {
-
-  //states used throughout the hooks
+export const AuthProvider = ({ children }: ProviderProps) => {
+  // states used throughout the hooks
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState<User | null>(null)
-  const [error, setError] = useState(null)
-  const [initialLoading, setInitialLoading] = useState(true) //used to block UI
+  const [error] = useState(null)
+  const [initialLoading, setInitialLoading] = useState(true) // used to block UI
   const router = useRouter()
 
-
-  //hook to persist login state
+  // hook to persist login state
   useEffect(
-      () =>
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            // Logged in, persist state
-            setUser(user)
-            setLoading(false)
-          } else {
-            // Not logged in, route to login page
-            setUser(null)
-            setLoading(true)
-            router.push('/login')
-          }
-  
-          setInitialLoading(false) //block UI
-        }),
-      [auth]
-    )
+    () =>
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // Logged in, persist state
+          setUser(user)
+          setLoading(false)
+        } else {
+          // Not logged in, route to login page
+          setUser(null)
+          setLoading(true)
+          router.push('/login')
+        }
 
+        setInitialLoading(false) // block UI
+      }),
+    [auth]
+  )
 
-  const signUp = async (email: string, password: string) => {
-      setLoading(true) //user is signing up
+  const signUp = async (email: string, password: string, isBusiness: boolean) => {
+    setLoading(true) // user is signing up
 
-      //create firebase entry, and push user to home screen using next router
-      await createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-              setUser(userCredential.user)
-              router.push("/")
-              setLoading(false)
+    // create firebase entry, and push user to home screen using next router
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        setUser(userCredential.user)
+
+        // create business document in relevant collection a re-route to right page
+        if (isBusiness) {
+          await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
+            name: 'todo!() name'
           })
-          .catch((error) => alert(error.message)) //catch errors
-          .finally(() => setLoading(false)) //always set loading back to false
+
+          router.push('business-home')
+        } else {
+          router.push('/')
+        }
+
+        setLoading(false)
+      })
+      .catch((error) => alert(error.message)) // catch errors
+      .finally(() => setLoading(false)) // always set loading back to false
   }
 
   const signIn = async (email: string, password: string) => {
-      setLoading(true) //user is signing up
+    setLoading(true) // user is signing up
 
-      //create firebase entry, and push user to home screen using next router
-      await signInWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-              setUser(userCredential.user)
-              router.push("/")
-              setLoading(false)
-          })
-          .catch((error) => alert(error.message)) //catch errors
-          .finally(() => setLoading(false)) //always set loading back to false
-  }
+    // create firebase entry, and push user to home screen using next router
+    await signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        setUser(userCredential.user)
 
-  const logout = async() => {
-      setLoading(true) //load
+        // getting document if exists from businesses collection
+        const docRef = doc(db, 'businesses', auth.currentUser!.uid)
+        const docSnap = await getDoc(docRef)
 
-      signOut(auth).then(() => {
-          setUser(null) //set user to null
+        // push to business landing page if valid
+        if (docSnap.exists()) {
+          router.push('/business-home')
+        } else {
+          router.push('/')
+        }
+
+        setLoading(false)
       })
-      .catch((error) => alert(error.message)) //catch errors
-      .finally(() => setLoading(false)) //set loading to false
+      .catch((error) => alert(error.message)) // catch errors
+      .finally(() => setLoading(false)) // always set loading back to false
   }
 
-  //memoized value for user's session, don't recompute if it's the same user
+  const logout = async () => {
+    setLoading(true) // load
+
+    signOut(auth).then(() => {
+      setUser(null) // set user to null
+    })
+      .catch((error) => alert(error.message)) // catch errors
+      .finally(() => setLoading(false)) // set loading to false
+  }
+
+  // memoized value for user's session, don't recompute if it's the same user
   const memoizedVal = useMemo(() => ({
-      user, signUp, signIn, loading, logout, error
+    user, signUp, signIn, loading, logout, error
   }), [user, loading])
 
   // return AuthContext component
   return (
-  <AuthContext.Provider value={memoizedVal}> 
-      {!initialLoading && children} 
-  </AuthContext.Provider>
+    <AuthContext.Provider value={memoizedVal}>
+      {!initialLoading && children}
+    </AuthContext.Provider>
   )
 }
 
-
-export default function useAuth() {
+export default function useAuth () {
   return useContext(AuthContext)
 }
