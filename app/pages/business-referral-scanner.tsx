@@ -10,11 +10,15 @@ export default function BusinessReferralScanner () {
 
   // Result box.
   const [queryData, setQueryData] = useState('No Result')
-  const [decodeResult, setDecodeResult] = useState('N/A')
+  const [decodeResult, setDecodeResult] = useState('')
 
   // Run something...
   useEffect(() => {
     async function updateData () {
+      if (decodeResult === '') {
+        return
+      }
+
       const jsonResponse = (await checkNewCustomer(
         decodeResult,
         (auth.currentUser) ? auth.currentUser!.uid : ''))

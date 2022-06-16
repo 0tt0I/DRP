@@ -1,7 +1,7 @@
 export async function checkNewCustomer (qrString: String, useruid: String) {
   const dict = {
-    user_business_id: qrString,
-    business_logged_in: useruid
+    qrString,
+    businessLoggedIn: useruid
   }
   const res = await fetch('/api/business/qr-scan', {
     method: 'POST',
