@@ -31,7 +31,6 @@ export default function AddReferral () {
 
   const createReferral = async () => {
     if (newReview === '' || imageRef === '' || businessUid === '') {
-      console.log(businessUid)
       // set error message to be displayed
       setInputValidation('Fill in all fields and take a picture!')
     } else {
@@ -111,7 +110,6 @@ export default function AddReferral () {
               <button className="general-button"
                 onClick={() => {
                   setQrOpen(false)
-                  console.log(businessUid)
                   if (businessUid === '') {
                     setInputValidation('Scan Failed!')
                   } else {
