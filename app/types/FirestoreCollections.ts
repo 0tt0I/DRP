@@ -13,4 +13,9 @@ interface Businesses {
     name: string,
 }
 
-export type { Referral, Businesses }
+interface Discount {
+    description: string,
+    points: number
+}
+
+export type { Referral, Businesses, Discount }
