@@ -24,7 +24,7 @@ export default function BusinessHome () {
             Log Out
           </button>
 
-          <button onClick={() => router.push('/qr-scanner')} className="general-button">
+          <button onClick={() => router.push('/business-referral-scanner')} className="general-button">
             Scan Discount Code
           </button>
 
