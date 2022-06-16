@@ -3,29 +3,31 @@ import { db } from '../plugins/firebase'
 // import { Businesses } from "src/models/FirestoreCollections"
 import { doc, getDoc, setDoc } from '@firebase/firestore'
 
-export async function businessQRScanController (_req: Request, res: Response) {
-  let newCust
+export async function businessQRScanController (req: Request, res: Response) {
+  let newCustomer
 
-  const userBusinessId: String = _req.body.userBusinessId
-  const businessLoggedIn: String = _req.body.businessLoggedIn
-  const idArray = userBusinessId.split('-')
-  if (idArray[0] && idArray[1]) {
-    if (idArray[0] !== businessLoggedIn) {
-      newCust = 2
+  const userBusinessId: String = req.body.userBusinessId
+  const businessLoggedIn: String = req.body.businessLoggedIn
+  console.log(userBusinessId)
+  const [businessUid, customerUid] = userBusinessId.split('-')
+
+  // both uids non-empty
+  // qrString valid
+  const qrValid = businessUid && customerUid
+
+  // qr code relates to logged in business
+  const businessValid = qrValid && (businessUid !== businessLoggedIn)
+  if (businessValid) {
+    const businessDocRef = doc(db, 'businesses', businessUid)
+    const customerDocRef = doc(businessDocRef, 'customers_visited', customerUid)
+    const customerDocSnap = await getDoc(customerDocRef)
+    if (customerDocSnap.exists()) {
+      newCustomer = false
     } else {
-      const busDoc = doc(db, 'businesses', idArray[0])
-      const custsDocRef = doc(busDoc, 'customers_visited', idArray[1])
-      const custsDocSnap = await getDoc(custsDocRef)
-      if (custsDocSnap.exists()) {
-        newCust = 0
-      } else {
-        await setDoc(custsDocRef, {})
-        newCust = 1
-      }
+      await setDoc(customerDocRef, {})
+      newCustomer = true
     }
-  } else {
-    newCust = -1
   }
 
-  res.status(200).json({ newUser: newCust })
+  res.status(200).json({ newCustomer, qrValid, businessValid })
 }
