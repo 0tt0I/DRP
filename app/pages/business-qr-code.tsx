@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useRef } from 'react'
 import { BrowserQRCodeSvgWriter } from '@zxing/browser'
 import { auth } from '../firebase'
+import HomeButton from '../components/HomeButton'
 
 export default function BusinessQRCode () {
   const router = useRouter()
@@ -25,12 +26,7 @@ export default function BusinessQRCode () {
           <div className="w-[256px] h-[256px] bg-left" ref={svg}/>
         </div>
 
-        <div className="home-buttondiv">
-
-          <button onClick={() => router.push('/business-home')} className="general-button">
-            Go back to Home
-          </button>
-        </div>
+        <HomeButton router={router} where="/business-home" />
       </div>
     </div>
   )

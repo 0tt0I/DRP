@@ -1,6 +1,7 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import HomeButton from '../components/HomeButton'
 import { db, auth } from '../firebase'
 
 export default function SetDiscount () {
@@ -49,9 +50,7 @@ export default function SetDiscount () {
 
         <button onClick={businessSetDiscount} className="general-button">Apply</button>
 
-        <button onClick={() => router.push('/business-home')} className="general-button">
-          Go back to Home
-        </button>
+        <HomeButton router={router} where="/business-home" />
       </div>
     </div>
   )

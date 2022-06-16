@@ -4,6 +4,7 @@ import { getDocs, query, where } from 'firebase/firestore'
 import { Referral } from '../types/FirestoreCollections'
 import { useRouter } from 'next/router'
 import { createHash } from 'crypto'
+import HomeButton from '../components/HomeButton'
 
 export default function MyReferrals () {
   const router = useRouter()
@@ -37,9 +38,7 @@ export default function MyReferrals () {
             : <p className="text-warning text-2xl white-div p-8">You have no active referrals.</p>}
         </div>
 
-        <button onClick={() => router.push('/')} className="general-button">
-          Go back to Home
-        </button>
+        <HomeButton router={router} />
       </div>
     </div>
   )

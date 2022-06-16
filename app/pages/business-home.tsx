@@ -35,7 +35,6 @@ export default function BusinessHome () {
           <button onClick={() => router.push('/business-qr-code')} className="general-button">
             Your QR Code
           </button>
-
         </div>
       </div>
     </div>

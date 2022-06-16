@@ -6,6 +6,7 @@ import { Referral } from '../types/FirestoreCollections'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
 import { BrowserQRCodeSvgWriter } from '@zxing/browser'
+import HomeButton from '../components/HomeButton'
 
 export default function Referrals () {
   const router = useRouter()
@@ -78,9 +79,7 @@ export default function Referrals () {
           ? referrals.map(ReferralEntry)
           : <p className="text-warning text-2xl p-8">There are no active referrals from others.</p>}
 
-        <button onClick={() => router.push('/')} className="general-button">
-          Go back to Home
-        </button>
+        <HomeButton router={router} />
       </div>
     </div>
   )
