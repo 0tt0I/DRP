@@ -85,6 +85,17 @@ export default function AddReferral () {
     }
   }
 
+  // Close the scanner window with status:
+  const closeWithStatus = () => {
+    setQrOpen(false)
+
+    if (businessUid === '') {
+      setInputValidation('Scan Failed!')
+    } else {
+      setInputValidation('Scanned Successfully!')
+    }
+  }
+
   return (
     <div className="relative flex flex-col gap-8 w-screen items-center p-4">
       <div className="bg-violet-300 rounded-lg flex flex-col p-4 gap-2">
@@ -104,23 +115,12 @@ export default function AddReferral () {
               </Dialog.Description>
 
               <div className="place-self-center">
-                <QRScanner resultSetter={setBusinessUid}/>
+                <QRScanner resultSetter={setBusinessUid} afterScan={closeWithStatus} />
               </div>
 
-              <button className="general-button"
-                onClick={() => {
-                  setQrOpen(false)
-                  if (businessUid === '') {
-                    setInputValidation('Scan Failed!')
-                  } else {
-                    setInputValidation('Scanned Successfully!')
-                  }
-                }}>Scan</button>
-
-              <button className="general-button"
-                onClick={() => {
-                  setQrOpen(false)
-                }}>Cancel</button>
+              <button className="general-button" onClick={() => setQrOpen(false)}>
+                CANCEL
+              </button>
             </Dialog.Panel>
           </div>
         </Dialog>
