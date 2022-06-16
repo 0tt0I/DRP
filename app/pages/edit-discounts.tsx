@@ -1,7 +1,9 @@
 import { Dialog } from '@headlessui/react'
+import { addDoc, collection, doc } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import HomeButton from '../components/HomeButton'
+import { auth, db } from '../firebase'
 
 export default function SetDiscounts () {
   const router = useRouter()
@@ -15,6 +17,21 @@ export default function SetDiscounts () {
   // state for points input
   // eslint-disable-next-line no-unused-vars
   const [newPoints, setNewPoints] = useState('')
+
+  const createDiscount = async () => {
+    // business should already be logged in
+    const businessUid = auth.currentUser!.uid
+
+    console.log(businessUid)
+
+    // null check
+    if (businessUid) {
+      const discountCollection = collection(db, 'businesses', businessUid, 'discounts')
+      const newDiscount = { description: newDescription, points: newPoints }
+
+      await addDoc(discountCollection, newDiscount)
+    }
+  }
 
   return (
     <div className="home-div">
@@ -53,8 +70,8 @@ export default function SetDiscounts () {
               </div>
 
               <button className="general-button" onClick={() => {
+                createDiscount()
                 setInputOpen(false)
-                console.log(newPoints)
               }}>
                 Submit
               </button>
