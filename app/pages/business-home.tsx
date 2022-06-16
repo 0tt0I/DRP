@@ -27,6 +27,11 @@ export default function BusinessHome () {
           <button onClick={() => router.push('/qr-scanner')} className="general-button">
             Scan Discount Code
           </button>
+
+          <button onClick={() => router.push('/set-discount')} className="general-button">
+            Set Discount Offered
+          </button>
+
         </div>
       </div>
     </div>
