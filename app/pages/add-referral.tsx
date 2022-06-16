@@ -97,15 +97,15 @@ export default function AddReferral () {
   }
 
   return (
-    <div className="relative flex flex-col gap-8 w-screen items-center p-4">
-      <div className="bg-violet-300 rounded-lg flex flex-col p-4 gap-2">
-        <h2 className="font-bold text-center text-4xl text-violet-800">
+    <div className="relative flex w-screen h-screen items-center justify-center">
+      <div className="default-div rounded-lg flex flex-col p-4 gap-2 w-fit">
+        <h2 className="font-bold text-center text-4xl text-dark-nonblack">
           Make a Referral
         </h2>
         <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
-            <Dialog.Panel className="w-full max-w-md overflow-hidden rounded-lg bg-violet-100 p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
-              <Dialog.Title as="h3" className="font-bold text-center text-2xl text-violet-800">
+            <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
+              <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
               Place
               </Dialog.Title>
               <Dialog.Description>
@@ -119,13 +119,13 @@ export default function AddReferral () {
               </div>
 
               <button className="general-button" onClick={() => setQrOpen(false)}>
-                CANCEL
+                Cancel
               </button>
             </Dialog.Panel>
           </div>
         </Dialog>
 
-        <div className="gap-2 flex flex-col bg-violet-400 p-2 rounded-lg">
+        <div className="gap-2 flex flex-col p-2 darker-div">
           <label>
             <input
               placeholder="Review: "
@@ -134,19 +134,19 @@ export default function AddReferral () {
           </label>
         </div>
 
-        <button className="general-button" onClick={() => {
-          setQrOpen(true)
-        }}>
+        <button className="general-button" onClick={() => setQrOpen(true)}>
           Add Place
         </button>
 
         <Camera imageRef={setImageRef}/>
 
-        <div className="place-self-center">
-          <button onClick={createReferral} className="general-button">ADD REFERRAL</button>
-        </div>
+        <button onClick={createReferral} className="general-button">Add Referral</button>
 
-        <h1 className="bg-white font-bold text-violet-600 p-2 rounded-lg text-center">{inputValidation}</h1>
+        <h1 className="white-div font-bold text-nondark p-2 text-center">{inputValidation}</h1>
+
+        <br />
+
+        <button onClick={() => router.push('/')} className="general-button">Go back to Home</button>
       </div>
     </div>
   )

@@ -11,7 +11,7 @@ export default function BusinessQRCode () {
   useEffect(() => {
     const businessUid = auth.currentUser!.uid
     if (svg.current) {
-      svg.current.appendChild(qrCodeWriter.write(businessUid, 150, 150))
+      svg.current.appendChild(qrCodeWriter.write(businessUid, 256, 256))
     }
   }, [])
 
@@ -21,14 +21,14 @@ export default function BusinessQRCode () {
         <h1>
               Your Unique Business QR Code
         </h1>
-        <div className="place-self-center">
-          <div className="w-[150px] h-[150px] bg-left" ref={svg}/>
+        <div className="place-self-center white-div">
+          <div className="w-[256px] h-[256px] bg-left" ref={svg}/>
         </div>
 
         <div className="home-buttondiv">
 
           <button onClick={() => router.push('/business-home')} className="general-button">
-                Back
+            Go back to Home
           </button>
         </div>
       </div>

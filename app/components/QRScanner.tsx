@@ -48,8 +48,8 @@ export default function QRScanner (props: QRScannerProps) {
       <video id='scanner-preview' width='512' height='512' className="rounded-lg" />
 
       {(props.showReset !== undefined && props.showReset) &&
-        <button className="general-button place-self-center grow" onClick={runScanner}>
-          RESET
+        <button className="general-button grow" onClick={runScanner}>
+          Reset
         </button>}
     </div>
   )
