@@ -3,6 +3,8 @@ import { BrowserCodeReader, BrowserQRCodeReader } from '@zxing/browser'
 
 export type QRScannerProps = {
   resultSetter: React.Dispatch<React.SetStateAction<string>>
+  afterScan?: () => void
+  showReset?: boolean
 }
 
 export default function QRScanner (props: QRScannerProps) {
@@ -35,6 +37,7 @@ export default function QRScanner (props: QRScannerProps) {
     reader.decodeOnceFromVideoDevice(selectedDevice, 'scanner-preview')
       .then(result => props.resultSetter(result.getText()))
       .catch(console.info)
+      .finally(props.afterScan)
   }
 
   // Now actually read.
@@ -44,9 +47,10 @@ export default function QRScanner (props: QRScannerProps) {
     <div className="flex flex-col gap-4">
       <video id='scanner-preview' width='512' height='512' className="rounded-lg" />
 
-      <button className="general-button place-self-center grow" onClick={runScanner}>
-        RESET
-      </button>
+      {(props.showReset !== undefined && props.showReset) &&
+        <button className="general-button place-self-center grow" onClick={runScanner}>
+          RESET
+        </button>}
     </div>
   )
 }

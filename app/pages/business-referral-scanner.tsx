@@ -45,7 +45,7 @@ export default function BusinessReferralScanner () {
       <div className="home-subdiv">
         <h1>Scan a Customer QR Code</h1>
 
-        <QRScanner resultSetter={setDecodeResult} />
+        <QRScanner resultSetter={setDecodeResult} showReset={true} />
 
         <div className="grid grid-rows-2 grid-flow-col gap-2 min-w-fit">
           <p className="font-bold text-violet-900">RAW DECODED DATA</p>
