@@ -35,6 +35,10 @@ export default function BusinessHome () {
           <button onClick={() => router.push('/business-qr-code')} className="general-button">
             Your QR Code
           </button>
+
+          <button onClick={() => router.push('/business-point-checker')} className="general-button">
+            Check Points
+          </button>
         </div>
       </div>
     </div>
