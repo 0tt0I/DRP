@@ -48,16 +48,16 @@ export default function BusinessReferralScanner () {
         <QRScanner resultSetter={setDecodeResult} showReset={true} />
 
         <div className="grid grid-rows-2 grid-flow-col gap-2 min-w-fit">
-          <p className="font-bold text-violet-900">RAW DECODED DATA</p>
-          <p className="font-bold text-violet-900 w-32">REMARK</p>
+          <p className="font-bold text-dark-nonblack">RAW DECODED DATA</p>
+          <p className="font-bold text-dark-nonblack w-32">REMARK</p>
           <p>{decodeResult}</p>
           <p className="w-72">{queryData}</p>
         </div>
-      </div>
 
-      <button onClick={() => router.push('/business-home')} className="general-button">
-        Back To Home
-      </button>
+        <button onClick={() => router.push('/business-home')} className="general-button">
+          Go back to Home
+        </button>
+      </div>
     </div>
   )
 }

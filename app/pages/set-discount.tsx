@@ -36,18 +36,22 @@ export default function SetDiscount () {
   }
 
   return (
-    <div>
-      <div className="gap-2 flex flex-col bg-violet-400 p-2 rounded-lg">
-        <label>
+    <div className="home-div">
+      <div className="home-subdiv">
+        <h1>Set a new Discount</h1>
+
+        <label className="p-2 darker-div">
           <input
             placeholder={newDiscount}
             className="input"
             onChange={(event) => setNewDiscount(event.target.value)}/>
         </label>
 
-        <div className="place-self-center">
-          <button onClick={businessSetDiscount} className="general-button">Apply</button>
-        </div>
+        <button onClick={businessSetDiscount} className="general-button">Apply</button>
+
+        <button onClick={() => router.push('/business-home')} className="general-button">
+          Go back to Home
+        </button>
       </div>
     </div>
   )

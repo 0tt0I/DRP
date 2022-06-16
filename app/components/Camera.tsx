@@ -46,26 +46,26 @@ export default function Camera (props: PropsInterface) {
         screenshotFormat = "image/jpeg"
         width = {videoConstraints.width}
         videoConstraints = {videoConstraints}
-        className = "place-self-center"
+        className = "place-self-center rounded-lg"
       />
 
       {image && (
-        <img src={image} className="place-self-center" />
+        <img src={image} className="place-self-center rounded-lg" />
       )}
 
-      <div className="col-span-2 grid grid-cols-2 row-span-1 gap-2 place-content-center">
+      <div className="col-span-2 flex flex-row gap-2 place-content-center">
         <button
-          className="cameraCapture_button general-button place-self-end"
+          className="cameraCapture_button general-button place-self-center"
           onClick={capture}
-        >&nbsp;TAKE PICTURE&nbsp;</button>
+        >&nbsp;Take Picture&nbsp;</button>
 
         <button
-          className="cameraClear_button general-button place-self-start"
+          className="cameraClear_button general-button place-self-center"
           onClick={() => {
             props.imageRef('')
             setImage(null)
           }}
-        >CLEAR PICTURE</button>
+        >Clear Picture</button>
       </div>
     </div>
   )

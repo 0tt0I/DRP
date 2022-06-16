@@ -27,15 +27,20 @@ export default function MyReferrals () {
 
   // display each referral from state, use combobox for dropdown menu
   return (
-    <div className="relative flex flex-col gap-8 w-screen items-center p-4">
-      <div className="flex flex-col gap-4 p-4 rounded-lg bg-violet-200">
-        <h1 className="font-bold text-center text-4xl text-violet-800">My Referrals</h1>
-        {referrals.map(ReferralEntry)}
-      </div>
+    <div className="relative flex flex-col w-screen items-center p-4">
+      <div className="flex flex-col gap-8 p-4 lighter-div">
+        <h1 className="font-bold text-center text-4xl text-dark-nonblack">My Referrals</h1>
 
-      <button onClick={() => router.push('/')} className="general-button">
-      Back To Home
-      </button>
+        <div className="flex flex-col gap-4">
+          {referrals.length > 0
+            ? referrals.map(ReferralEntry)
+            : <p className="text-warning text-2xl white-div p-8">You have no active referrals.</p>}
+        </div>
+
+        <button onClick={() => router.push('/')} className="general-button">
+          Go back to Home
+        </button>
+      </div>
     </div>
   )
 
@@ -43,23 +48,23 @@ export default function MyReferrals () {
     return (
       <div
         key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
-        className="flex flex-col gap-4 place-content-center p-4 bg-violet-300 rounded-lg max-w-max">
+        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg max-w-max">
         <div className="flex flex-row gap-4 place-content-start">
           <img
             src={ref.image}
-            className="aspect-square object-contain h-60 place-self-center rounded-lg bg-violet-400 p-1" />
+            className="aspect-square object-contain h-60 place-self-center p-1 darker-div" />
 
           <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
-            <h1 className="font-bold text-violet-900">PLACE</h1>
+            <h1 className="font-bold text-dark-nonblack">PLACE</h1>
             <p className="col-span-2">{ref.place}</p>
 
-            <h1 className="font-bold text-violet-900 w-32">DISCOUNT</h1>
+            <h1 className="font-bold text-dark-nonblack w-32">DISCOUNT</h1>
             <p className="col-span-2">{ref.discount}</p>
 
-            <h1 className="font-bold text-violet-900">DATE</h1>
+            <h1 className="font-bold text-dark-nonblack">DATE</h1>
             <p className="col-span-2">{ref.date}</p>
 
-            <h1 className="font-bold text-violet-900 row-span-3">REVIEW</h1>
+            <h1 className="font-bold text-dark-nonblack row-span-3">REVIEW</h1>
             <p className="col-span-2 row-span-3 w-60">{ref.review}</p>
           </div>
         </div>
