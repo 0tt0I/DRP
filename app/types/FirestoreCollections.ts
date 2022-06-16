@@ -18,4 +18,8 @@ interface Discount {
     points: number
 }
 
-export type { Referral, Businesses, Discount }
+interface BusinessPoints {
+    pointsEarned: number
+}
+
+export type { Referral, Businesses, Discount, BusinessPoints }
