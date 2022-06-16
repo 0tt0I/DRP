@@ -31,6 +31,9 @@ export default function Home () {
           <button onClick={() => router.push('/my-referrals')} className="general-button">
             My Referrals
           </button>
+          <button onClick={() => router.push('/redeem-reward')} className="general-button">
+            Redeem Rewards
+          </button>
         </div>
       </div>
     </div>
