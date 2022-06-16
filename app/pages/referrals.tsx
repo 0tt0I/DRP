@@ -1,13 +1,14 @@
 import { addDoc, getDocs, updateDoc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Camera from '../components/Camera'
 import { auth, createCollection, db, storage } from '../firebase'
 import { ref, getDownloadURL, uploadString } from '@firebase/storage'
-import { collection, doc } from 'firebase/firestore'
+import { collection, doc, getDoc } from 'firebase/firestore'
 import { Referral } from '../types/FirestoreCollections'
-import { Combobox } from '@headlessui/react'
+import { Combobox, Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
+import { BrowserQRCodeSvgWriter } from '@zxing/browser'
 
 export default function Referrals () {
   const router = useRouter()
@@ -28,6 +29,12 @@ export default function Referrals () {
   // imageRef state from Camera component
   const [imageRef, setImageRef] = useState('')
 
+  // modal state for popup and info for qr-gen
+  const [qrOpen, setQrOpen] = useState(false)
+  const [activeReferral, setActiveReferral] = useState<Referral>(
+    { place: '', review: '', date:'', userEmail:'', image: '', discount: '', businessUid: ''}
+  )
+
   const createReferral = async () => {
     if (newPlace === '' || newReview === '' || imageRef === '') {
       // set error message to be displayed
@@ -45,9 +52,12 @@ export default function Referrals () {
 
       // null check
       if (userEmail) {
+        const discountStringField = (await getDoc(doc(db, "businesses", selectedBusiness[1]))).get("new_customer_discount")
+        const discountString = discountStringField ? discountStringField : "Ask about the discount at the till!"
+
         // add doc to firestore
         const docRef = await addDoc(collectionsRef,
-          { place: newPlace, review: newReview, date, userEmail, image: '' })
+          { place: selectedBusiness[0], review: newReview, date, userEmail, image: '', discount: discountString, businessUid: selectedBusiness[1]})
 
         // get the image storage bucket from firebase storage
         const imageStorage = ref(storage, `referrals/${docRef.id}/image`)
@@ -70,7 +80,7 @@ export default function Referrals () {
   }
 
   // state for list of business names
-  const [businesses, setBusinesses] = useState<string[]>([])
+  const [businesses, setBusinesses] = useState<[string, string][]>([])
 
   // api call to firestore to run on page load
   // get all user referrals and businesses
@@ -83,10 +93,10 @@ export default function Referrals () {
     }
 
     const getBusinesses = async () => {
-      const nameList: string[] = []
+      const nameList: [string, string][] = []
 
       const data = await getDocs(collection(db, 'businesses'))
-      data.forEach(businsessDoc => nameList.push(businsessDoc.data().name))
+      data.forEach(businsessDoc => nameList.push([businsessDoc.data().name, businsessDoc.id]))
 
       setBusinesses(nameList)
     }
@@ -103,9 +113,17 @@ export default function Referrals () {
     newPlace === ''
       ? businesses
       : (businesses).filter((business) => {
-        return business.toLowerCase().includes(newPlace.toLowerCase())
+        return business[0].toLowerCase().includes(newPlace.toLowerCase())
       })
   )
+
+  const qrCodeWriter = new BrowserQRCodeSvgWriter()
+  const [qrImage, setQrImage] = useState<SVGSVGElement>()
+
+  useEffect(() => {
+    const input = activeReferral.businessUid + '-' + auth.currentUser!.uid
+    setQrImage(qrCodeWriter.write(input, 150, 150))
+  }, [qrOpen])
 
   // display each referral from state, use combobox for dropdown menu
   return (
@@ -118,11 +136,14 @@ export default function Referrals () {
         <div className="gap-2 flex flex-col bg-violet-400 p-2 rounded-lg">
           <label>
             <Combobox value={selectedBusiness} onChange={setSelectedBusiness}>
-              <Combobox.Input onChange={(event) => setNewPlace(event.target.value)} className="input" placeholder="Location Name: " />
+              <Combobox.Input 
+                onChange={(event) => setNewPlace(event.target.value)} 
+                displayValue={(business: [string, string]) => selectedBusiness ? selectedBusiness[0] : ""} 
+                className="input" placeholder="Location Name: " />
               <Combobox.Options>
                 {filteredBusinesses.map((business) => (
-                  <Combobox.Option key={business} value={business}>
-                    {business}
+                  <Combobox.Option key={business[1]} value={business}>
+                    {business[0]}
                   </Combobox.Option>
                 ))}
               </Combobox.Options>
@@ -146,6 +167,27 @@ export default function Referrals () {
         <h1 className="bg-white font-bold text-violet-600 p-2 rounded-lg text-center">{inputValidation}</h1>
       </div>
 
+      <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+            <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+              Referral code
+            </Dialog.Title>
+            <Dialog.Description>
+              <p>Scan this at {activeReferral.place} to redeem</p>
+              <p>{activeReferral.discount} available!</p>
+            </Dialog.Description>
+
+            <p>
+              <svg dangerouslySetInnerHTML={{__html: qrImage ? qrImage.innerHTML : ""}}/>
+            </p>
+
+            <button className="rounded-md border border-transparent bg-purple-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            onClick={() => setQrOpen(false)}>Cancel</button>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+
       <div className="flex flex-col gap-4 p-4 rounded-lg bg-violet-200">
         <h1 className="font-bold text-center text-4xl text-violet-800">Current Referrals</h1>
         {referrals.map(ReferralEntry)}
@@ -156,31 +198,36 @@ export default function Referrals () {
       </button>
     </div>
   )
-}
 
-function ReferralEntry (ref: Referral) {
-  return (
-    <div
-      key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
-      className="flex flex-col gap-4 place-content-center p-4 bg-violet-300 rounded-lg max-w-fit">
-      <div className="flex flex-row gap-4 place-content-start">
-        <img src={ref.image} className="object-scale-down h-60 place-self-center rounded-lg" />
-
-        <div className="grid grid-rows-6 grid-flow-col-dense place-content-center gap-2 w-fit">
-          <h1 className="font-bold text-violet-900">PLACE</h1>
-          <h1 className="font-bold text-violet-900 w-32">USER EMAIL</h1>
-          <h1 className="font-bold text-violet-900">DATE</h1>
-          <h1 className="font-bold text-violet-900 row-span-3">REVIEW</h1>
-          <p>{ref.place}</p>
-          <p>{ref.userEmail}</p>
-          <p>{ref.date}</p>
-          <p className="row-span-3 w-60">{ref.review}</p>
+  function ReferralEntry (ref: Referral) {
+    return (
+      <div
+        key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
+        className="flex flex-col gap-4 place-content-center p-4 bg-violet-300 rounded-lg max-w-fit">
+        <div className="flex flex-row gap-4 place-content-start">
+          <img src={ref.image} className="object-scale-down h-60 place-self-center rounded-lg" />
+  
+          <div className="grid grid-rows-6 grid-flow-col-dense place-content-center gap-2 w-fit">
+            <h1 className="font-bold text-violet-900">PLACE</h1>
+            <h1 className="font-bold text-violet-900 w-32">DISCOUNT</h1>
+            <h1 className="font-bold text-violet-900">DATE</h1>
+            <h1 className="font-bold text-violet-900 row-span-3">REVIEW</h1>
+            <p>{ref.place}</p>
+            <p>{ref.discount}</p>
+            <p>{ref.date}</p>
+            <p className="row-span-3 w-60">{ref.review}</p>
+  
+          </div>
+        </div>
+        <div className="general-button" onClick={() => {
+            setActiveReferral(ref)
+            setQrOpen(true)
+          }}>
+          USE REFERRAL
         </div>
       </div>
-
-      <div className="general-button">
-        USE REFERRAL
-      </div>
-    </div>
-  )
+    )
+  }
 }
+
+
