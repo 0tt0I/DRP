@@ -168,21 +168,25 @@ export default function Referrals () {
       </div>
 
       <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-            <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+        <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
+          <Dialog.Panel className="w-full max-w-md overflow-hidden rounded-lg bg-violet-100 p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
+            <Dialog.Title as="h3" className="font-bold text-center text-2xl text-violet-800">
               Referral code
             </Dialog.Title>
             <Dialog.Description>
-              <p>Scan this at {activeReferral.place} to redeem</p>
-              <p>{activeReferral.discount} available!</p>
+              <div className="flex flex-col grow text-center">
+                <p>Scan this at {activeReferral.place} to redeem:</p>
+                <p>&quot;{activeReferral.discount}&quot;</p>
+              </div>
             </Dialog.Description>
 
-            <p>
-              <svg dangerouslySetInnerHTML={{ __html: qrImage ? qrImage.innerHTML : '' }}/>
-            </p>
+            <div className="place-self-center">
+              <svg
+                className="w-[150px] h-[150px] bg-left"
+                dangerouslySetInnerHTML={{ __html: qrImage ? qrImage.innerHTML : '' }}/>
+            </div>
 
-            <button className="rounded-md border border-transparent bg-purple-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            <button className="general-button"
               onClick={() => setQrOpen(false)}>Cancel</button>
           </Dialog.Panel>
         </div>
