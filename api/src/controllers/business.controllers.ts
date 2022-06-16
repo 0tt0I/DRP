@@ -6,17 +6,16 @@ import { doc, getDoc, setDoc } from '@firebase/firestore'
 export async function businessQRScanController (req: Request, res: Response) {
   let newCustomer
 
-  const userBusinessId: String = req.body.userBusinessId
+  const qrString: String = req.body.qrString
   const businessLoggedIn: String = req.body.businessLoggedIn
-  console.log(userBusinessId)
-  const [businessUid, customerUid] = userBusinessId.split('-')
+  const [businessUid, customerUid] = qrString.split('-')
 
   // both uids non-empty
   // qrString valid
   const qrValid = businessUid && customerUid
 
   // qr code relates to logged in business
-  const businessValid = qrValid && (businessUid !== businessLoggedIn)
+  const businessValid = qrValid && (businessUid === businessLoggedIn)
   if (businessValid) {
     const businessDocRef = doc(db, 'businesses', businessUid)
     const customerDocRef = doc(businessDocRef, 'customers_visited', customerUid)
