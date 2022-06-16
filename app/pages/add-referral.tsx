@@ -4,6 +4,7 @@ import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Camera from '../components/Camera'
+import HomeButton from '../components/HomeButton'
 import QRScanner from '../components/QRScanner'
 import { auth, createCollection, db, storage } from '../firebase'
 import { Referral } from '../types/FirestoreCollections'
@@ -146,7 +147,7 @@ export default function AddReferral () {
 
         <br />
 
-        <button onClick={() => router.push('/')} className="general-button">Go back to Home</button>
+        <HomeButton router={router} />
       </div>
     </div>
   )

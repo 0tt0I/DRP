@@ -3,6 +3,7 @@ import { auth } from '../firebase'
 import { checkNewCustomer } from '../services/businessQrScan'
 import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'
+import HomeButton from '../components/HomeButton'
 
 export default function BusinessReferralScanner () {
   // Request router.
@@ -54,9 +55,7 @@ export default function BusinessReferralScanner () {
           <p className="w-72">{queryData}</p>
         </div>
 
-        <button onClick={() => router.push('/business-home')} className="general-button">
-          Go back to Home
-        </button>
+        <HomeButton router={router} where="/business-home" />
       </div>
     </div>
   )
