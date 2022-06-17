@@ -64,7 +64,11 @@ body {
     @apply place-self-center flex flex-col gap-4 default-div p-4;
 }
 
-.home-subdiv > h1 {
+.home-subdiv-l {
+    @apply place-self-center flex flex-col gap-4 lighter-div p-4;
+}
+
+.home-subdiv > h1, .home-subdiv-l > h1 {
     @apply text-3xl text-dark-nonblack font-bold text-center;
 }
 
