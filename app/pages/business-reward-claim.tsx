@@ -3,9 +3,8 @@ import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'
 import HomeButton from '../components/HomeButton'
 import { Dialog } from '@headlessui/react'
-import { BusinessPoints, Discount } from '../types/FirestoreCollections'
 import { auth, db } from '../firebase'
-import { doc, DocumentReference, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 
 export default function BusinessRewardClaim () {
   // Request router.
@@ -22,7 +21,7 @@ export default function BusinessRewardClaim () {
 
   // modal state for popup and info for qr-scan
   const [qrOpen, setQrOpen] = useState(false)
-  
+
   // modal state for popup and info for claim
   const [claimOpen, setClaimOpen] = useState(false)
 
@@ -45,17 +44,17 @@ export default function BusinessRewardClaim () {
       if (custSnap.exists()) {
         const discSnap = await getDoc(doc(db, 'businesses', businessUid, 'discounts', discountUid))
         if (discSnap.exists()) {
-            if (custSnap.data().pointsEarned < discSnap.data().points) {
-                setInputValidation('Not enough points!')
-            } else {
-                setCurrentPoints(custSnap.data().pointsEarned)
-                setCost(discSnap.data().points)
-                setDescription(discSnap.data().description)
-                setCustomerUid(uid)
-                setClaimOpen(true)
-            }
+          if (custSnap.data().pointsEarned < discSnap.data().points) {
+            setInputValidation('Not enough points!')
+          } else {
+            setCurrentPoints(custSnap.data().pointsEarned)
+            setCost(discSnap.data().points)
+            setDescription(discSnap.data().description)
+            setCustomerUid(uid)
+            setClaimOpen(true)
+          }
         } else {
-            setInputValidation("Invalid discount")
+          setInputValidation('Invalid discount')
         }
       } else {
         setInputValidation('Invalid customer')
@@ -63,18 +62,16 @@ export default function BusinessRewardClaim () {
     }
   }
 
-  //remove points from user
+  // remove points from user
   const removePoints = async () => {
-
     const businessUid = auth.currentUser!.uid
     const newPoints = currentPoints - cost
 
     console.log(newPoints)
 
     await updateDoc(doc(db, 'customers', customerUid, 'businesses', businessUid), {
-        pointsEarned: newPoints
+      pointsEarned: newPoints
     })
-
   }
 
   return (
@@ -105,7 +102,6 @@ export default function BusinessRewardClaim () {
           </div>
         </Dialog>
 
-
         <Dialog open={claimOpen} onClose={() => setClaimOpen(false)} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
@@ -118,8 +114,10 @@ export default function BusinessRewardClaim () {
                 </div>
               </Dialog.Description>
 
-              <button className="general-button" onClick={() => {setClaimOpen(false) 
-                removePoints()}}>
+              <button className="general-button" onClick={() => {
+                setClaimOpen(false)
+                removePoints()
+              }}>
                 Claim
               </button>
 
