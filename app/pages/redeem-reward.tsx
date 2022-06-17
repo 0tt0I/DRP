@@ -64,11 +64,9 @@ export default function BusinessQRCode () {
           ? discounts.map(DiscountEntry)
           : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
 
-        <div>
-          <button className="general-button" onClick={() => setDummy(true)}> Load </button>
-        </div>
-        <HomeButton router={router} where="/" />
+        <button className="general-button" onClick={() => setDummy(true)}>Load</button>
 
+        <HomeButton router={router} where="/" />
       </div>
 
     </div>

@@ -51,7 +51,7 @@ export default function SetDiscounts () {
 
   return (
     <div className="home-div">
-      <div className="home-subdiv">
+      <div className="flex flex-col gap-8 p-4 lighter-div">
         <Dialog open={inputOpen} onClose={() => setInputOpen(false)} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
@@ -96,7 +96,7 @@ export default function SetDiscounts () {
           </div>
         </Dialog>
 
-        <div className="flex flex-col gap-4 p-4 lighter-div">
+        <div className="flex flex-col gap-4 p-4">
           <h2 className="font-bold text-center text-4xl text-dark-nonblack">Set Discounts</h2>
 
           {discounts.length > 0

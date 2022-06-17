@@ -1,8 +1,8 @@
 import { Dialog } from '@headlessui/react'
-import { getDoc, doc, addDoc, updateDoc } from 'firebase/firestore'
+import { getDoc, doc, addDoc, updateDoc, DocumentSnapshot, DocumentData } from 'firebase/firestore'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Camera from '../components/Camera'
 import HomeButton from '../components/HomeButton'
 import QRScanner from '../components/QRScanner'
@@ -30,14 +30,16 @@ export default function AddReferral () {
   // modal state for popup and info for qr-scan
   const [qrOpen, setQrOpen] = useState(false)
 
+  // current selected business
+  const [selectedBusiness, setSelectedBusiness] =
+    useState<DocumentSnapshot<DocumentData> | undefined>(undefined)
+
   const createReferral = async () => {
     if (newReview === '' || imageRef === '' || businessUid === '') {
       // set error message to be displayed
       setInputValidation('Fill in all fields and take a picture!')
     } else {
-      const businessDoc = (await getDoc(doc(db, 'businesses', businessUid)))
-
-      if (businessDoc.exists()) {
+      if (selectedBusiness?.exists()) {
         // set input validation to success
         setInputValidation('Success!')
 
@@ -50,10 +52,10 @@ export default function AddReferral () {
 
         // null check
         if (userEmail) {
-          const discountStringField = businessDoc.get('new_customer_discount')
+          const discountStringField = selectedBusiness!!.get('new_customer_discount')
           const discountString = discountStringField || 'Ask about the discount at the till!'
 
-          const placeName = businessDoc.get('name')
+          const placeName = selectedBusiness!!.get('name')
 
           const newReferral = { place: placeName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: auth.currentUser!.uid }
 
@@ -86,16 +88,23 @@ export default function AddReferral () {
     }
   }
 
-  // Close the scanner window with status:
-  const closeWithStatus = () => {
-    setQrOpen(false)
-
+  // Update the input validation if uid is updated:
+  useEffect(() => {
     if (businessUid === '') {
-      setInputValidation('Scan Failed!')
+      setInputValidation('No current data.')
     } else {
-      setInputValidation('Scanned Successfully!')
+      const changeState = async () => {
+        const businessDoc = (await getDoc(doc(db, 'businesses', businessUid)))
+
+        if (businessDoc.exists()) {
+          setSelectedBusiness(businessDoc)
+          setInputValidation('Scanned for: ' + businessDoc.get('name'))
+        }
+      }
+
+      changeState()
     }
-  }
+  }, [businessUid])
 
   return (
     <div className="relative flex w-screen h-screen items-center justify-center">
@@ -116,7 +125,7 @@ export default function AddReferral () {
               </Dialog.Description>
 
               <div className="place-self-center">
-                <QRScanner resultSetter={setBusinessUid} afterScan={closeWithStatus} />
+                <QRScanner resultSetter={setBusinessUid} afterScan={() => setQrOpen(false)} />
               </div>
 
               <button className="general-button" onClick={() => setQrOpen(false)}>
