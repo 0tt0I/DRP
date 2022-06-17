@@ -47,7 +47,7 @@ export default function Referrals () {
 
   // display each referral from state, use combobox for dropdown menu
   return (
-    <div className="relative flex flex-col gap-8 w-screen items-center p-4">
+    <div className="home-div">
       <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
           <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
@@ -92,16 +92,16 @@ export default function Referrals () {
             className="aspect-square object-contain h-60 place-self-center p-1 default-div" />
 
           <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
-            <h1 className="font-bold text-dark-nonblack">PLACE</h1>
+            <h1 className="font-bold text-dark-nonblack">Place</h1>
             <p className="col-span-2">{ref.place}</p>
 
-            <h1 className="font-bold text-dark-nonblack w-32">DISCOUNT</h1>
+            <h1 className="font-bold text-dark-nonblack w-32">Discount</h1>
             <p className="col-span-2">{ref.discount}</p>
 
-            <h1 className="font-bold text-dark-nonblack">DATE</h1>
+            <h1 className="font-bold text-dark-nonblack">Date</h1>
             <p className="col-span-2">{ref.date}</p>
 
-            <h1 className="font-bold text-dark-nonblack row-span-3">REVIEW</h1>
+            <h1 className="font-bold text-dark-nonblack row-span-3">Review</h1>
             <p className="col-span-2 row-span-3 w-60">{ref.review}</p>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function Referrals () {
           setActiveReferral(ref)
           setQrOpen(true)
         }}>
-          USE REFERRAL
+          Use Referral
         </button>
       </div>
     )
