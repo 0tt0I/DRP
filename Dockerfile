@@ -55,7 +55,8 @@ COPY ./app/interfaces /workspace/app/interfaces/
 COPY ./app/types /workspace/app/types/
 COPY ./app/styles /workspace/app/styles/
 COPY ./app/hooks /workspace/app/hooks/
-COPY ./app/firebase.ts /workspace/app/firebase.ts
+COPY ./app/plugins/firebase.ts /workspace/app/plugins/firebase.ts
+COPY ./app/config/config.ts /workspace/app/config/config.ts
 COPY ./app/tsconfig.json /workspace/app/
 COPY ./app/tailwind.config.js /workspace/app/tailwind.config.js
 COPY ./app/postcss.config.js /workspace/app/postcss.config.js
