@@ -5,7 +5,6 @@ import { auth, createCollection } from '../firebase'
 import { Referral } from '../types/FirestoreCollections'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
-import { BrowserQRCodeSvgWriter } from '@zxing/browser'
 import HomeButton from '../components/HomeButton'
 import QRUid from '../components/QRUid'
 
