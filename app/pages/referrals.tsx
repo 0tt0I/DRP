@@ -7,6 +7,7 @@ import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
 import { BrowserQRCodeSvgWriter } from '@zxing/browser'
 import HomeButton from '../components/HomeButton'
+import QRUid from '../components/QRUid'
 
 export default function Referrals () {
   const router = useRouter()
@@ -36,12 +37,13 @@ export default function Referrals () {
     getUsers()
   }, [])
 
-  const qrCodeWriter = new BrowserQRCodeSvgWriter()
-  const [qrImage, setQrImage] = useState<SVGSVGElement>()
+  // Create QR code image.
+  const [qrComponent, setQrComponent] = useState(<div></div>)
 
   useEffect(() => {
     const input = activeReferral.businessUid + '-' + auth.currentUser!.uid
-    setQrImage(qrCodeWriter.write(input, 150, 150))
+    // setQrImage(qrCodeWriter.write(input, 256, 256))
+    setQrComponent(<QRUid uid={input} />)
   }, [qrOpen])
 
   // display each referral from state, use combobox for dropdown menu
@@ -60,11 +62,7 @@ export default function Referrals () {
               </div>
             </Dialog.Description>
 
-            <div className="place-self-center">
-              <svg
-                className="w-[150px] h-[150px] bg-left"
-                dangerouslySetInnerHTML={{ __html: qrImage ? qrImage.innerHTML : '' }}/>
-            </div>
+            {qrComponent}
 
             <button className="general-button"
               onClick={() => setQrOpen(false)}>Cancel</button>
