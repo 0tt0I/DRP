@@ -24,9 +24,6 @@ export default function BusinessQRCode () {
 
   const [discounts, setDiscounts] = useState<ReedemableDiscount[]>([])
 
-  // eslint-disable-next-line no-unused-vars
-  const [dummy, setDummy] = useState(false)
-
   useEffect(() => {
     const acc: ReedemableDiscount[] = []
 
@@ -44,6 +41,10 @@ export default function BusinessQRCode () {
             const data = discount.data()
             acc.push({ pointsEarned: docPoints, pointsNeeded: data.points, description: data.description, discountUid: discount.id, place: docSnap.data().name })
           })
+
+          // This updates acc for every new docSnap.
+          // TODO: change this later.
+          setDiscounts(acc)
         } else {
           console.log('broken')
         }
@@ -51,20 +52,17 @@ export default function BusinessQRCode () {
     }
 
     getBusinessIds()
-    setDiscounts(acc)
   }, [])
 
   return (
     <div className="home-div">
-      <div className="home-subdiv">
+      <div className="home-subdiv-l">
         <h1>
               Redeem Referrals
         </h1>
         {discounts.length > 0
           ? discounts.map(DiscountEntry)
           : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
-
-        <button className="general-button" onClick={() => setDummy(true)}>Load</button>
 
         <HomeButton router={router} where="/" />
       </div>
@@ -76,15 +74,15 @@ export default function BusinessQRCode () {
     return (
       <div
         key={createHash('sha256').update(JSON.stringify(discount)).digest('hex').toString()}
-        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg max-w-max">
+        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max">
         <div className="flex flex-row gap-4 place-content-start">
 
-          <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
+          <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 min-w-max">
             <h1 className="font-bold text-dark-nonblack">Place</h1>
             <p className="col-span-2">{discount.place}</p>
 
             <h1 className="font-bold text-dark-nonblack">Description</h1>
-            <p className="col-span-2">{discount.description}</p>
+            <p className="col-span-2 break-all w-80">{discount.description}</p>
 
             <h1 className="font-bold text-dark-nonblack w-32">Points Needed</h1>
             <p className="col-span-2">{discount.pointsNeeded}</p>
@@ -95,7 +93,7 @@ export default function BusinessQRCode () {
           </div>
 
           <button className="general-button" onClick={() => setQrOpen(true)}>
-          Redeem
+            Redeem
           </button>
 
           <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
