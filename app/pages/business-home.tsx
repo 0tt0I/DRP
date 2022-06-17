@@ -39,6 +39,10 @@ export default function BusinessHome () {
           <button onClick={() => router.push('/business-point-checker')} className="general-button">
             Check Points
           </button>
+
+          <button onClick={() => router.push('/business-reward-claim')} className="general-button">
+            Reward
+          </button>
         </div>
       </div>
     </div>
