@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'
 import HomeButton from '../components/HomeButton'
@@ -20,26 +20,28 @@ export default function BusinessPointChecker () {
   // modal state for popup and info for qr-scan
   const [qrOpen, setQrOpen] = useState(false)
 
-  // Close the scanner window with status:
-  const closeWithStatus = async () => {
-    setQrOpen(false)
-
-    if (customerUid === '') {
-      setInputValidation('Scan Failed!')
-    } else {
-      setInputValidation('Scanned Successfully!')
-
-      // get points from customer collection
-      const businessUid = auth.currentUser!.uid
-      const docSnap = await getDoc(doc(db, 'customers', customerUid, 'businesses', businessUid) as DocumentReference<BusinessPoints>)
-
-      if (docSnap.exists()) {
-        setPoints(docSnap.data().pointsEarned)
+  // Check for uid change:
+  useEffect(() => {
+    const modify = async () => {
+      if (customerUid === '') {
+        setInputValidation('No data.')
       } else {
-        setInputValidation('Something went wrong!!!')
+        setInputValidation('Scanned Successfully!')
+
+        // get points from customer collection
+        const businessUid = auth.currentUser!.uid
+        const docSnap = await getDoc(doc(db, 'customers', customerUid, 'businesses', businessUid) as DocumentReference<BusinessPoints>)
+
+        if (docSnap.exists()) {
+          setPoints(docSnap.data().pointsEarned)
+        } else {
+          setInputValidation('Something went wrong!')
+        }
       }
     }
-  }
+
+    modify()
+  }, [customerUid])
 
   return (
     <div className="home-div">
@@ -59,7 +61,7 @@ export default function BusinessPointChecker () {
               </Dialog.Description>
 
               <div className="place-self-center">
-                <QRScanner resultSetter={setCustomerUid} afterScan={closeWithStatus} />
+                <QRScanner resultSetter={setCustomerUid} afterScan={() => setQrOpen(false)} />
               </div>
 
               <button className="general-button" onClick={() => setQrOpen(false)}>

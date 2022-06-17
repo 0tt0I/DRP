@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'
 import HomeButton from '../components/HomeButton'
@@ -25,42 +25,44 @@ export default function BusinessRewardClaim () {
   // modal state for popup and info for claim
   const [claimOpen, setClaimOpen] = useState(false)
 
-  // Close the scanner window with status:
-  const closeWithStatus = async () => {
-    setQrOpen(false)
+  // Update on state changes to reward:
+  useEffect(() => {
+    const modify = async () => {
+      if (encodedReward === '') {
+        setInputValidation('Scan Failed!')
+      } else {
+        setInputValidation('Scanned Successfully!')
 
-    if (encodedReward === '') {
-      setInputValidation('Scan Failed!')
-    } else {
-      setInputValidation('Scanned Successfully!')
+        // get points from customer collection
 
-      // get points from customer collection
+        const [uid, discountUid] = encodedReward.split('-', 2)
 
-      const [uid, discountUid] = encodedReward.split('-', 2)
+        const businessUid = auth.currentUser!.uid
+        const custSnap = await getDoc(doc(db, 'customers', uid, 'businesses', businessUid))
 
-      const businessUid = auth.currentUser!.uid
-      const custSnap = await getDoc(doc(db, 'customers', uid, 'businesses', businessUid))
-
-      if (custSnap.exists()) {
-        const discSnap = await getDoc(doc(db, 'businesses', businessUid, 'discounts', discountUid))
-        if (discSnap.exists()) {
-          if (custSnap.data().pointsEarned < discSnap.data().points) {
-            setInputValidation('Not enough points!')
+        if (custSnap.exists()) {
+          const discSnap = await getDoc(doc(db, 'businesses', businessUid, 'discounts', discountUid))
+          if (discSnap.exists()) {
+            if (custSnap.data().pointsEarned < discSnap.data().points) {
+              setInputValidation('Not enough points!')
+            } else {
+              setCurrentPoints(custSnap.data().pointsEarned)
+              setCost(discSnap.data().points)
+              setDescription(discSnap.data().description)
+              setCustomerUid(uid)
+              setClaimOpen(true)
+            }
           } else {
-            setCurrentPoints(custSnap.data().pointsEarned)
-            setCost(discSnap.data().points)
-            setDescription(discSnap.data().description)
-            setCustomerUid(uid)
-            setClaimOpen(true)
+            setInputValidation('Invalid discount')
           }
         } else {
-          setInputValidation('Invalid discount')
+          setInputValidation('Invalid customer')
         }
-      } else {
-        setInputValidation('Invalid customer')
       }
     }
-  }
+
+    modify()
+  }, [encodedReward])
 
   // remove points from user
   const removePoints = async () => {
@@ -92,7 +94,7 @@ export default function BusinessRewardClaim () {
               </Dialog.Description>
 
               <div className="place-self-center">
-                <QRScanner resultSetter={setEncodedReward} afterScan={closeWithStatus} />
+                <QRScanner resultSetter={setEncodedReward} afterScan={() => setQrOpen(false)} />
               </div>
 
               <button className="general-button" onClick={() => setQrOpen(false)}>
