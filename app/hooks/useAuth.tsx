@@ -16,6 +16,8 @@ import React, { createContext, useContext, useEffect, useMemo, useRef, useState 
 
 import { auth, db } from '../firebase'
 
+import cookie from 'cookie-cutter'
+
 // AuthContext type, promises signify the completion of an async function
 interface IAuth {
   user: User | null
@@ -77,12 +79,12 @@ export const AuthProvider = ({ children }: ProviderProps) => {
       .then(async (userCredential) => {
         setUser(userCredential.user)
 
+
         // create business document in relevant collection a re-route to right page
         if (isBusiness) {
           await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
             name: 'todo!() name'
           })
-
           router.push('business-home')
         } else {
           router.push('/')
@@ -98,9 +100,11 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     setLoading(true) // user is signing up
 
     // create firebase entry, and push user to home screen using next router
+    // TODO: elegantly handle the non-existent user case
     await signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         setUser(userCredential.user)
+        cookie.set('auth_token', await userCredential.user.getIdToken())
 
         // getting document if exists from businesses collection
         const docRef = doc(db, 'businesses', auth.currentUser!.uid)
