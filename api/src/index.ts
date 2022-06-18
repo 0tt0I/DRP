@@ -8,6 +8,8 @@ import {
 
 import { router } from './routes'
 import { environmentConfig } from './config/config'
+import cookieParser from 'cookie-parser'
+import readCookie from './middleware/cookieReader'
 
 const app = express()
 const port = environmentConfig.port
@@ -16,6 +18,8 @@ app.use(express.static(pathJoin(__dirname, '../../app/out')))
 app.use(cors())
 app.use(bodyParserJson())
 app.use(bodyParserUrlEncoded({ extended: true }))
+app.use(cookieParser())
+app.use(readCookie)
 
 app.use('/api', router)
 
