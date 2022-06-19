@@ -15,7 +15,8 @@ interface Businesses {
 
 interface Discount {
     description: string,
-    points: number
+    points: number,
+    id: string
 }
 
 interface BusinessPoints {
