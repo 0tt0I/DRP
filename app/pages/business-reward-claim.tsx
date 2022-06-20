@@ -4,7 +4,9 @@ import QRScanner from '../components/QRScanner'
 import HomeButton from '../components/HomeButton'
 import { Dialog } from '@headlessui/react'
 import { auth, db } from '../firebase'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
+import { getPointsEarned } from '../services/customerInfo'
+import { getDiscountInfo } from '../services/discountInfo'
 
 export default function BusinessRewardClaim () {
   // Request router.
@@ -38,26 +40,27 @@ export default function BusinessRewardClaim () {
         const [uid, discountUid] = encodedReward.split('-', 2)
 
         const businessUid = auth.currentUser!.uid
-        const custSnap = await getDoc(doc(db, 'customers', uid, 'businesses', businessUid))
 
-        if (custSnap.exists()) {
-          const discSnap = await getDoc(doc(db, 'businesses', businessUid, 'discounts', discountUid))
-          if (discSnap.exists()) {
-            if (custSnap.data().pointsEarned < discSnap.data().points) {
-              const pts = ' (' + custSnap.data().pointsEarned + '/' + discSnap.data().points + ')'
-              setInputValidation('Not enough points.' + pts)
+        const custPoints = await getPointsEarned(uid, businessUid)
+        const [discPoints, discDescription] = await getDiscountInfo(businessUid, discountUid)
+
+        if (discPoints === -1) {
+          setInputValidation('Invalid discount')
+        } else {
+          if (custPoints === -1) {
+            setInputValidation('Invalid customer')
+          } else {
+            if (custPoints < discPoints) {
+              const pts = ' (' + custPoints + '/' + discPoints + ')'
+              setInputValidation('Not enough points!' + pts)
             } else {
-              setCurrentPoints(custSnap.data().pointsEarned)
-              setCost(discSnap.data().points)
-              setDescription(discSnap.data().description)
+              setCurrentPoints(custPoints)
+              setCost(discPoints)
+              setDescription(discDescription)
               setCustomerUid(uid)
               setClaimOpen(true)
             }
-          } else {
-            setInputValidation('Invalid discount.')
           }
-        } else {
-          setInputValidation('Invalid customer.')
         }
       }
     }
