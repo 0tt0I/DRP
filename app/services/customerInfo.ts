@@ -1,5 +1,7 @@
-import { collection, CollectionReference, doc, getDoc, getDocs, updateDoc, query, where } from '@firebase/firestore'
-import { db } from '../firebase'
+import { collection, CollectionReference, doc, getDoc, getDocs, updateDoc, query, where, addDoc } from '@firebase/firestore'
+import { ref } from '@firebase/storage'
+import { getDownloadURL, uploadString } from 'firebase/storage'
+import { db, storage } from '../firebase'
 import { RedeemableDiscount, Referral } from '../types/FirestoreCollections'
 
 export async function getPointsEarned (customerUid: string, businessUid: string): Promise<number> {
@@ -58,4 +60,26 @@ export async function getUserDiscounts (customerUid: string): Promise<Redeemable
   })
 
   return acc
+}
+
+
+export async function addReferral (referral: Referral, imageRef: string): Promise<void> {
+  const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
+
+  // add doc to firestore
+  const docRef = await addDoc(collectionsRef, referral)
+
+  // get the image storage bucket from firebase storage
+  const imageStorage = ref(storage, `referrals/${docRef.id}/image`)
+
+  // upload image, then update firestore document with image's download URL
+  await uploadString(imageStorage, imageRef, 'data_url').then(
+    async snapshot => {
+      const downloadURL = await getDownloadURL(imageStorage)
+
+      await updateDoc(doc(db, 'referrals', docRef.id), {
+        image: downloadURL
+      })
+    }
+  ) 
 }
