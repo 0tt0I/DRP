@@ -15,8 +15,8 @@ export default function MyReferrals () {
 
   useEffect(() => {
     const getUsers = async () => {
-      const refs = await getUserReferrals(getUid())
-      setReferrals(refs)
+      const jsonResponse = await getUserReferrals(getUid())
+      setReferrals(jsonResponse.referrals)
     }
 
     if (initialLoad) {
