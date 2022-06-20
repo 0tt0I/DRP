@@ -30,8 +30,8 @@ export default function RedeemReward () {
 
   useEffect(() => {
     const getBusinessIds = async () => {
-      const discs = await getUserDiscounts(uid.current)
-      setDiscounts(discs)
+      const jsonResponse = await getUserDiscounts(uid.current)
+      setDiscounts(jsonResponse.discounts)
     }
 
     if (initialLoad) {
