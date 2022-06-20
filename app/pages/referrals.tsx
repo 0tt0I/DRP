@@ -29,8 +29,8 @@ export default function Referrals () {
   // get all user referrals and businesses
   useEffect(() => {
     const getUsers = async () => {
-      const data = await getOtherReferrals(uid.current)
-      setReferrals(data)
+      const jsonResponse = await getOtherReferrals(uid.current)
+      setReferrals(jsonResponse.referrals)
     }
 
     if (initialLoad) {
