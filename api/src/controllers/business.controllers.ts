@@ -65,10 +65,11 @@ export async function businessAwardPointsController (req: Request, res: Response
   res.sendStatus(200)
 }
 
-export async function getNameAndDiscount (req: Request, res: Response) {
+export async function businessGetNameAndDiscount (req: Request, res: Response) {
 
   const businessUid: string = req.body.businessUid
-  const businessDoc = (await getDoc(doc(db, 'businesses', businessUid)))
+  const businessDocRef = doc(db, 'businesses', businessUid)
+  const businessDoc = await getDoc(businessDocRef)
 
   if (businessDoc.exists()) {
     const name: string = businessDoc.get('name')
