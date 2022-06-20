@@ -5,5 +5,5 @@ export function getUid (): string {
 }
 
 export function getUserEmail (): string {
-  return auth.currentUser!.email!
+  return auth.currentUser?.email!
 }

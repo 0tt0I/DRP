@@ -71,6 +71,7 @@ export default function AddReferral () {
         if (name === '') {
           setInputValidation('Invalid QR Code')
         } else {
+          setInputValidation('Place Scanned: ' + name)
           setBusinessName(name)
           setBusinessDiscount(discount)
         }
