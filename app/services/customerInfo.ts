@@ -61,7 +61,7 @@ export async function getUserDiscounts (customerUid: string) {
 }
 
 export async function addReferral (referral: Referral, imageRef: string): Promise<void> {
-  const res = await fetch('/api/customer/update-points', {
+  const res = await fetch('/api/customer/add-referral', {
     method: 'POST',
     body: JSON.stringify({ referral, imageRef }),
     headers: {
