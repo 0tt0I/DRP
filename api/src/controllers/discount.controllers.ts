@@ -1,4 +1,4 @@
-import { doc, getDoc, collection, CollectionReference, getDocs } from '@firebase/firestore'
+import { doc, getDoc, collection, CollectionReference, getDocs, addDoc } from '@firebase/firestore'
 import { Request, Response } from 'express'
 import { Discount } from '../models/FirestoreCollections'
 import { db } from '../plugins/firebase'
@@ -29,4 +29,13 @@ export async function discountsGetAllController (req: Request, res: Response) {
 
   const discounts = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
   res.status(200).json({ discounts })
+}
+
+export async function discountAddController (req: Request, res: Response) {
+  const businessUid: string = req.body.businessUid
+  const discount: Discount = req.body.discount
+
+  const discountCollection = collection(db, 'businesses', businessUid, 'discounts') as CollectionReference<Discount>
+  await addDoc(discountCollection, discount)
+  res.status(200)
 }
