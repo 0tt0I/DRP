@@ -1,21 +1,15 @@
 import { Dialog } from '@headlessui/react'
-import { getDoc, doc, addDoc, updateDoc } from 'firebase/firestore'
-import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import Camera from '../components/Camera'
 import HomeButton from '../components/HomeButton'
 import QRScanner from '../components/QRScanner'
-import { createCollection, db, storage } from '../firebase'
 import { getUid, getUserEmail } from '../services/authInfo'
 import { getNameAndDiscount } from '../services/businessInfo'
-import { Referral } from '../types/FirestoreCollections'
+import { addReferral } from '../services/customerInfo'
 
 export default function AddReferral () {
   const router = useRouter()
-
-  // get collections reference from firestore
-  const collectionsRef = createCollection<Referral>('referrals')
 
   // states for input fields
   const [newReview, setNewReview] = useState('')
@@ -59,24 +53,7 @@ export default function AddReferral () {
 
           const newReferral = { place: businessName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: getUid() }
 
-          // add doc to firestore
-          const docRef = await addDoc(collectionsRef, newReferral)
-
-          // get the image storage bucket from firebase storage
-          const imageStorage = ref(storage, `referrals/${docRef.id}/image`)
-
-          // upload image, then update firestore document with image's download URL
-          await uploadString(imageStorage, imageRef, 'data_url').then(
-            async snapshot => {
-              const downloadURL = await getDownloadURL(imageStorage)
-
-              await updateDoc(doc(db, 'referrals', docRef.id), {
-                image: downloadURL
-              })
-            }
-          )
-
-          newReferral.image = imageRef
+          await addReferral(newReferral, imageRef)
 
           // set taken image to empty again
           setImageRef('')
