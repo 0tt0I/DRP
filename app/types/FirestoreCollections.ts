@@ -14,7 +14,7 @@ interface Businesses {
 }
 
 interface Discount {
-    id: string
+    id?: string
     description: string,
     points: number
     id: string
