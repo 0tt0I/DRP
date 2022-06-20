@@ -64,7 +64,8 @@ export default function Referrals () {
   useEffect(() => {
     const getDiscounts = async () => {
       if (referralOpen) {
-        setDiscounts(await getAllDiscounts(activeReferral.businessUid))
+        const jsonResponse = await getAllDiscounts(activeReferral.businessUid)
+        setDiscounts(jsonResponse.discounts)
       }
     }
 
