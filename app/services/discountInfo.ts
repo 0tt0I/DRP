@@ -1,5 +1,6 @@
-import { doc, getDoc } from '@firebase/firestore'
+import { doc, getDoc, collection, CollectionReference, getDocs } from '@firebase/firestore'
 import { db } from '../firebase'
+import { Discount } from '../types/FirestoreCollections'
 
 export async function getDiscountInfo (businessUid: string, discountUid: string): Promise<[number, string]> {
   const docRef = doc(db, 'businesses', businessUid, 'discounts', discountUid)
@@ -10,4 +11,12 @@ export async function getDiscountInfo (businessUid: string, discountUid: string)
   } else {
     return [-1, ''] // document doesn't exist
   }
+}
+
+export async function getAllDiscounts (businessUid: string): Promise<Discount[]> {
+  const discountCollection = collection(db, 'businesses', businessUid, 'discounts') as CollectionReference<Discount>
+  const data = await getDocs(discountCollection)
+  // get relevant information from document
+
+  return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
 }
