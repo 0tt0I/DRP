@@ -96,7 +96,7 @@ export default function Referrals () {
 
   // display each referral from state, use combobox for dropdown menu
   return (
-    <div className="home-div">
+    <div className="relative grid h-screen justify-center items-center p-2 sm:p-4">
       <Dialog open={referralOpen} onClose={() => setReferralOpen(false)} className="relative z-50">
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
           <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
@@ -121,7 +121,7 @@ export default function Referrals () {
         </div>
       </Dialog>
 
-      <div className="flex flex-col gap-4 p-4 lighter-div">
+      <div className="flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 lighter-div">
         <h1 className="font-bold text-center text-4xl text-dark-nonblack">Current Referrals</h1>
 
         {referrals.length > 0
@@ -137,24 +137,24 @@ export default function Referrals () {
     return (
       <div
         key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
-        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg max-w-max">
+        className="flex flex-col gap-4 place-content-center p-2 sm:p-4 default-div rounded-lg max-h-max">
         <div className="flex flex-row gap-4 place-content-start">
           <img
             src={ref.image}
-            className="aspect-square object-contain h-60 place-self-center p-1 default-div" />
+            className="aspect-square object-contain h-32 sm:h-60 place-self-center p-1 default-div" />
 
           <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
             <h1 className="font-bold text-dark-nonblack">Place</h1>
             <p className="col-span-2">{ref.place}</p>
 
-            <h1 className="font-bold text-dark-nonblack w-32">Discount</h1>
+            <h1 className="font-bold text-dark-nonblack w-18 sm:w-24">Discount</h1>
             <p className="col-span-2">{ref.discount}</p>
 
             <h1 className="font-bold text-dark-nonblack">Date</h1>
             <p className="col-span-2">{ref.date}</p>
 
             <h1 className="font-bold text-dark-nonblack row-span-3">Review</h1>
-            <p className="col-span-2 row-span-3 w-60">{ref.review}</p>
+            <p className="col-span-2 row-span-3 w-32 sm:w-48">{ref.review}</p>
           </div>
         </div>
 
