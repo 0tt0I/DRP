@@ -1,6 +1,6 @@
 import { doc, getDoc, updateDoc, collection, CollectionReference, getDocs, query, where } from '@firebase/firestore'
 import { Request, Response } from 'express'
-import { Referral } from '../models/FirestoreCollections'
+import { RedeemableDiscount, Referral } from '../models/FirestoreCollections'
 import { db } from '../plugins/firebase'
 
 export async function customerGetPointsController (req: Request, res: Response) {
@@ -53,4 +53,31 @@ export async function customerGetOtherReferrals (req: Request, res: Response) {
   const referrals = (data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
 
   res.status(200).json({ referrals })
+}
+
+// wip: forEach loop doesn't finish before the response is sent
+export async function customerGetUserDiscounts (req: Request, res: Response) {
+  const customerUid: string = req.body.customerUid
+  const visitedBusinessCollection = collection(db, 'customers', customerUid, 'businesses')
+
+  const acc: RedeemableDiscount[] = []
+
+  const querySnapshot = await getDocs(visitedBusinessCollection)
+  querySnapshot.forEach(async (business) => {
+    const docPoints = business.data().pointsEarned
+    const docSnap = await getDoc(doc(db, 'businesses', business.id))
+
+    if (docSnap.exists()) {
+      const currentDiscountDocs = await getDocs(query(collection(db, 'businesses', business.id, 'discounts'), where('points', '<=', docPoints)))
+      currentDiscountDocs.forEach(async (discount) => {
+        const data = discount.data()
+        const redeemable: RedeemableDiscount = { pointsEarned: docPoints, pointsNeeded: data.points, description: data.description, discountUid: discount.id, place: docSnap.data().name }
+        acc.push(redeemable)
+      })
+    } else {
+      // error handling - should never happen
+    }
+  })
+
+  res.status(200).json({ discounts: acc })
 }
