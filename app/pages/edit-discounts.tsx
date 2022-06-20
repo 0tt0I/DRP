@@ -1,12 +1,11 @@
 import { Dialog } from '@headlessui/react'
-import { addDoc, collection, CollectionReference, getDocs } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import HomeButton from '../components/HomeButton'
-import { auth, db } from '../firebase'
+import { auth } from '../firebase'
 import { Discount } from '../types/FirestoreCollections'
 import { createHash } from 'crypto'
-import { getAllDiscounts } from '../services/discountInfo'
+import { addDiscount, getAllDiscounts } from '../services/discountInfo'
 
 export default function SetDiscounts () {
   const router = useRouter()
@@ -26,11 +25,11 @@ export default function SetDiscounts () {
   const [discounts, setDiscounts] = useState<Discount[]>([])
   const [initialLoad, setInitialLoad] = useState(true)
 
-  useEffect(() => {
-    const getDiscountList = async () => {
-      setDiscounts(await getAllDiscounts(businessUid.current))
-    }
+  const getDiscountList = async () => {
+    setDiscounts(await getAllDiscounts(businessUid.current))
+  }
 
+  useEffect(() => {
     if (initialLoad) {
       getDiscountList()
       setInitialLoad(false)
@@ -38,16 +37,13 @@ export default function SetDiscounts () {
   }, [])
 
   const createDiscount = async () => {
-    // business should already be logged in
-    const discountCollection = collection(db, 'businesses', businessUid.current, 'discounts') as CollectionReference<Discount>
+    const newDiscount: Discount = {
+      description: newDescription,
+      points: newPoints
+    }
 
-    const newDiscount = { description: newDescription, points: newPoints }
-
-    const data = await getDocs(discountCollection)
-    // get relevant information from document
-    setDiscounts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-
-    await addDoc(discountCollection, newDiscount)
+    await addDiscount(businessUid.current, newDiscount)
+    await getDiscountList()
   }
 
   return (
