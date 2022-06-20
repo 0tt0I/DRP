@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react'
-import { getDoc, doc, addDoc, updateDoc, DocumentSnapshot, DocumentData } from 'firebase/firestore'
+import { getDoc, doc, addDoc, updateDoc } from 'firebase/firestore'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
@@ -8,6 +8,7 @@ import HomeButton from '../components/HomeButton'
 import QRScanner from '../components/QRScanner'
 import { createCollection, db, storage } from '../firebase'
 import { getUid, getUserEmail } from '../services/authInfo'
+import { getNameAndDiscount } from '../services/businessInfo'
 import { Referral } from '../types/FirestoreCollections'
 
 export default function AddReferral () {
@@ -28,19 +29,20 @@ export default function AddReferral () {
   // state for business UID
   const [businessUid, setBusinessUid] = useState('')
 
+  // state for business name
+  const [businessName, setBusinessName] = useState('')
+  // state for business UID
+  const [businessDiscount, setBusinessDiscount] = useState('')
+
   // modal state for popup and info for qr-scan
   const [qrOpen, setQrOpen] = useState(false)
 
-  // current selected business
-  const [selectedBusiness, setSelectedBusiness] =
-    useState<DocumentSnapshot<DocumentData> | undefined>(undefined)
 
   const createReferral = async () => {
-    if (newReview === '' || imageRef === '' || businessUid === '') {
+    if (newReview === '' || imageRef === '' || businessUid === '' || businessName === '') {
       // set error message to be displayed
       setInputValidation('Fill in all fields and take a picture!')
     } else {
-      if (selectedBusiness?.exists()) {
         // set input validation to success
         setInputValidation('Success!')
 
@@ -53,12 +55,9 @@ export default function AddReferral () {
 
         // null check
         if (userEmail) {
-          const discountStringField = selectedBusiness!!.get('new_customer_discount')
-          const discountString = discountStringField || 'Ask about the discount at the till!'
+          const discountString = businessDiscount === '' ? 'Ask about the discount at the till' : businessDiscount
 
-          const placeName = selectedBusiness!!.get('name')
-
-          const newReferral = { place: placeName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: getUid() }
+          const newReferral = { place: businessName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: getUid() }
 
           // add doc to firestore
           const docRef = await addDoc(collectionsRef, newReferral)
@@ -83,29 +82,29 @@ export default function AddReferral () {
           setImageRef('')
           router.push('/my-referrals')
         }
-      } else {
-        setInputValidation('Invalid QR code, try scanning again!')
       }
     }
-  }
-
+  
   // Update the input validation if uid is updated:
   useEffect(() => {
     if (businessUid === '') {
       setInputValidation('No current data.')
     } else {
       const changeState = async () => {
-        const businessDoc = (await getDoc(doc(db, 'businesses', businessUid)))
-
-        if (businessDoc.exists()) {
-          setSelectedBusiness(businessDoc)
-          setInputValidation('Scanned for: ' + businessDoc.get('name'))
+        const [name, discount] = await getNameAndDiscount(businessUid)
+        if (name === '') {
+          setInputValidation("Invalid QR Code")
+        } else {
+          setBusinessName(name)
+          setBusinessDiscount(discount)
         }
       }
 
       changeState()
     }
   }, [businessUid])
+
+
 
   return (
     <div className="relative flex w-screen h-screen items-center justify-center">
