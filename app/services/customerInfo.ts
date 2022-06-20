@@ -52,28 +52,16 @@ export async function getOtherReferrals (customerUid: string) {
   return await res.json()
 }
 
-export async function getUserDiscounts (customerUid: string): Promise<RedeemableDiscount[]> {
-  const acc: RedeemableDiscount[] = []
-
-  const visitedBusinessCollection = collection(db, 'customers', customerUid, 'businesses')
-
-  const querySnapshot = await getDocs(visitedBusinessCollection)
-  querySnapshot.forEach(async (business) => {
-    const docPoints = business.data().pointsEarned
-
-    const docSnap = await getDoc(doc(db, 'businesses', business.id))
-    if (docSnap.exists()) {
-      const currentDiscountDocs = await getDocs(query(collection(db, 'businesses', business.id, 'discounts'), where('points', '<=', docPoints)))
-      currentDiscountDocs.forEach(async (discount) => {
-        const data = discount.data()
-        acc.push({ pointsEarned: docPoints, pointsNeeded: data.points, description: data.description, discountUid: discount.id, place: docSnap.data().name })
-      })
-    } else {
-      // error handling - should never happen
+export async function getUserDiscounts (customerUid: string) {
+  const res = await fetch('/api/customer/get-user-discounts', {
+    method: 'POST',
+    body: JSON.stringify({ customerUid }),
+    headers: {
+      'Content-Type': 'application/json'
     }
   })
 
-  return acc
+  return await res.json()
 }
 
 export async function addReferral (referral: Referral, imageRef: string): Promise<void> {
