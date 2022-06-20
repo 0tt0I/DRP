@@ -6,6 +6,7 @@ import QRUid from '../components/QRUid'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
 import { getUserDiscounts } from '../services/customerInfo'
+import { getUid } from '../services/authInfo'
 
 interface ReedemableDiscount {
   pointsEarned: number,
@@ -17,7 +18,7 @@ interface ReedemableDiscount {
 
 export default function RedeemReward () {
   const router = useRouter()
-  const uid = useRef(auth.currentUser!.uid)
+  const uid = useRef(getUid())
 
   // modal state for popup and info for qr-gen
   const [qrOpen, setQrOpen] = useState(false)
@@ -30,7 +31,7 @@ export default function RedeemReward () {
 
   useEffect(() => {
     const getBusinessIds = async () => {
-      const discs = await getUserDiscounts(auth.currentUser!.uid)
+      const discs = await getUserDiscounts(getUid())
       setDiscounts(discs)
     }
 
