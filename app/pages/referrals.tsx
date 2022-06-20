@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { auth } from '../firebase'
 import { Discount, Referral } from '../types/FirestoreCollections'
 import { Dialog } from '@headlessui/react'
@@ -24,11 +24,13 @@ export default function Referrals () {
   }
   const [activeReferral, setActiveReferral] = useState<Referral>(emptyReferral)
 
+  const uid = useRef(getUid())
+
   // api call to firestore to run on page load
   // get all user referrals and businesses
   useEffect(() => {
     const getUsers = async () => {
-      const data = await getOtherReferrals(getUid())
+      const data = await getOtherReferrals(uid.current)
       setReferrals(data)
     }
 
@@ -49,7 +51,7 @@ export default function Referrals () {
     const input = activeReferral.businessUid +
       '-' + activeReferral.customerUid +
       '-' + selectedDiscount.id +
-      '-' + getUid()
+      '-' + uid.current
     // setQrImage(qrCodeWriter.write(input, 256, 256))
     setQrComponent(<QRUid uid={input} />)
   }, [selectedDiscount])

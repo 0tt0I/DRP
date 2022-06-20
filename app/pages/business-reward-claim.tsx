@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'
 import HomeButton from '../components/HomeButton'
@@ -27,6 +27,8 @@ export default function BusinessRewardClaim () {
   // modal state for popup and info for claim
   const [claimOpen, setClaimOpen] = useState(false)
 
+  const uid = useRef(getUid())
+
   // Update on state changes to reward:
   useEffect(() => {
     const modify = async () => {
@@ -37,11 +39,11 @@ export default function BusinessRewardClaim () {
 
         // get points from customer collection
 
-        const [uid, discountUid] = encodedReward.split('-', 2)
+        const [custUid, discountUid] = encodedReward.split('-', 2)
 
-        const businessUid = getUid()
+        const businessUid = uid.current
 
-        const custPoints = await getPointsEarned(uid, businessUid)
+        const custPoints = await getPointsEarned(custUid, businessUid)
         const [discPoints, discDescription] = await getDiscountInfo(businessUid, discountUid)
 
         if (discPoints === -1) {
@@ -56,7 +58,7 @@ export default function BusinessRewardClaim () {
               setCurrentPoints(custPoints)
               setCost(discPoints)
               setDescription(discDescription)
-              setCustomerUid(uid)
+              setCustomerUid(custUid)
               setClaimOpen(true)
             }
           }
@@ -69,7 +71,7 @@ export default function BusinessRewardClaim () {
 
   // remove points from user
   const removePoints = async () => {
-    const businessUid = getUid()
+    const businessUid = uid.current
     const newPoints = currentPoints - cost
     updatePointsEarned(customerUid, businessUid, newPoints)
   }

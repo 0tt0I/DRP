@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { auth } from '../firebase'
 import { awardPoints, checkNewCustomer } from '../services/businessQrScan'
 import { useRouter } from 'next/router'
@@ -22,6 +22,7 @@ export default function BusinessReferralScanner () {
     points: 0,
     id: ''
   })
+  const uid = useRef(getUid())
 
   // Run something...
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function BusinessReferralScanner () {
         businessUid,
         redeemerUid,
         discountUid,
-        getUid()))
+        uid.current))
 
       if (!jsonResponse.businessValid) {
         setQueryData('This referral is for a different business.')
@@ -69,7 +70,7 @@ export default function BusinessReferralScanner () {
 
   function awaitAwardPoints (points: Number, promoterUid: string) {
     async function awaitService () {
-      await awardPoints(points, promoterUid, getUid(), redeemerUidState)
+      await awardPoints(points, promoterUid, uid.current, redeemerUidState)
     }
 
     awaitService()
