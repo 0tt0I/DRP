@@ -84,7 +84,7 @@ export default function BusinessReferralScanner () {
 
         <div className="grid grid-rows-2 grid-flow-col gap-2 min-w-fit">
           <p className="font-bold text-dark-nonblack w-32">Result</p>
-          <p className="w-72">{queryData}</p>
+          <p className="w-48 sm:w-72">{queryData}</p>
         </div>
 
         <Dialog open={redeemOpen} onClose={() => setRedeemOpen(false)} className="relative z-50">

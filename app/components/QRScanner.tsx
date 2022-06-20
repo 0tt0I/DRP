@@ -119,7 +119,7 @@ export default class QRScanner extends React.Component<QRScannerProps, QRScanner
           id='scanner-preview'
           width='512'
           height='512'
-          className="darker-div" />
+          className="darker-div aspect-auto place-self-center max-w-[360px] max-h-[360px] sm:max-w-[512px] sm:max-h-[512px]" />
 
         {(self.showReset && self.state.currentControls === undefined) &&
           <button className="general-button grow" onClick={() => this.runScanner()}>
