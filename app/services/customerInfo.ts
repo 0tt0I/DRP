@@ -65,22 +65,13 @@ export async function getUserDiscounts (customerUid: string) {
 }
 
 export async function addReferral (referral: Referral, imageRef: string): Promise<void> {
-  const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
-
-  // add doc to firestore
-  const docRef = await addDoc(collectionsRef, referral)
-
-  // get the image storage bucket from firebase storage
-  const imageStorage = ref(storage, `referrals/${docRef.id}/image`)
-
-  // upload image, then update firestore document with image's download URL
-  await uploadString(imageStorage, imageRef, 'data_url').then(
-    async snapshot => {
-      const downloadURL = await getDownloadURL(imageStorage)
-
-      await updateDoc(doc(db, 'referrals', docRef.id), {
-        image: downloadURL
-      })
+  const res = await fetch('/api/customer/update-points', {
+    method: 'POST',
+    body: JSON.stringify({ referral, imageRef }),
+    headers: {
+      'Content-Type': 'application/json'
     }
-  )
+  })
+
+  return await res.json()
 }
