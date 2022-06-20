@@ -15,6 +15,7 @@ export default function BusinessReferralScanner () {
   const [decodeResult, setDecodeResult] = useState('')
   const [redeemOpen, setRedeemOpen] = useState(false)
   const [promoterUid, setPromoterUid] = useState('')
+  const [redeemerUidState, setRedeemerUidState] = useState('')
   const [discount, setDiscount] = useState({
     description: '',
     points: 0,
@@ -28,7 +29,7 @@ export default function BusinessReferralScanner () {
         return
       }
 
-      const [businessUid, promoterUid, redeemerUid, discountUid] = decodeResult.split('-')
+      const [businessUid, promoterUid, discountUid, redeemerUid] = decodeResult.split('-')
 
       // all uids non-empty
       // qrString valid
@@ -52,6 +53,7 @@ export default function BusinessReferralScanner () {
         if (jsonResponse.discount) {
           setDiscount(jsonResponse.discount)
           setPromoterUid(promoterUid)
+          setRedeemerUidState(redeemerUid)
           setQueryData('This is a new customer! Treat them to a discount')
           setRedeemOpen(true)
         } else {
@@ -66,7 +68,7 @@ export default function BusinessReferralScanner () {
 
   function awaitAwardPoints (points: Number, promoterUid: string) {
     async function awaitService () {
-      await awardPoints(points, promoterUid, (auth.currentUser) ? auth.currentUser!.uid : '')
+      await awardPoints(points, promoterUid, (auth.currentUser) ? auth.currentUser!.uid : '', redeemerUidState)
     }
 
     awaitService()
