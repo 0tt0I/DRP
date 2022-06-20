@@ -8,6 +8,7 @@ import HomeButton from '../components/HomeButton'
 import QRUid from '../components/QRUid'
 import { getOtherReferrals } from '../services/customerInfo'
 import { getAllDiscounts } from '../services/discountInfo'
+import { getUid } from '../services/authInfo'
 
 export default function Referrals () {
   const router = useRouter()
@@ -27,7 +28,7 @@ export default function Referrals () {
   // get all user referrals and businesses
   useEffect(() => {
     const getUsers = async () => {
-      const data = await getOtherReferrals(auth.currentUser!.uid)
+      const data = await getOtherReferrals(getUid())
       setReferrals(data)
     }
 
@@ -48,7 +49,7 @@ export default function Referrals () {
     const input = activeReferral.businessUid +
       '-' + activeReferral.customerUid +
       '-' + selectedDiscount.id +
-      '-' + auth.currentUser!.uid
+      '-' + getUid()
     // setQrImage(qrCodeWriter.write(input, 256, 256))
     setQrComponent(<QRUid uid={input} />)
   }, [selectedDiscount])

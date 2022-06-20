@@ -7,6 +7,7 @@ import Camera from '../components/Camera'
 import HomeButton from '../components/HomeButton'
 import QRScanner from '../components/QRScanner'
 import { auth, createCollection, db, storage } from '../firebase'
+import { getUid, getUserEmail } from '../services/authInfo'
 import { Referral } from '../types/FirestoreCollections'
 
 export default function AddReferral () {
@@ -48,7 +49,7 @@ export default function AddReferral () {
         const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`
 
         // get user email (shouldn't be null as user already logged in)
-        const userEmail = auth.currentUser!.email
+        const userEmail = getUserEmail()
 
         // null check
         if (userEmail) {
@@ -57,7 +58,7 @@ export default function AddReferral () {
 
           const placeName = selectedBusiness!!.get('name')
 
-          const newReferral = { place: placeName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: auth.currentUser!.uid }
+          const newReferral = { place: placeName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: getUid() }
 
           // add doc to firestore
           const docRef = await addDoc(collectionsRef, newReferral)
