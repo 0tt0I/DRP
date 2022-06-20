@@ -3,9 +3,8 @@ import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'
 import HomeButton from '../components/HomeButton'
 import { Dialog } from '@headlessui/react'
-import { auth, db } from '../firebase'
-import { doc, updateDoc } from 'firebase/firestore'
-import { getPointsEarned } from '../services/customerInfo'
+import { auth } from '../firebase'
+import { getPointsEarned, updatePointsEarned } from '../services/customerInfo'
 import { getDiscountInfo } from '../services/discountInfo'
 
 export default function BusinessRewardClaim () {
@@ -72,12 +71,7 @@ export default function BusinessRewardClaim () {
   const removePoints = async () => {
     const businessUid = auth.currentUser!.uid
     const newPoints = currentPoints - cost
-
-    console.log(newPoints)
-
-    await updateDoc(doc(db, 'customers', customerUid, 'businesses', businessUid), {
-      pointsEarned: newPoints
-    })
+    updatePointsEarned(customerUid, businessUid, newPoints)
   }
 
   return (
