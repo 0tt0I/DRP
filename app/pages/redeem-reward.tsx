@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import { auth, db } from '../firebase'
+import { auth } from '../firebase'
 import HomeButton from '../components/HomeButton'
 import QRUid from '../components/QRUid'
 import { Dialog } from '@headlessui/react'
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
 import { createHash } from 'crypto'
+import { getUserDiscounts } from '../services/customerInfo'
 
 interface ReedemableDiscount {
   pointsEarned: number,
@@ -23,36 +23,19 @@ export default function BusinessQRCode () {
   const [qrOpen, setQrOpen] = useState(false)
 
   const [discounts, setDiscounts] = useState<ReedemableDiscount[]>([])
+  const [initialLoad, setInitialLoad] = useState(true)
 
   useEffect(() => {
-    const acc: ReedemableDiscount[] = []
-
     const getBusinessIds = async () => {
-      const visitedBusinessCollection = collection(db, 'customers', uid.current, 'businesses')
-
-      const querySnapshot = await getDocs(visitedBusinessCollection)
-      querySnapshot.forEach(async (business) => {
-        const docPoints = business.data().pointsEarned
-
-        const docSnap = await getDoc(doc(db, 'businesses', business.id))
-        if (docSnap.exists()) {
-          const currentDiscountDocs = await getDocs(query(collection(db, 'businesses', business.id, 'discounts'), where('points', '<=', docPoints)))
-          currentDiscountDocs.forEach(async (discount) => {
-            const data = discount.data()
-            acc.push({ pointsEarned: docPoints, pointsNeeded: data.points, description: data.description, discountUid: discount.id, place: docSnap.data().name })
-          })
-
-          // This updates acc for every new docSnap.
-          // TODO: change this later.
-          setDiscounts(acc)
-        } else {
-          console.log('broken')
-        }
-      })
+      const discs = await getUserDiscounts(auth.currentUser!.uid)
+      setDiscounts(discs)
     }
 
-    getBusinessIds()
-  }, [])
+    if (initialLoad) {
+      getBusinessIds()
+      setInitialLoad(false)
+    }
+  })
 
   return (
     <div className="home-div">
