@@ -28,6 +28,14 @@ export async function getUserReferrals (customerUid: string): Promise<Referral[]
   return (data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
 }
 
+export async function getOtherReferrals (customerUid: string): Promise<Referral[]> {
+  const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
+  const data = await getDocs(query(collectionsRef, where('customerUid', '!=', customerUid)))
+
+  // get relevant information from document
+  return (data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+}
+
 export async function getUserDiscounts (customerUid: string): Promise<RedeemableDiscount[]> {
   const acc: RedeemableDiscount[] = []
 
