@@ -42,3 +42,15 @@ export async function customerGetUserReferrals (req: Request, res: Response) {
 
   res.status(200).json({ referrals })
 }
+
+export async function customerGetOtherReferrals (req: Request, res: Response) {
+  const customerUid: string = req.body.customerUid
+
+  const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
+  const data = await getDocs(query(collectionsRef, where('customerUid', '!=', customerUid)))
+
+  // get relevant information from document
+  const referrals = (data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+
+  res.status(200).json({ referrals })
+}
