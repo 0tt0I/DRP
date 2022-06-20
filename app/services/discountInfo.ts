@@ -25,7 +25,7 @@ export async function getAllDiscounts (businessUid: string) {
 }
 
 export async function addDiscount (businessUid: string, discount: Discount): Promise<void> {
-  const res = await fetch('/api/customer/add-discount', {
+  const res = await fetch('/api/discount/add-discount', {
     method: 'POST',
     body: JSON.stringify({ businessUid, discount }),
     headers: {
