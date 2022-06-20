@@ -24,14 +24,18 @@ export default function SetDiscounts () {
 
   // set state for referrals
   const [discounts, setDiscounts] = useState<Discount[]>([])
+  const [initialLoad, setInitialLoad] = useState(true)
 
   useEffect(() => {
     const getDiscountList = async () => {
       setDiscounts(await getAllDiscounts(businessUid.current))
     }
 
-    getDiscountList()
-  }, [discounts])
+    if (initialLoad) {
+      getDiscountList()
+      setInitialLoad(false)
+    }
+  }, [])
 
   const createDiscount = async () => {
     // business should already be logged in
