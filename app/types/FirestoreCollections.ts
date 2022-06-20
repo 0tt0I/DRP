@@ -25,4 +25,12 @@ interface BusinessPoints {
     pointsEarned: number
 }
 
-export type { Referral, Businesses, Discount, BusinessPoints }
+interface RedeemableDiscount {
+    pointsEarned: number,
+    pointsNeeded: number,
+    description: string,
+    discountUid: string,
+    place: string
+  }
+
+export type { Referral, Businesses, Discount, BusinessPoints, RedeemableDiscount }
