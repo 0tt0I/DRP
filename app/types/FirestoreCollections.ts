@@ -1,4 +1,5 @@
 interface Referral {
+    id?: string
     date: string,
     place: string,
     review: string,
