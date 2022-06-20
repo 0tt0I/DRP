@@ -43,7 +43,7 @@ function Login () {
   // handleSubmit validates input, register gets data
 
   return (
-    <div className="relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent">
+    <div className="home-div">
       <Head>
         <title>Login Page</title>
         <link rel="icon" href="coffee-icon.png" />
@@ -52,7 +52,7 @@ function Login () {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 default-div rounded-lg p-4 min-w-max">
         <h1 className="font-bold text-center text-6xl text-dark-nonblack p-2">Sign In</h1>
 
-        <div className="flex flex-col gap-2 w-96 bg-violet-400 p-2 rounded-lg">
+        <div className="flex flex-col gap-2 w-96 p-2 darker-div">
           <label>
             <input type="email"
               placeholder="Email"
@@ -79,9 +79,7 @@ function Login () {
           <button onClick={() => {
             setLogin(false)
             setIsBusiness(true)
-          }
-
-          } type="submit" className="general-button">
+          }} type="submit" className="general-button">
             Business Sign Up
           </button>
         </div>
