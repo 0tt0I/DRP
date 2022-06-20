@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { discountGetInfoController } from 'src/controllers/discount.controller'
+import { discountGetInfoController } from '../controllers/discount.controllers'
 
 export const discountRouter = Router()
 
