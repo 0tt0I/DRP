@@ -1,8 +1,4 @@
-import { collection, CollectionReference, doc, getDoc, getDocs, updateDoc, query, where, addDoc } from '@firebase/firestore'
-import { ref } from '@firebase/storage'
-import { getDownloadURL, uploadString } from 'firebase/storage'
-import { db, storage } from '../firebase'
-import { RedeemableDiscount, Referral } from '../types/FirestoreCollections'
+import { Referral } from '../types/FirestoreCollections'
 
 export async function getPointsEarned (customerUid: string, businessUid: string) {
   const res = await fetch('/api/customer/get-points', {
