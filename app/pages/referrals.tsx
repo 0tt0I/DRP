@@ -1,22 +1,19 @@
-import { getDocs, query, where, collection } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { auth, createCollection, db } from '../firebase'
+import { auth } from '../firebase'
 import { Discount, Referral } from '../types/FirestoreCollections'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
 import HomeButton from '../components/HomeButton'
 import QRUid from '../components/QRUid'
-import { doc, QuerySnapshot } from 'firebase/firestore'
+import { getOtherReferrals } from '../services/customerInfo'
 
 export default function Referrals () {
   const router = useRouter()
 
   // set state for referrals
   const [referrals, setReferrals] = useState<Referral[]>([])
-
-  // get collections reference from firestore
-  const collectionsRef = createCollection<Referral>('referrals')
+  const [initialLoad, setInitialLoad] = useState(true)
 
   // modal state for popup and info for qr-gen
   const [referralOpen, setReferralOpen] = useState(false)
@@ -29,15 +26,14 @@ export default function Referrals () {
   // get all user referrals and businesses
   useEffect(() => {
     const getUsers = async () => {
-      const data = await getDocs(query(collectionsRef, where('customerUid', '!=', auth.currentUser!.uid)))
-      console.log(data.docs.map((doc) => doc.data().customerUid))
-      console.log(auth.currentUser!.uid)
-
-      // get relevant information from document
-      setReferrals(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      const data = await getOtherReferrals(auth.currentUser!.uid)
+      setReferrals(data)
     }
 
-    getUsers()
+    if (initialLoad) {
+      getUsers()
+      setInitialLoad(false)
+    }
   }, [])
 
   // Create QR code image.
