@@ -22,6 +22,8 @@ export async function businessQRScanController (req: Request, res: Response) {
       newCustomer = false
     } else {
       newCustomer = true
+      // this document will be filled in if the business confirms
+      // they have redeemed the discount
     }
 
     if (newCustomer) {
@@ -29,9 +31,6 @@ export async function businessQRScanController (req: Request, res: Response) {
       const discountDocSnap = await getDoc(discountDocRef)
       if (discountDocSnap.exists()) {
         discount = { ...discountDocSnap.data(), id: discountDocSnap.id }
-        // set customer as old customer
-        // TODO move this to when they redeem the reward
-        await setDoc(customerDocRef, {})
       }
     }
   }
@@ -40,6 +39,7 @@ export async function businessQRScanController (req: Request, res: Response) {
 }
 
 export async function businessAwardPointsController (req: Request, res: Response) {
+  const redeemerUid: string = req.body.redeemerUid
   const promoterUid: string = req.body.promoterUid
   const points: Number = req.body.points
   const businessUid: string = req.body.businessUid
@@ -50,13 +50,17 @@ export async function businessAwardPointsController (req: Request, res: Response
     return
   }
 
-  const customerDocRef = doc(db, 'customers', promoterUid)
-  const pointsDocRef = doc(customerDocRef, 'businesses', businessUid)
+  const businessDocRef = doc(db, 'businesses', businessUid)
+  const redeemerDocRef = doc(businessDocRef, 'customers_visited', redeemerUid)
+  await setDoc(redeemerDocRef, {})
+
+  const promoterDocRef = doc(db, 'customers', promoterUid)
+  const pointsDocRef = doc(promoterDocRef, 'businesses', businessUid)
   const pointsDocSnap = await getDoc(pointsDocRef)
 
-  const prevPoints = pointsDocSnap.exists() ? pointsDocSnap.data().points : 0
+  const prevPoints = pointsDocSnap.exists() ? pointsDocSnap.data().pointsEarned : 0
 
-  await updateDoc(pointsDocRef, { points: prevPoints + points })
+  await updateDoc(pointsDocRef, { pointsEarned: prevPoints + points })
 
   res.sendStatus(200)
 }

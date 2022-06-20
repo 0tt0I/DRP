@@ -15,11 +15,12 @@ export async function checkNewCustomer (businessUid: String, redeemerUid: String
   return await res.json()
 }
 
-export async function awardPoints (points: Number, promoterUid: string, businessUid: string) {
+export async function awardPoints (points: Number, promoterUid: string, businessUid: string, redeemerUid: string) {
   const dict = {
     points,
     promoterUid,
-    businessUid
+    businessUid,
+    redeemerUid
   }
   const res = await fetch('/api/business/award-points', {
     method: 'POST',
