@@ -67,13 +67,13 @@ export default function AddReferral () {
       setInputValidation('No current data.')
     } else {
       const changeState = async () => {
-        const [name, discount] = await getNameAndDiscount(businessUid)
-        if (name === '') {
+        const jsonResponse = await getNameAndDiscount(businessUid)
+        if (jsonResponse.name === '') {
           setInputValidation('Invalid QR Code')
         } else {
-          setInputValidation('Place Scanned: ' + name)
-          setBusinessName(name)
-          setBusinessDiscount(discount)
+          setInputValidation('Place Scanned: ' + jsonResponse.name)
+          setBusinessName(jsonResponse.name)
+          setBusinessDiscount(jsonResponse.discount)
         }
       }
 
