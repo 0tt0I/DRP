@@ -1,5 +1,6 @@
 import { Router } from 'express'
+import { customerGetPointsController } from '../controllers/customer.controllers';
 
 export const customerRouter = Router()
 
-// businessRouter.get("/status", businessStatusController);
+customerRouter.get("/get-points", customerGetPointsController);
