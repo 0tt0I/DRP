@@ -7,6 +7,7 @@ import { createHash } from 'crypto'
 import HomeButton from '../components/HomeButton'
 import QRUid from '../components/QRUid'
 import { getOtherReferrals } from '../services/customerInfo'
+import { getAllDiscounts } from '../services/discountInfo'
 
 export default function Referrals () {
   const router = useRouter()
@@ -61,9 +62,7 @@ export default function Referrals () {
   useEffect(() => {
     const getDiscounts = async () => {
       if (referralOpen) {
-        const businessDocRef = doc(db, 'businesses', activeReferral.businessUid)
-        const discountsSnapshot = await getDocs(collection(businessDocRef, 'discounts')) as QuerySnapshot<Discount>
-        setDiscounts(discountsSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        setDiscounts(await getAllDiscounts(activeReferral.businessUid))
       }
     }
 
