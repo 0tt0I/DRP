@@ -5,11 +5,7 @@ import HomeButton from '../components/HomeButton'
 import { auth } from '../firebase'
 import { Discount } from '../types/FirestoreCollections'
 import { createHash } from 'crypto'
-<<<<<<< HEAD
 import { addDiscount, getAllDiscounts } from '../services/discountInfo'
-=======
-import { getAllDiscounts } from '../services/discountInfo'
->>>>>>> 912be8c (refactor: made use of getAllDiscount service in edit-discounts)
 
 export default function SetDiscounts () {
   const router = useRouter()
