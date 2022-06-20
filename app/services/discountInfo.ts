@@ -1,5 +1,3 @@
-import { doc, getDoc, collection, CollectionReference, getDocs, addDoc } from '@firebase/firestore'
-import { db } from '../firebase'
 import { Discount } from '../types/FirestoreCollections'
 
 export async function getDiscountInfo (businessUid: string, discountUid: string) {
@@ -27,6 +25,13 @@ export async function getAllDiscounts (businessUid: string) {
 }
 
 export async function addDiscount (businessUid: string, discount: Discount): Promise<void> {
-  const discountCollection = collection(db, 'businesses', businessUid, 'discounts') as CollectionReference<Discount>
-  await addDoc(discountCollection, discount)
+  const res = await fetch('/api/customer/add-discount', {
+    method: 'POST',
+    body: JSON.stringify({ businessUid, discount }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  return await res.json()
 }
