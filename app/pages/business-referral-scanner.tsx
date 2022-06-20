@@ -52,7 +52,7 @@ export default function BusinessReferralScanner () {
           <p className="font-bold text-dark-nonblack">RAW DECODED DATA</p>
           <p className="font-bold text-dark-nonblack w-32">REMARK</p>
           <p>{decodeResult}</p>
-          <p className="w-72">{queryData}</p>
+          <p className="w-48 sm:w-72">{queryData}</p>
         </div>
 
         <HomeButton router={router} where="/business-home" />
