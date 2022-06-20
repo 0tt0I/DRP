@@ -28,12 +28,16 @@ export async function updatePointsEarned (customerUid: string, businessUid: stri
   return await res.json()
 }
 
-export async function getUserReferrals (customerUid: string): Promise<Referral[]> {
-  const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
-  const data = await getDocs(query(collectionsRef, where('customerUid', '==', customerUid)))
+export async function getUserReferrals (customerUid: string) {
+  const res = await fetch('/api/customer/get-user-referrals', {
+    method: 'POST',
+    body: JSON.stringify({ customerUid }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
 
-  // get relevant information from document
-  return (data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+  return await res.json()
 }
 
 export async function getOtherReferrals (customerUid: string): Promise<Referral[]> {
