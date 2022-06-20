@@ -29,9 +29,9 @@ export default function BusinessRewardClaim () {
   useEffect(() => {
     const modify = async () => {
       if (encodedReward === '') {
-        setInputValidation('Scan Failed!')
+        setInputValidation('No data.')
       } else {
-        setInputValidation('Scanned Successfully!')
+        setInputValidation('Scanned successfully!')
 
         // get points from customer collection
 
@@ -44,7 +44,8 @@ export default function BusinessRewardClaim () {
           const discSnap = await getDoc(doc(db, 'businesses', businessUid, 'discounts', discountUid))
           if (discSnap.exists()) {
             if (custSnap.data().pointsEarned < discSnap.data().points) {
-              setInputValidation('Not enough points!')
+              const pts = ' (' + custSnap.data().pointsEarned + '/' + discSnap.data().points + ')'
+              setInputValidation('Not enough points.' + pts)
             } else {
               setCurrentPoints(custSnap.data().pointsEarned)
               setCost(discSnap.data().points)
@@ -53,10 +54,10 @@ export default function BusinessRewardClaim () {
               setClaimOpen(true)
             }
           } else {
-            setInputValidation('Invalid discount')
+            setInputValidation('Invalid discount.')
           }
         } else {
-          setInputValidation('Invalid customer')
+          setInputValidation('Invalid customer.')
         }
       }
     }
@@ -85,7 +86,7 @@ export default function BusinessRewardClaim () {
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Place
+              Customer Code
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
