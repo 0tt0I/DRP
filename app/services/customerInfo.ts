@@ -4,15 +4,17 @@ import { getDownloadURL, uploadString } from 'firebase/storage'
 import { db, storage } from '../firebase'
 import { RedeemableDiscount, Referral } from '../types/FirestoreCollections'
 
-export async function getPointsEarned (customerUid: string, businessUid: string): Promise<number> {
-  const docRef = doc(db, 'customers', customerUid, 'businesses', businessUid)
-  const docSnap = await getDoc(docRef)
+export async function getPointsEarned (customerUid: string, businessUid: string) {
+  
+  const res = await fetch('/api/customer/get-points', {
+    method: 'POST',
+    body: JSON.stringify({customerUid, businessUid}),
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
 
-  if (docSnap.exists()) {
-    return (docSnap.data().pointsEarned)
-  } else {
-    return -1 // document doesn't exist
-  }
+  return await res.json()
 }
 
 export async function updatePointsEarned (customerUid: string, businessUid: string, newPoints: number): Promise<void> {
