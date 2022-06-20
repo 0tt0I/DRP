@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { auth } from '../firebase'
 import { awardPoints, checkNewCustomer } from '../services/businessQrScan'
 import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'

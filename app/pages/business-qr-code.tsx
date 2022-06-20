@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
-import { auth } from '../firebase'
 import HomeButton from '../components/HomeButton'
 import QRUid from '../components/QRUid'
 import { getUid } from '../services/authInfo'
