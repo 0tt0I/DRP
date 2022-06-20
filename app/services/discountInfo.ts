@@ -2,15 +2,16 @@ import { doc, getDoc, collection, CollectionReference, getDocs, addDoc } from '@
 import { db } from '../firebase'
 import { Discount } from '../types/FirestoreCollections'
 
-export async function getDiscountInfo (businessUid: string, discountUid: string): Promise<[number, string]> {
-  const docRef = doc(db, 'businesses', businessUid, 'discounts', discountUid)
-  const docSnap = await getDoc(docRef)
+export async function getDiscountInfo (businessUid: string, discountUid: string) {
+  const res = await fetch('/api/discount/get-discount-info', {
+    method: 'POST',
+    body: JSON.stringify({ businessUid, discountUid }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
 
-  if (docSnap.exists()) {
-    return [(docSnap.data().points), docSnap.data().description]
-  } else {
-    return [-1, ''] // document doesn't exist
-  }
+  return await res.json()
 }
 
 export async function getAllDiscounts (businessUid: string): Promise<Discount[]> {
