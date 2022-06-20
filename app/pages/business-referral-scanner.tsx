@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'
 import HomeButton from '../components/HomeButton'
 import { Dialog } from '@headlessui/react'
+import { getUid } from '../services/authInfo'
 
 export default function BusinessReferralScanner () {
   // Request router.
@@ -43,7 +44,7 @@ export default function BusinessReferralScanner () {
         businessUid,
         redeemerUid,
         discountUid,
-        (auth.currentUser) ? auth.currentUser!.uid : ''))
+        getUid()))
 
       if (!jsonResponse.businessValid) {
         setQueryData('This referral is for a different business.')
@@ -68,7 +69,7 @@ export default function BusinessReferralScanner () {
 
   function awaitAwardPoints (points: Number, promoterUid: string) {
     async function awaitService () {
-      await awardPoints(points, promoterUid, (auth.currentUser) ? auth.currentUser!.uid : '', redeemerUidState)
+      await awardPoints(points, promoterUid, getUid(), redeemerUidState)
     }
 
     awaitService()

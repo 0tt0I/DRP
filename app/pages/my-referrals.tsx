@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { createHash } from 'crypto'
 import HomeButton from '../components/HomeButton'
 import { getUserReferrals } from '../services/customerInfo'
+import { getUid } from '../services/authInfo'
 
 export default function MyReferrals () {
   const router = useRouter()
@@ -15,7 +16,7 @@ export default function MyReferrals () {
 
   useEffect(() => {
     const getUsers = async () => {
-      const refs = await getUserReferrals(auth.currentUser!.uid)
+      const refs = await getUserReferrals(getUid())
       setReferrals(refs)
     }
 

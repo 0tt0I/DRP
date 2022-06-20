@@ -3,12 +3,13 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import HomeButton from '../components/HomeButton'
 import { db, auth } from '../firebase'
+import { getUid } from '../services/authInfo'
 
 export default function SetDiscount () {
   const router = useRouter()
 
   const [newDiscount, setNewDiscount] = useState('')
-  const businessDoc = doc(db, 'businesses', auth.currentUser!.uid)
+  const businessDoc = doc(db, 'businesses', getUid())
 
   useEffect(() => {
   // TODO: move db accesses to backend

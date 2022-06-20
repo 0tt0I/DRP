@@ -6,6 +6,7 @@ import { auth } from '../firebase'
 import { Discount } from '../types/FirestoreCollections'
 import { createHash } from 'crypto'
 import { addDiscount, getAllDiscounts } from '../services/discountInfo'
+import { getUid } from '../services/authInfo'
 
 export default function SetDiscounts () {
   const router = useRouter()
@@ -19,7 +20,7 @@ export default function SetDiscounts () {
   const [newPoints, setNewPoints] = useState(0)
   // state for discount collection ref
 
-  const businessUid = useRef(auth.currentUser!.uid)
+  const businessUid = useRef(getUid())
 
   // set state for referrals
   const [discounts, setDiscounts] = useState<Discount[]>([])

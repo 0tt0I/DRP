@@ -3,10 +3,11 @@ import React, { useRef } from 'react'
 import { auth } from '../firebase'
 import HomeButton from '../components/HomeButton'
 import QRUid from '../components/QRUid'
+import { getUid } from '../services/authInfo'
 
 export default function BusinessQRCode () {
   const router = useRouter()
-  const uid = useRef(auth.currentUser!.uid)
+  const uid = useRef(getUid())
 
   return (
     <div className="home-div">

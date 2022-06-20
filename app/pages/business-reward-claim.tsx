@@ -6,6 +6,7 @@ import { Dialog } from '@headlessui/react'
 import { auth } from '../firebase'
 import { getPointsEarned, updatePointsEarned } from '../services/customerInfo'
 import { getDiscountInfo } from '../services/discountInfo'
+import { getUid } from '../services/authInfo'
 
 export default function BusinessRewardClaim () {
   // Request router.
@@ -38,7 +39,7 @@ export default function BusinessRewardClaim () {
 
         const [uid, discountUid] = encodedReward.split('-', 2)
 
-        const businessUid = auth.currentUser!.uid
+        const businessUid = getUid()
 
         const custPoints = await getPointsEarned(uid, businessUid)
         const [discPoints, discDescription] = await getDiscountInfo(businessUid, discountUid)
@@ -68,7 +69,7 @@ export default function BusinessRewardClaim () {
 
   // remove points from user
   const removePoints = async () => {
-    const businessUid = auth.currentUser!.uid
+    const businessUid = getUid()
     const newPoints = currentPoints - cost
     updatePointsEarned(customerUid, businessUid, newPoints)
   }
