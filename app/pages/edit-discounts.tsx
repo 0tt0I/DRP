@@ -26,7 +26,8 @@ export default function SetDiscounts () {
   const [initialLoad, setInitialLoad] = useState(true)
 
   const getDiscountList = async () => {
-    setDiscounts(await getAllDiscounts(businessUid.current))
+    const jsonResponse = await getAllDiscounts(businessUid.current)
+    setDiscounts(jsonResponse.discounts)
   }
 
   useEffect(() => {
