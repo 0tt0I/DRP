@@ -1,12 +1,15 @@
 import { doc, getDoc } from '@firebase/firestore'
 import { db } from '../firebase'
 
-export async function getNameAndDiscount (businessUid: string): Promise<[string, string]> {
-  const businessDoc = (await getDoc(doc(db, 'businesses', businessUid)))
+export async function getNameAndDiscount (businessUid: string) {
+  
+  const res = await fetch('/api/business/get-name-and-discount', {
+    method: 'POST',
+    body: JSON.stringify({businessUid}),
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
 
-  if (businessDoc.exists()) {
-    return [businessDoc.get('name'), businessDoc.get('new_customer_discount')]
-  } else {
-    return ['', '']
-  }
+  return await res.json()
 }
