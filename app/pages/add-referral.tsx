@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react'
 import Camera from '../components/Camera'
 import HomeButton from '../components/HomeButton'
 import QRScanner from '../components/QRScanner'
-import { auth, createCollection, db, storage } from '../firebase'
+import { createCollection, db, storage } from '../firebase'
 import { getUid, getUserEmail } from '../services/authInfo'
 import { Referral } from '../types/FirestoreCollections'
 
