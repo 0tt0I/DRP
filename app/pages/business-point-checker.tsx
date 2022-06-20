@@ -29,11 +29,11 @@ export default function BusinessPointChecker () {
 
         // get points from customer collection
         const businessUid = getUid()
-        const pointsEarned = await getPointsEarned(customerUid, businessUid)
-        if (pointsEarned === -1) {
+        const jsonResponse = await getPointsEarned(customerUid, businessUid)
+        if (jsonResponse.pointsEarned === -1) {
           setInputValidation('Something went wrong!')
         } else {
-          setPoints(pointsEarned)
+          setPoints(jsonResponse.pointsEarned)
         }
       }
     }
