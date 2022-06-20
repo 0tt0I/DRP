@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { auth } from '../firebase'
 import { Referral } from '../types/FirestoreCollections'
 import { useRouter } from 'next/router'
 import { createHash } from 'crypto'

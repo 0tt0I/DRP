@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'
 import HomeButton from '../components/HomeButton'
 import { Dialog } from '@headlessui/react'
-import { auth } from '../firebase'
 import { getPointsEarned } from '../services/customerInfo'
 import { getUid } from '../services/authInfo'
 
