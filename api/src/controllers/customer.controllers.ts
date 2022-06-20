@@ -1,6 +1,6 @@
 import { doc, getDoc } from '@firebase/firestore'
 import { Request, Response } from 'express'
-import { db } from 'src/plugins/firebase'
+import { db } from '../plugins/firebase'
 
 export async function customerGetPointsController(req: Request, res: Response) {
 
