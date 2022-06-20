@@ -3,9 +3,8 @@ import { useRouter } from 'next/router'
 import QRScanner from '../components/QRScanner'
 import HomeButton from '../components/HomeButton'
 import { Dialog } from '@headlessui/react'
-import { BusinessPoints } from '../types/FirestoreCollections'
-import { auth, db } from '../firebase'
-import { doc, DocumentReference, getDoc } from 'firebase/firestore'
+import { auth } from '../firebase'
+import { getPointsEarned } from '../services/customerInfo'
 
 export default function BusinessPointChecker () {
   // Request router.
@@ -30,12 +29,11 @@ export default function BusinessPointChecker () {
 
         // get points from customer collection
         const businessUid = auth.currentUser!.uid
-        const docSnap = await getDoc(doc(db, 'customers', customerUid, 'businesses', businessUid) as DocumentReference<BusinessPoints>)
-
-        if (docSnap.exists()) {
-          setPoints(docSnap.data().pointsEarned)
+        const pointsEarned = await getPointsEarned(customerUid, businessUid)
+        if (pointsEarned == -1) {
+          setInputValidation("Something went wrong!")
         } else {
-          setInputValidation('Something went wrong!')
+          setPoints(pointsEarned)
         }
       }
     }
