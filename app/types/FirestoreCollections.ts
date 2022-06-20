@@ -1,4 +1,5 @@
 interface Referral {
+    id?: string
     date: string,
     place: string,
     review: string,
@@ -14,6 +15,7 @@ interface Businesses {
 }
 
 interface Discount {
+    id?: string
     description: string,
     points: number
 }
@@ -22,4 +24,12 @@ interface BusinessPoints {
     pointsEarned: number
 }
 
-export type { Referral, Businesses, Discount, BusinessPoints }
+interface RedeemableDiscount {
+    pointsEarned: number,
+    pointsNeeded: number,
+    description: string,
+    discountUid: string,
+    place: string
+  }
+
+export type { Referral, Businesses, Discount, BusinessPoints, RedeemableDiscount }

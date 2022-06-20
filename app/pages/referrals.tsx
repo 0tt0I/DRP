@@ -1,54 +1,103 @@
-import { getDocs, query, where } from '@firebase/firestore'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { auth, createCollection } from '../firebase'
-import { Referral } from '../types/FirestoreCollections'
+import React, { useEffect, useRef, useState } from 'react'
+import { Discount, Referral } from '../types/FirestoreCollections'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
 import HomeButton from '../components/HomeButton'
 import QRUid from '../components/QRUid'
+import { getOtherReferrals } from '../services/customerInfo'
+import { getAllDiscounts } from '../services/discountInfo'
+import { getUid } from '../services/authInfo'
 
 export default function Referrals () {
   const router = useRouter()
 
   // set state for referrals
   const [referrals, setReferrals] = useState<Referral[]>([])
-
-  // get collections reference from firestore
-  const collectionsRef = createCollection<Referral>('referrals')
+  const [initialLoad, setInitialLoad] = useState(true)
 
   // modal state for popup and info for qr-gen
-  const [qrOpen, setQrOpen] = useState(false)
-  const [activeReferral, setActiveReferral] = useState<Referral>(
-    { place: '', review: '', date: '', userEmail: '', image: '', discount: '', businessUid: '', customerUid: '' }
-  )
+  const [referralOpen, setReferralOpen] = useState(false)
+  const emptyReferral = {
+    place: '', review: '', date: '', userEmail: '', image: '', discount: '', businessUid: '', customerUid: ''
+  }
+  const [activeReferral, setActiveReferral] = useState<Referral>(emptyReferral)
+
+  const uid = useRef(getUid())
 
   // api call to firestore to run on page load
   // get all user referrals and businesses
   useEffect(() => {
     const getUsers = async () => {
-      const data = await getDocs(query(collectionsRef, where('customerUid', '!=', auth.currentUser!.uid)))
-
-      // get relevant information from document
-      setReferrals(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      const data = await getOtherReferrals(uid.current)
+      setReferrals(data)
     }
 
-    getUsers()
+    if (initialLoad) {
+      getUsers()
+      setInitialLoad(false)
+    }
   }, [])
 
   // Create QR code image.
+  const [qrOpen, setQrOpen] = useState(false)
   const [qrComponent, setQrComponent] = useState(<div></div>)
+  const [selectedDiscount, setSelectedDiscount] = useState<Discount>(
+    { description: '', points: 0, id: '' }
+  )
 
   useEffect(() => {
-    const input = activeReferral.businessUid + '-' + auth.currentUser!.uid
+    const input = activeReferral.businessUid +
+      '-' + activeReferral.customerUid +
+      '-' + selectedDiscount.id +
+      '-' + uid.current
     // setQrImage(qrCodeWriter.write(input, 256, 256))
     setQrComponent(<QRUid uid={input} />)
-  }, [qrOpen])
+  }, [selectedDiscount])
+
+  useEffect(() => {
+    setQrOpen(true)
+  }, [qrComponent])
+
+  const [discounts, setDiscounts] = useState<Discount[]>([])
+
+  useEffect(() => {
+    const getDiscounts = async () => {
+      if (referralOpen) {
+        setDiscounts(await getAllDiscounts(activeReferral.businessUid))
+      }
+    }
+
+    getDiscounts()
+  }, [referralOpen])
+
+  const qrDialogue = (
+    <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
+      <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
+        <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
+          <Dialog.Title as="h3" className="font-bold text-center text-2xl text-dark-nonblack">
+            Referral code
+          </Dialog.Title>
+          <Dialog.Description>
+            <div className="flex flex-col grow text-center">
+              <p>Scan this at {activeReferral.place} to redeem:</p>
+              <p>&quot;{selectedDiscount.description}&quot;</p>
+            </div>
+          </Dialog.Description>
+
+          {qrComponent}
+
+          <button className="general-button"
+            onClick={() => setQrOpen(false)}>Cancel</button>
+        </Dialog.Panel>
+      </div>
+    </Dialog>
+  )
 
   // display each referral from state, use combobox for dropdown menu
   return (
     <div className="relative grid h-screen justify-center items-center p-2 sm:p-4">
-      <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
+      <Dialog open={referralOpen} onClose={() => setReferralOpen(false)} className="relative z-50">
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
           <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
             <Dialog.Title as="h3" className="font-bold text-center text-2xl text-dark-nonblack">
@@ -56,15 +105,18 @@ export default function Referrals () {
             </Dialog.Title>
             <Dialog.Description>
               <div className="flex flex-col grow text-center">
-                <p>Scan this at {activeReferral.place} to redeem:</p>
-                <p>&quot;{activeReferral.discount}&quot;</p>
+                <p>Select one of {activeReferral.place}&apos;s discounts to redeem:</p>
               </div>
             </Dialog.Description>
 
-            {qrComponent}
+            {qrDialogue}
+
+            {discounts.length > 0
+              ? discounts.map(DiscountEntry)
+              : <p className="text-warning text-2xl p-8">There are no active disounts at this business.</p>}
 
             <button className="general-button"
-              onClick={() => setQrOpen(false)}>Cancel</button>
+              onClick={() => setReferralOpen(false)}>Cancel</button>
           </Dialog.Panel>
         </div>
       </Dialog>
@@ -108,11 +160,29 @@ export default function Referrals () {
 
         <button className="general-button" onClick={() => {
           setActiveReferral(ref)
-          setQrOpen(true)
+          setReferralOpen(true)
+          setQrOpen(false)
         }}>
           Use Referral
         </button>
       </div>
+    )
+  }
+
+  function DiscountEntry (discount: Discount) {
+    return (
+      <button
+        onClick = {() => {
+          setSelectedDiscount(discount)
+        }}
+        className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+      >
+        <div className="ml-4">
+          <p className="text-sm text-gray-500">
+            {discount.description}
+          </p>
+        </div>
+      </button>
     )
   }
 }

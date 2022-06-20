@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import { auth, db } from '../firebase'
 import HomeButton from '../components/HomeButton'
 import QRUid from '../components/QRUid'
 import { Dialog } from '@headlessui/react'
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
 import { createHash } from 'crypto'
+import { getUserDiscounts } from '../services/customerInfo'
+import { getUid } from '../services/authInfo'
 
 interface ReedemableDiscount {
   pointsEarned: number,
@@ -15,44 +15,30 @@ interface ReedemableDiscount {
   place: string
 }
 
-export default function BusinessQRCode () {
+export default function RedeemReward () {
   const router = useRouter()
-  const uid = useRef(auth.currentUser!.uid)
+  const uid = useRef(getUid())
 
   // modal state for popup and info for qr-gen
   const [qrOpen, setQrOpen] = useState(false)
 
+  // eslint-disable-next-line no-unused-vars
+  const [dummy, setDummy] = useState(false)
+
   const [discounts, setDiscounts] = useState<ReedemableDiscount[]>([])
+  const [initialLoad, setInitialLoad] = useState(true)
 
   useEffect(() => {
-    const acc: ReedemableDiscount[] = []
-
     const getBusinessIds = async () => {
-      const visitedBusinessCollection = collection(db, 'customers', uid.current, 'businesses')
-
-      const querySnapshot = await getDocs(visitedBusinessCollection)
-      querySnapshot.forEach(async (business) => {
-        const docPoints = business.data().pointsEarned
-
-        const docSnap = await getDoc(doc(db, 'businesses', business.id))
-        if (docSnap.exists()) {
-          const currentDiscountDocs = await getDocs(query(collection(db, 'businesses', business.id, 'discounts'), where('points', '<=', docPoints)))
-          currentDiscountDocs.forEach(async (discount) => {
-            const data = discount.data()
-            acc.push({ pointsEarned: docPoints, pointsNeeded: data.points, description: data.description, discountUid: discount.id, place: docSnap.data().name })
-          })
-
-          // This updates acc for every new docSnap.
-          // TODO: change this later.
-          setDiscounts(acc)
-        } else {
-          console.log('broken')
-        }
-      })
+      const discs = await getUserDiscounts(uid.current)
+      setDiscounts(discs)
     }
 
-    getBusinessIds()
-  }, [])
+    if (initialLoad) {
+      getBusinessIds()
+      setInitialLoad(false)
+    }
+  }, [dummy])
 
   return (
     <div className="home-div">
@@ -63,6 +49,10 @@ export default function BusinessQRCode () {
         {discounts.length > 0
           ? discounts.map(DiscountEntry)
           : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
+
+        <div>
+          <button className="general-button" onClick={() => setDummy(true)}> Load </button>
+        </div>
 
         <HomeButton router={router} where="/" />
       </div>

@@ -1,11 +1,11 @@
 import { Dialog } from '@headlessui/react'
-import { addDoc, collection, CollectionReference, getDocs } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import HomeButton from '../components/HomeButton'
-import { auth, db } from '../firebase'
 import { Discount } from '../types/FirestoreCollections'
 import { createHash } from 'crypto'
+import { addDiscount, getAllDiscounts } from '../services/discountInfo'
+import { getUid } from '../services/authInfo'
 
 export default function SetDiscounts () {
   const router = useRouter()
@@ -19,34 +19,31 @@ export default function SetDiscounts () {
   const [newPoints, setNewPoints] = useState(0)
   // state for discount collection ref
 
-  const businessUid = useRef(auth.currentUser!.uid)
+  const businessUid = useRef(getUid())
 
   // set state for referrals
   const [discounts, setDiscounts] = useState<Discount[]>([])
+  const [initialLoad, setInitialLoad] = useState(true)
+
+  const getDiscountList = async () => {
+    setDiscounts(await getAllDiscounts(businessUid.current))
+  }
 
   useEffect(() => {
-    const getDiscounts = async () => {
-      // impossible but typescript hates me
-      const discountCollection = collection(db, 'businesses', businessUid.current, 'discounts') as CollectionReference<Discount>
-      const data = await getDocs(discountCollection)
-      // get relevant information from document
-      setDiscounts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+    if (initialLoad) {
+      getDiscountList()
+      setInitialLoad(false)
     }
-
-    getDiscounts()
   }, [])
 
   const createDiscount = async () => {
-    // business should already be logged in
-    const discountCollection = collection(db, 'businesses', businessUid.current, 'discounts') as CollectionReference<Discount>
+    const newDiscount: Discount = {
+      description: newDescription,
+      points: newPoints
+    }
 
-    const newDiscount = { description: newDescription, points: newPoints }
-
-    const data = await getDocs(discountCollection)
-    // get relevant information from document
-    setDiscounts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-
-    await addDoc(discountCollection, newDiscount)
+    await addDiscount(businessUid.current, newDiscount)
+    await getDiscountList()
   }
 
   return (

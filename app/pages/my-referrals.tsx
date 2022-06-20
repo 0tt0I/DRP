@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import { auth, createCollection } from '../firebase'
-import { getDocs, query, where } from 'firebase/firestore'
 import { Referral } from '../types/FirestoreCollections'
 import { useRouter } from 'next/router'
 import { createHash } from 'crypto'
 import HomeButton from '../components/HomeButton'
+import { getUserReferrals } from '../services/customerInfo'
+import { getUid } from '../services/authInfo'
 
 export default function MyReferrals () {
   const router = useRouter()
 
-  // get collections reference from firestore
-  const collectionsRef = createCollection<Referral>('referrals')
-
   // set state for referrals
   const [referrals, setReferrals] = useState<Referral[]>([])
+  const [initialLoad, setInitalLoad] = useState(true)
 
   useEffect(() => {
     const getUsers = async () => {
-      const data = await getDocs(query(collectionsRef, where('customerUid', '==', auth.currentUser!.uid)))
-
-      // get relevant information from document
-      setReferrals(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      const refs = await getUserReferrals(getUid())
+      setReferrals(refs)
     }
 
-    getUsers()
+    if (initialLoad) {
+      getUsers()
+      setInitalLoad(false)
+    }
   }, [])
 
   // display each referral from state, use combobox for dropdown menu

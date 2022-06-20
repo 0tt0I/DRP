@@ -12,9 +12,10 @@ import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 
 // react state hooks
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { auth, db } from '../firebase'
+import { getUid } from '../services/authInfo'
 
 // AuthContext type, promises signify the completion of an async function
 interface IAuth {
@@ -48,6 +49,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
   const [error] = useState(null)
   const [initialLoading, setInitialLoading] = useState(true) // used to block UI
   const router = useRouter()
+  const uid = useRef(getUid())
 
   // hook to persist login state
   useEffect(
@@ -79,7 +81,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
         // create business document in relevant collection a re-route to right page
         if (isBusiness) {
-          await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
+          await setDoc(doc(db, 'businesses', uid.current), {
             name: 'todo!() name'
           })
 
@@ -103,7 +105,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
         setUser(userCredential.user)
 
         // getting document if exists from businesses collection
-        const docRef = doc(db, 'businesses', auth.currentUser!.uid)
+        const docRef = doc(db, 'businesses', uid.current)
         const docSnap = await getDoc(docRef)
 
         // push to business landing page if valid
