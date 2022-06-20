@@ -14,7 +14,7 @@ export default function Home () {
     <div className="home-div">
       <div className="home-subdiv">
         <h1>
-          What would you like to do?
+          User Home
         </h1>
 
         <div className="home-buttondiv">
@@ -22,18 +22,31 @@ export default function Home () {
             Log Out
           </button>
 
+          <p>Log out of your account.</p>
+
           <button onClick={() => router.push('/referrals')} className="general-button">
             Redeem Referrals
           </button>
+
+          <p>Use someone&apos;s referral for a discount.</p>
+
           <button onClick={() => router.push('/add-referral')} className="general-button">
             New Referral
           </button>
+
+          <p>Create a new referral for a location.</p>
+
           <button onClick={() => router.push('/my-referrals')} className="general-button">
             My Referrals
           </button>
+
+          <p>See your created referrals and their next discount progress.</p>
+
           <button onClick={() => router.push('/redeem-reward')} className="general-button">
             Redeem Rewards
           </button>
+
+          <p>Redeem your available discounts for a location.</p>
         </div>
       </div>
     </div>
