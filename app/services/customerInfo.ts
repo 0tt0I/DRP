@@ -1,7 +1,7 @@
 import { doc, getDoc } from "@firebase/firestore"
 import { db } from "../firebase"
 
-export async function getPointsEarned (customerUid: string, businessUid: string): Promise<Number> {
+export async function getPointsEarned (customerUid: string, businessUid: string): Promise<number> {
 
     const docRef = doc(db, 'customers', customerUid, 'businesses', businessUid)
     const docSnap = await getDoc(docRef)
