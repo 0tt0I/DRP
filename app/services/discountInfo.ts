@@ -14,12 +14,16 @@ export async function getDiscountInfo (businessUid: string, discountUid: string)
   return await res.json()
 }
 
-export async function getAllDiscounts (businessUid: string): Promise<Discount[]> {
-  const discountCollection = collection(db, 'businesses', businessUid, 'discounts') as CollectionReference<Discount>
-  const data = await getDocs(discountCollection)
-  // get relevant information from document
+export async function getAllDiscounts (businessUid: string) {
+  const res = await fetch('/api/discount/get-all-discounts', {
+    method: 'POST',
+    body: JSON.stringify({ businessUid }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
 
-  return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+  return await res.json()
 }
 
 export async function addDiscount (businessUid: string, discount: Discount): Promise<void> {
