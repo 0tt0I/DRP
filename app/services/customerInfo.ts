@@ -5,12 +5,11 @@ import { db, storage } from '../firebase'
 import { RedeemableDiscount, Referral } from '../types/FirestoreCollections'
 
 export async function getPointsEarned (customerUid: string, businessUid: string) {
-  
   const res = await fetch('/api/customer/get-points', {
     method: 'POST',
-    body: JSON.stringify({customerUid, businessUid}),
+    body: JSON.stringify({ customerUid, businessUid }),
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     }
   })
 
@@ -18,10 +17,15 @@ export async function getPointsEarned (customerUid: string, businessUid: string)
 }
 
 export async function updatePointsEarned (customerUid: string, businessUid: string, newPoints: number): Promise<void> {
-  const docRef = doc(db, 'customers', customerUid, 'businesses', businessUid)
-  await updateDoc(docRef, {
-    pointsEarned: newPoints
+  const res = await fetch('/api/customer/update-points', {
+    method: 'POST',
+    body: JSON.stringify({ customerUid, businessUid, newPoints }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
   })
+
+  return await res.json()
 }
 
 export async function getUserReferrals (customerUid: string): Promise<Referral[]> {
