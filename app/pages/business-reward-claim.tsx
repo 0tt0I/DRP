@@ -43,21 +43,21 @@ export default function BusinessRewardClaim () {
         const businessUid = uid.current
 
         const custJson = await getPointsEarned(custUid, businessUid)
-        const [discPoints, discDescription] = await getDiscountInfo(businessUid, discountUid)
+        const jsonResponse = await getDiscountInfo(businessUid, discountUid)
 
-        if (discPoints === -1) {
+        if (jsonResponse.points === -1) {
           setInputValidation('Invalid discount')
         } else {
           if (custJson.pointsEarned === -1) {
             setInputValidation('Invalid customer')
           } else {
-            if (custJson.pointsEarned < discPoints) {
-              const pts = ' (' + custJson.pointsEarned + '/' + discPoints + ')'
+            if (custJson.pointsEarned < jsonResponse.points) {
+              const pts = ' (' + custJson.pointsEarned + '/' + jsonResponse.points + ')'
               setInputValidation('Not enough points!' + pts)
             } else {
               setCurrentPoints(custJson.pointsEarned)
-              setCost(discPoints)
-              setDescription(discDescription)
+              setCost(jsonResponse.points)
+              setDescription(jsonResponse.description)
               setCustomerUid(custUid)
               setClaimOpen(true)
             }
