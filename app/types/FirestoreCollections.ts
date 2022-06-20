@@ -18,7 +18,6 @@ interface Discount {
     id?: string
     description: string,
     points: number
-    id: string
 }
 
 interface BusinessPoints {
