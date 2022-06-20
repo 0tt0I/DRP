@@ -30,8 +30,13 @@ export default function BusinessPointChecker () {
         // get points from customer collection
         const businessUid = auth.currentUser!.uid
         const pointsEarned = await getPointsEarned(customerUid, businessUid)
+<<<<<<< HEAD
         if (pointsEarned === -1) {
           setInputValidation('Something went wrong!')
+=======
+        if (pointsEarned == -1) {
+          setInputValidation("Something went wrong!")
+>>>>>>> 209c2df (refactor: made use of getPointsEarned in business-point-checker.tsx)
         } else {
           setPoints(pointsEarned)
         }
