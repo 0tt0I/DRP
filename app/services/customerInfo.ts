@@ -62,7 +62,6 @@ export async function getUserDiscounts (customerUid: string): Promise<Redeemable
   return acc
 }
 
-
 export async function addReferral (referral: Referral, imageRef: string): Promise<void> {
   const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
 
@@ -81,5 +80,5 @@ export async function addReferral (referral: Referral, imageRef: string): Promis
         image: downloadURL
       })
     }
-  ) 
+  )
 }

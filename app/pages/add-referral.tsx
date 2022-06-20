@@ -31,37 +31,36 @@ export default function AddReferral () {
   // modal state for popup and info for qr-scan
   const [qrOpen, setQrOpen] = useState(false)
 
-
   const createReferral = async () => {
     if (newReview === '' || imageRef === '' || businessUid === '' || businessName === '') {
       // set error message to be displayed
       setInputValidation('Fill in all fields and take a picture!')
     } else {
-        // set input validation to success
-        setInputValidation('Success!')
+      // set input validation to success
+      setInputValidation('Success!')
 
-        // get current time and format correctly
-        const current = new Date()
-        const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`
+      // get current time and format correctly
+      const current = new Date()
+      const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`
 
-        // get user email (shouldn't be null as user already logged in)
-        const userEmail = getUserEmail()
+      // get user email (shouldn't be null as user already logged in)
+      const userEmail = getUserEmail()
 
-        // null check
-        if (userEmail) {
-          const discountString = businessDiscount === '' ? 'Ask about the discount at the till' : businessDiscount
+      // null check
+      if (userEmail) {
+        const discountString = businessDiscount === '' ? 'Ask about the discount at the till' : businessDiscount
 
-          const newReferral = { place: businessName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: getUid() }
+        const newReferral = { place: businessName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: getUid() }
 
-          await addReferral(newReferral, imageRef)
+        await addReferral(newReferral, imageRef)
 
-          // set taken image to empty again
-          setImageRef('')
-          router.push('/my-referrals')
-        }
+        // set taken image to empty again
+        setImageRef('')
+        router.push('/my-referrals')
       }
     }
-  
+  }
+
   // Update the input validation if uid is updated:
   useEffect(() => {
     if (businessUid === '') {
@@ -70,7 +69,7 @@ export default function AddReferral () {
       const changeState = async () => {
         const [name, discount] = await getNameAndDiscount(businessUid)
         if (name === '') {
-          setInputValidation("Invalid QR Code")
+          setInputValidation('Invalid QR Code')
         } else {
           setBusinessName(name)
           setBusinessDiscount(discount)
@@ -80,8 +79,6 @@ export default function AddReferral () {
       changeState()
     }
   }, [businessUid])
-
-
 
   return (
     <div className="relative flex w-screen h-screen items-center justify-center">
