@@ -6,6 +6,7 @@ import HomeButton from '../components/HomeButton'
 import { auth, db } from '../firebase'
 import { Discount } from '../types/FirestoreCollections'
 import { createHash } from 'crypto'
+import { getAllDiscounts } from '../services/discountInfo'
 
 export default function SetDiscounts () {
   const router = useRouter()
@@ -25,16 +26,12 @@ export default function SetDiscounts () {
   const [discounts, setDiscounts] = useState<Discount[]>([])
 
   useEffect(() => {
-    const getDiscounts = async () => {
-      // impossible but typescript hates me
-      const discountCollection = collection(db, 'businesses', businessUid.current, 'discounts') as CollectionReference<Discount>
-      const data = await getDocs(discountCollection)
-      // get relevant information from document
-      setDiscounts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+    const getDiscountList = async () => {
+      setDiscounts(await getAllDiscounts(businessUid.current))
     }
 
-    getDiscounts()
-  }, [])
+    getDiscountList()
+  }, [discounts])
 
   const createDiscount = async () => {
     // business should already be logged in
