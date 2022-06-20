@@ -30,8 +30,8 @@ export default function BusinessPointChecker () {
         // get points from customer collection
         const businessUid = auth.currentUser!.uid
         const pointsEarned = await getPointsEarned(customerUid, businessUid)
-        if (pointsEarned == -1) {
-          setInputValidation("Something went wrong!")
+        if (pointsEarned === -1) {
+          setInputValidation('Something went wrong!')
         } else {
           setPoints(pointsEarned)
         }
