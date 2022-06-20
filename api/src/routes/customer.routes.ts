@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  customerAddReferral,
   customerGetOtherReferrals,
   customerGetPointsController,
   customerGetUserDiscounts,
@@ -14,3 +15,4 @@ customerRouter.post('/update-points', customerUpdatePointsController)
 customerRouter.post('/get-user-referrals', customerGetUserReferrals)
 customerRouter.post('/get-other-referrals', customerGetOtherReferrals)
 customerRouter.post('/get-user-discounts', customerGetUserDiscounts)
+customerRouter.post('/add-referral', customerAddReferral)
