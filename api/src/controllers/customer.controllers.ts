@@ -1,7 +1,8 @@
-import { doc, getDoc, updateDoc, collection, CollectionReference, getDocs, query, where } from '@firebase/firestore'
+import { doc, getDoc, updateDoc, collection, CollectionReference, getDocs, query, where, addDoc } from '@firebase/firestore'
+import { ref, getDownloadURL, uploadString } from '@firebase/storage'
 import { Request, Response } from 'express'
 import { RedeemableDiscount, Referral } from '../models/FirestoreCollections'
-import { db } from '../plugins/firebase'
+import { db, storage } from '../plugins/firebase'
 
 export async function customerGetPointsController (req: Request, res: Response) {
   const customerUid: string = req.body.customerUid
@@ -80,4 +81,30 @@ export async function customerGetUserDiscounts (req: Request, res: Response) {
   })
 
   res.status(200).json({ discounts: acc })
+}
+
+export async function customerAddReferral (req: Request, res: Response) {
+  const referral: Referral = req.body.referral
+  const imageRef: string = req.body.imageRef
+
+  const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
+
+  // add doc to firestore
+  const docRef = await addDoc(collectionsRef, referral)
+
+  // get the image storage bucket from firebase storage
+  const imageStorage = ref(storage, `referrals/${docRef.id}/image`)
+
+  // upload image, then update firestore document with image's download URL
+  await uploadString(imageStorage, imageRef, 'data_url').then(
+    async _snapshot => {
+      const downloadURL = await getDownloadURL(imageStorage)
+
+      await updateDoc(doc(db, 'referrals', docRef.id), {
+        image: downloadURL
+      })
+    }
+  )
+
+  res.status(200)
 }
