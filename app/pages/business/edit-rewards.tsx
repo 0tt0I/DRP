@@ -1,12 +1,12 @@
 import { Dialog } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import { Discount } from '../../types/FirestoreCollections'
+import { Reward } from '../../types/FirestoreCollections'
 import { createHash } from 'crypto'
-import { addDiscount, getAllDiscounts } from '../../services/discountInfo'
+import { addReward, getAllRewards, deleteReward } from '../../services/rewardInfo'
 import { getUid } from '../../services/authInfo'
 
-export default function SetDiscounts () {
+export default function SetRewards () {
   const router = useRouter()
 
   // modal state for popup and info for qr-scan
@@ -16,34 +16,43 @@ export default function SetDiscounts () {
   const [newDescription, setNewDescription] = useState('')
   // state for points input
   const [newPoints, setNewPoints] = useState(0)
-  // state for discount collection ref
+  // state for Reward collection ref
 
   const businessUid = useRef(getUid())
 
   // set state for referrals
-  const [discounts, setDiscounts] = useState<Discount[]>([])
+  const [rewards, setRewards] = useState<Reward[]>([])
   const [initialLoad, setInitialLoad] = useState(true)
 
-  const getDiscountList = async () => {
-    const jsonResponse = await getAllDiscounts(businessUid.current)
-    setDiscounts(jsonResponse.discounts)
+  async function getRewardList () {
+    const jsonResponse = await getAllRewards(businessUid.current)
+    setRewards([...jsonResponse.rewards])
+  }
+
+  function refreshPage () {
+    window.location.reload()
   }
 
   useEffect(() => {
     if (initialLoad) {
-      getDiscountList()
+      getRewardList()
       setInitialLoad(false)
     }
   }, [])
 
-  const createDiscount = async () => {
-    const newDiscount: Discount = {
+  const createReward = async () => {
+    const newReward: Reward = {
       description: newDescription,
       points: newPoints
     }
 
-    await addDiscount(businessUid.current, newDiscount)
-    await getDiscountList()
+    await addReward(businessUid.current, newReward)
+    setRewards((oldRewards) => oldRewards.concat([newReward]))
+  }
+
+  const removeReward = async (rewardUid: string) => {
+    await deleteReward(businessUid.current, rewardUid)
+    getRewardList()
   }
 
   return (
@@ -53,11 +62,13 @@ export default function SetDiscounts () {
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Add Discount
+              Add Reward
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
-                  <p>Ask to scan the QR code at the till to refer:</p>
+                  <p>Description: How this will appear to customers.</p>
+                  <br></br>
+                  <p>Points: The number of points needed to be spent to redeem this reward.</p>
                 </div>
               </Dialog.Description>
 
@@ -80,8 +91,10 @@ export default function SetDiscounts () {
               </div>
 
               <button className="general-button" onClick={() => {
-                createDiscount()
+                createReward()
                 setInputOpen(false)
+                refreshPage()
+                // TODO: find better way to ensure new Reward appears in list
               }}>
                 Submit
               </button>
@@ -94,11 +107,12 @@ export default function SetDiscounts () {
         </Dialog>
 
         <div className="flex flex-col gap-4 p-4">
-          <h2 className="font-bold text-center text-4xl text-dark-nonblack">Set Discounts</h2>
+          <h2 className="font-bold text-center text-4xl text-dark-nonblack">Set Rewards</h2>
+          <p>These are the &apos;loyalty card&apos; rewards available to returning customers.</p>
 
-          {discounts.length > 0
-            ? discounts.map(DiscountEntry)
-            : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
+          {rewards.length > 0
+            ? rewards.map(RewardEntry)
+            : <p className="text-warning text-2xl p-8">There are no active Rewards.</p>}
 
           <button className="general-button" onClick={() => setInputOpen(true)}>  Add </button>
           <button onClick={() => router.push('/business/your-business')} className="general-button">
@@ -109,19 +123,26 @@ export default function SetDiscounts () {
     </div>
   )
 
-  function DiscountEntry (ref: Discount) {
+  function RewardEntry (ref: Reward) {
     return (
       <div
         key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
-        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg max-w-max">
-        <div className="flex flex-row gap-4 place-content-start">
+        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max grow">
+        <div className="flex flex-row gap-4 place-content-start min-w-max grow">
 
-          <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
+          <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 grow">
             <h1 className="font-bold text-dark-nonblack">Description: </h1>
             <p className="col-span-2">{ref.description}</p>
 
             <h1 className="font-bold text-dark-nonblack w-32">Points Worth: </h1>
             <p className="col-span-2">{ref.points}</p>
+          </div>
+          <div className='place-self-center'>
+            <button className='general-button' onClick={() => {
+              removeReward(ref.id ? ref.id : '')
+              refreshPage()
+              // TODO: find better way to ensure list is updated
+            }}>Delete</button>
           </div>
         </div>
       </div>
