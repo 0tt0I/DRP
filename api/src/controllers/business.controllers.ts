@@ -66,7 +66,6 @@ export async function businessAwardPointsController (req: Request, res: Response
 }
 
 export async function businessGetNameAndDiscount (req: Request, res: Response) {
-
   const businessUid: string = req.body.businessUid
   const businessDocRef = doc(db, 'businesses', businessUid)
   const businessDoc = await getDoc(businessDocRef)
@@ -75,7 +74,6 @@ export async function businessGetNameAndDiscount (req: Request, res: Response) {
     const name: string = businessDoc.get('name')
     const discount: string = businessDoc.get('new_customer_discount')
     res.status(200).json({ name, discount })
-
   } else {
     res.status(200).json({ name: '', discount: '' })
   }
