@@ -27,7 +27,7 @@ export default function MyReferrals () {
 
   // display each referral from state, use combobox for dropdown menu
   return (
-    <div className="relative flex flex-col w-screen items-center p-4">
+    <div className="home-div">
       <div className="flex flex-col gap-8 p-4 lighter-div">
         <h1 className="font-bold text-center text-4xl text-dark-nonblack">My Referrals</h1>
 
