@@ -12,7 +12,6 @@ const videoConstraints = {
 interface PropsInterface {
     imageRef: Dispatch<SetStateAction<string | undefined>>;
     existingRef?: string;
-    afterTake: () => void;
 }
 
 // react component for camera
@@ -68,7 +67,7 @@ export default function Camera (props: PropsInterface) {
         <button
           className="cameraClear_button general-button place-self-center"
           onClick={() => {
-            props.imageRef('')
+            props.imageRef(undefined)
             setImage(null)
           }}
         >Clear Picture</button>

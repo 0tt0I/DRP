@@ -18,7 +18,7 @@ export default function AddReferral () {
   const [inputValidation, setInputValidation] = useState('...')
 
   // imageRef state from Camera component
-  const [imageRef, setImageRef] = useState<string | undefined>('')
+  const [imageRef, setImageRef] = useState<string | undefined>(undefined)
 
   // state for business UID
   const [businessUid, setBusinessUid] = useState('')
@@ -35,7 +35,7 @@ export default function AddReferral () {
   const [picOpen, setPicOpen] = useState(false)
 
   const createReferral = async () => {
-    if (newReview === '' || imageRef === '' || businessUid === '' || businessName === '') {
+    if (newReview === '' || imageRef === undefined || imageRef === '' || businessUid === '' || businessName === '') {
       // set error message to be displayed
       setInputValidation('Fill in all fields and take a picture!')
     } else {
@@ -58,7 +58,7 @@ export default function AddReferral () {
         await addReferral(newReferral, imageRef!)
 
         // set taken image to empty again
-        setImageRef('')
+        setImageRef(undefined)
         router.push('/my-referrals')
       }
     }
@@ -83,6 +83,14 @@ export default function AddReferral () {
       changeState()
     }
   }, [businessUid])
+
+  useEffect(() => {
+    if (imageRef === undefined || imageRef === '') {
+      setInputValidation('Picture cancelled or not taken.')
+    } else {
+      setInputValidation('Picture taken and confirmed.')
+    }
+  }, [imageRef])
 
   return (
     <div className="relative flex w-screen h-screen items-center justify-center">
@@ -135,14 +143,17 @@ export default function AddReferral () {
               </Dialog.Description>
 
               <div className="place-self-center">
-                <Camera imageRef={setImageRef} existingRef={imageRef} afterTake={() => setPicOpen(false)} />
+                <Camera imageRef={setImageRef} existingRef={imageRef} />
               </div>
 
               <button className="general-button" onClick={() => setPicOpen(false)}>
                 Confirm
               </button>
 
-              <button className="general-button" onClick={() => setPicOpen(false)}>
+              <button className="general-button" onClick={() => {
+                setPicOpen(false)
+                setImageRef(undefined)
+              }}>
                 Cancel
               </button>
             </Dialog.Panel>
