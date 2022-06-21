@@ -126,7 +126,7 @@ export default function RedeemReward () {
           <h1 className="font-bold text-dark-nonblack w-16">Points Needed</h1>
           <p className="col-span-2">{discount.points}</p>
 
-          <h1 className="font-bold text-dark-nonblack w-16">Points Earnt</h1>
+          <h1 className="font-bold text-dark-nonblack w-16">Points Earned</h1>
           <p className="col-span-2">{selectedBusiness?.pointsEarned}</p>
 
         </div>
