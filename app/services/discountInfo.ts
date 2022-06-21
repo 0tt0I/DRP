@@ -36,6 +36,18 @@ export async function addDiscount (businessUid: string, discount: Discount): Pro
   return await res.json()
 }
 
+export async function deleteDiscount (businessUid: string, discountUid: string): Promise<void> {
+  const res = await fetch('/api/discount/delete-discount', {
+    method: 'POST',
+    body: JSON.stringify({ businessUid, discountUid }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  return await res.json()
+}
+
 export async function getEligibleDiscounts (businessUid: string, pointsEarned: number) {
   const res = await fetch('/api/discount/get-eligible-discounts', {
     method: 'POST',

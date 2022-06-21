@@ -1,4 +1,4 @@
-import { doc, getDoc, collection, CollectionReference, getDocs, addDoc } from '@firebase/firestore'
+import { doc, getDoc, collection, CollectionReference, getDocs, addDoc, deleteDoc } from '@firebase/firestore'
 import { Request, Response } from 'express'
 import { query, where } from 'firebase/firestore'
 import { Discount } from '../models/FirestoreCollections'
@@ -38,6 +38,15 @@ export async function discountAddController (req: Request, res: Response) {
 
   const discountCollection = collection(db, 'businesses', businessUid, 'discounts') as CollectionReference<Discount>
   await addDoc(discountCollection, discount)
+  res.status(200)
+}
+
+export async function discountDeleteController (req: Request, res: Response) {
+  const businessUid: string = req.body.businessUid
+  const discountUid: string = req.body.discountUid
+
+  const discountCollection = collection(db, 'businesses', businessUid, 'discounts') as CollectionReference<Discount>
+  await deleteDoc(doc(discountCollection, discountUid))
   res.status(200)
 }
 
