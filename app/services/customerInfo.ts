@@ -71,3 +71,15 @@ export async function addReferral (referral: Referral, imageRef: string): Promis
 
   return await res.json()
 }
+
+export async function getVisitedBusinesses (customerUid: string) {
+  const res = await fetch('/api/customer/get-visited-businesses', {
+    method: 'POST',
+    body: JSON.stringify({ customerUid }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  return await res.json()
+}
