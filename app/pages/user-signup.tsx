@@ -68,7 +68,7 @@ export default function UserSignup () {
         </div>
 
         <div className="flex flex-col gap-2 w-96 p-2 default-div">
-          <h1 className="font-bold text-center">User Image</h1>
+          <h1 className="font-bold text-center">Profile Image</h1>
 
           <div className="flex flex-row gap-2 p-2">
             {imageRef === undefined
