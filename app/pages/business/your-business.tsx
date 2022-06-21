@@ -37,7 +37,7 @@ export default function YourBusiness () {
             Your QR code
           </button>
 
-          <p>Fetch the unique location-identifying QR code for your businesss..</p>
+          <p>Fetch the unique location-identifying QR code for your businesss.</p>
 
           <HomeButton router={router} where="/business/business-home" />
         </div>
