@@ -2,7 +2,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import HomeButton from '../../components/HomeButton'
-import { db } from '../../firebase'
+import { db } from '../../plugins/firebase'
 import { getUid } from '../../services/authInfo'
 
 export default function SetDiscount () {

@@ -1,4 +1,4 @@
-import { auth } from '../firebase'
+import { auth } from '../plugins/firebase'
 
 export function getUid (): string {
   return auth.currentUser!.uid
