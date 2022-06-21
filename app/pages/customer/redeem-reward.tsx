@@ -4,8 +4,9 @@ import HomeButton from '../../components/HomeButton'
 import QRUid from '../../components/QRUid'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
-import { getUserDiscounts } from '../../services/customerInfo'
 import { getUid } from '../../services/authInfo'
+import { Businesses } from '../../types/FirestoreCollections'
+import { getVisitedBusinesses } from '../../services/customerInfo'
 
 interface ReedemableDiscount {
   pointsEarned: number,
@@ -22,20 +23,34 @@ export default function RedeemReward () {
   // modal state for popup and info for qr-gen
   const [qrOpen, setQrOpen] = useState(false)
 
+  // modal state for popup and info for displaying discounts
+  const [discountOpen, setDiscountOpen] = useState(false)
+
+  // eslint-disable-next-line no-unused-vars
   const [discounts, setDiscounts] = useState<ReedemableDiscount[]>([])
+  const [businesses, setBusinesses] = useState<Businesses[]>([])
   const [initialLoad, setInitialLoad] = useState(true)
 
   useEffect(() => {
-    const getBusinessIds = async () => {
-      const jsonResponse = await getUserDiscounts(uid.current)
-      setDiscounts(jsonResponse.discounts)
+    const getBusinesses = async () => {
+      const jsonResponse = await getVisitedBusinesses(uid.current)
+      setBusinesses(jsonResponse.businesses)
     }
 
     if (initialLoad) {
-      getBusinessIds()
+      getBusinesses()
       setInitialLoad(false)
     }
   })
+
+  // useEffect(() => {
+  //   const relevantDiscounts = async () => {
+  //     const jsonResponse = await getBusinessDisconts(businessUid)
+  //     setDiscounts(jsonResponse.discounts)
+  //   }
+
+  //   relevantDiscounts()
+  // }, [discountOpen])
 
   return (
     <div className="home-div">
@@ -43,15 +58,62 @@ export default function RedeemReward () {
         <h1>
               Redeem Referrals
         </h1>
-        {discounts.length > 0
-          ? discounts.map(DiscountEntry)
-          : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
+        {businesses.length > 0
+          ? businesses.map(BusinessEntry)
+          : <p className="text-warning text-2xl p-8">Go visit some businesses!</p>}
 
         <HomeButton router={router} where="/" />
       </div>
 
     </div>
   )
+
+  function BusinessEntry (business: Businesses) {
+    return (
+      <div
+        key={createHash('sha256').update(JSON.stringify(business)).digest('hex').toString()}
+        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max">
+        <div className="flex flex-row gap-4 place-content-start">
+
+          <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 min-w-max">
+            <h1 className="font-bold text-dark-nonblack">Place</h1>
+            <p className="col-span-2">{business.name}</p>
+
+            <button className="general-button" onClick={() => { setDiscountOpen(true) }}>
+            Redeem
+            </button>
+
+            <Dialog open={discountOpen} onClose={() => setDiscountOpen(false)} className="relative z-50">
+              <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
+                <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
+                  <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
+              Available Discounts
+                  </Dialog.Title>
+                  <Dialog.Description>
+                    <div className="flex flex-col grow text-center">
+                      <p>Discounts Available:</p>
+                    </div>
+                  </Dialog.Description>
+
+                  <div className="place-self-center">
+                    {discounts.length > 0
+                      ? discounts.map(DiscountEntry)
+                      : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
+                  </div>
+
+                  <button className="general-button" onClick={() => setDiscountOpen(false)}>
+                Back
+                  </button>
+                </Dialog.Panel>
+              </div>
+            </Dialog>
+
+          </div>
+        </div>
+      </div>
+
+    )
+  }
 
   function DiscountEntry (discount: ReedemableDiscount) {
     return (
