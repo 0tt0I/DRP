@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Referral } from '../types/FirestoreCollections'
+import { Referral } from '../../types/FirestoreCollections'
 import { useRouter } from 'next/router'
 import { createHash } from 'crypto'
-import HomeButton from '../components/HomeButton'
-import { getUserReferrals } from '../services/customerInfo'
-import { getUid } from '../services/authInfo'
+import HomeButton from '../../components/HomeButton'
+import { getUserReferrals } from '../../services/customerInfo'
+import { getUid } from '../../services/authInfo'
 
 export default function MyReferrals () {
   const router = useRouter()

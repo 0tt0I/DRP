@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import HomeButton from '../components/HomeButton'
-import QRUid from '../components/QRUid'
+import HomeButton from '../../components/HomeButton'
+import QRUid from '../../components/QRUid'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
-import { getUserDiscounts } from '../services/customerInfo'
-import { getUid } from '../services/authInfo'
+import { getUserDiscounts } from '../../services/customerInfo'
+import { getUid } from '../../services/authInfo'
 
 interface ReedemableDiscount {
   pointsEarned: number,

@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import { Discount, Referral } from '../types/FirestoreCollections'
+import { Discount, Referral } from '../../types/FirestoreCollections'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
-import HomeButton from '../components/HomeButton'
-import QRUid from '../components/QRUid'
-import { getOtherReferrals } from '../services/customerInfo'
-import { getAllDiscounts } from '../services/discountInfo'
-import { getUid } from '../services/authInfo'
+import HomeButton from '../../components/HomeButton'
+import QRUid from '../../components/QRUid'
+import { getOtherReferrals } from '../../services/customerInfo'
+import { getAllDiscounts } from '../../services/discountInfo'
+import { getUid } from '../../services/authInfo'
 
 export default function Referrals () {
   const router = useRouter()

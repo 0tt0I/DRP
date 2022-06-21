@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
-import HomeButton from '../components/HomeButton'
-import QRUid from '../components/QRUid'
-import { getUid } from '../services/authInfo'
+import HomeButton from '../../components/HomeButton'
+import QRUid from '../../components/QRUid'
+import { getUid } from '../../services/authInfo'
 
 export default function BusinessQRCode () {
   const router = useRouter()

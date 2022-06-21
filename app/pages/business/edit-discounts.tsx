@@ -1,11 +1,11 @@
 import { Dialog } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import HomeButton from '../components/HomeButton'
-import { Discount } from '../types/FirestoreCollections'
+import HomeButton from '../../components/HomeButton'
+import { Discount } from '../../types/FirestoreCollections'
 import { createHash } from 'crypto'
-import { addDiscount, getAllDiscounts } from '../services/discountInfo'
-import { getUid } from '../services/authInfo'
+import { addDiscount, getAllDiscounts } from '../../services/discountInfo'
+import { getUid } from '../../services/authInfo'
 
 export default function SetDiscounts () {
   const router = useRouter()
