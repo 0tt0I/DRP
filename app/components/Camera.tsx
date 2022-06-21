@@ -10,7 +10,9 @@ const videoConstraints = {
 
 // interface for props to communicate imageRef back to parent
 interface PropsInterface {
-    imageRef: Dispatch<SetStateAction<string>>;
+    imageRef: Dispatch<SetStateAction<string | undefined>>;
+    existingRef?: string;
+    afterTake: () => void;
 }
 
 // react component for camera
@@ -52,6 +54,10 @@ export default function Camera (props: PropsInterface) {
       {image && (
         <img src={image} className="place-self-center rounded-lg" />
       )}
+
+      {(!image && props.existingRef) &&
+        <img src={props.existingRef} className="place-self-center rounded-lg" />
+      }
 
       <div className="col-span-2 flex flex-row gap-2 place-content-center">
         <button

@@ -18,7 +18,7 @@ export default function AddReferral () {
   const [inputValidation, setInputValidation] = useState('...')
 
   // imageRef state from Camera component
-  const [imageRef, setImageRef] = useState('')
+  const [imageRef, setImageRef] = useState<string | undefined>('')
 
   // state for business UID
   const [businessUid, setBusinessUid] = useState('')
@@ -30,6 +30,9 @@ export default function AddReferral () {
 
   // modal state for popup and info for qr-scan
   const [qrOpen, setQrOpen] = useState(false)
+
+  // Modal state for the picture-taking popup
+  const [picOpen, setPicOpen] = useState(false)
 
   const createReferral = async () => {
     if (newReview === '' || imageRef === '' || businessUid === '' || businessName === '') {
@@ -52,7 +55,7 @@ export default function AddReferral () {
 
         const newReferral = { place: businessName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: getUid() }
 
-        await addReferral(newReferral, imageRef)
+        await addReferral(newReferral, imageRef!)
 
         // set taken image to empty again
         setImageRef('')
@@ -83,7 +86,7 @@ export default function AddReferral () {
 
   return (
     <div className="relative flex w-screen h-screen items-center justify-center">
-      <div className="default-div rounded-lg flex flex-col p-4 gap-2 w-fit">
+      <div className="default-div rounded-lg flex flex-col p-4 gap-2 w-fit sm:w-96">
         <h2 className="font-bold text-center text-4xl text-dark-nonblack">
           Make a Referral
         </h2>
@@ -91,7 +94,7 @@ export default function AddReferral () {
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Place
+              Place QR Code
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
@@ -119,13 +122,44 @@ export default function AddReferral () {
           </label>
         </div>
 
+        <Dialog open={picOpen} onClose={() => setPicOpen(false)} className="relateive z-50">
+          <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
+            <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
+              <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
+              Review Picture
+              </Dialog.Title>
+              <Dialog.Description>
+                <div className="flex flex-col grow text-center">
+                  <p>Take a picture to go with your review:</p>
+                </div>
+              </Dialog.Description>
+
+              <div className="place-self-center">
+                <Camera imageRef={setImageRef} existingRef={imageRef} afterTake={() => setPicOpen(false)} />
+              </div>
+
+              <button className="general-button" onClick={() => setPicOpen(false)}>
+                Confirm
+              </button>
+
+              <button className="general-button" onClick={() => setPicOpen(false)}>
+                Cancel
+              </button>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
+
         <button className="general-button" onClick={() => setQrOpen(true)}>
-          Add Place
+          Scan Place QR Code
         </button>
 
-        <Camera imageRef={setImageRef}/>
+        <button className="general-button" onClick={() => setPicOpen(true)}>
+          Add Picture to Review
+        </button>
 
-        <button onClick={createReferral} className="general-button">Add Referral</button>
+        <br />
+
+        <button onClick={createReferral} className="general-button">Finalise Referral</button>
 
         <h1 className="white-div font-bold text-nondark p-2 text-center">{inputValidation}</h1>
 
