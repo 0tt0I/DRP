@@ -1,7 +1,7 @@
 import { doc, getDoc, updateDoc, collection, CollectionReference, getDocs, query, where, addDoc } from '@firebase/firestore'
 import { ref, getDownloadURL, uploadString } from '@firebase/storage'
 import { Request, Response } from 'express'
-import { Businesses, RedeemableDiscount, Referral } from '../models/FirestoreCollections'
+import { RedeemableDiscount, Referral, VisitedBusiness } from '../models/FirestoreCollections'
 import { db, storage } from '../plugins/firebase'
 
 export async function customerGetPointsController (req: Request, res: Response) {
@@ -113,7 +113,7 @@ export async function customerAddReferral (req: Request, res: Response) {
 export async function customerGetVisitedBusinesses (req: Request, res: Response) {
   const customerUid: string = req.body.customerUid
 
-  const acc: Businesses[] = []
+  const acc: VisitedBusiness[] = []
 
   const collectionsRef = collection(db, 'customers', customerUid, 'businesses')
   const querySnapshot = await getDocs(collectionsRef)
@@ -123,7 +123,7 @@ export async function customerGetVisitedBusinesses (req: Request, res: Response)
     const docSnap = await getDoc(doc(db, 'businesses', business.id))
 
     if (docSnap.exists()) {
-      acc.push({ name: docSnap.data().name, id: business.id })
+      acc.push({ name: docSnap.data().name, id: business.id, pointsEarned: business.data().pointsEarned })
     }
   }
 
