@@ -20,41 +20,23 @@ export default function BusinessHome () {
         </h1>
 
         <div className="home-bus-buttondiv">
+          <button onClick={() => router.push('/business/business-referral-scanner')} className="general-button">
+            Scan a Customer&apos;s Code
+          </button>
+
+          <p>Scan a customer&apos;s QR code to verify their discount.</p>
+
+          <button onClick={() => router.push('/business/your-business')} className="general-button">
+            Your Business
+          </button>
+
+          <p>Edit the discounts you are offering or check your unique QR code.</p>
+
           <button onClick={logout} className="general-button">
             Log Out
           </button>
 
           <p>Log out of your account.</p>
-
-          <button onClick={() => router.push('/business/business-referral-scanner')} className="general-button">
-            Scan Discount Code
-          </button>
-
-          <p>Scan and verify a discount code for your business.</p>
-
-          <button onClick={() => router.push('/business/edit-discounts')} className="general-button">
-            Edit Discounts
-          </button>
-
-          <p>Edit the available discount offers at your business.</p>
-
-          <button onClick={() => router.push('/business/business-qr-code')} className="general-button">
-            Your QR Code
-          </button>
-
-          <p>Fetch the unique location-identifying QR code for your businesss.</p>
-
-          <button onClick={() => router.push('/business/business-point-checker')} className="general-button">
-            Check Points
-          </button>
-
-          <p>Scan a customer&apos;s referral QR code to check their progress for another discount.</p>
-
-          <button onClick={() => router.push('/business/business-reward-claim')} className="general-button">
-            Reward
-          </button>
-
-          <p>Scan and use up a customer&apos;s returning discount code.</p>
         </div>
       </div>
     </div>

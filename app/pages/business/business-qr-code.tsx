@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
-import HomeButton from '../../components/HomeButton'
 import QRUid from '../../components/QRUid'
 import { getUid } from '../../services/authInfo'
 
@@ -16,7 +15,9 @@ export default function BusinessQRCode () {
         </h1>
         <QRUid uid={uid.current}/>
 
-        <HomeButton router={router} where="/business/business-home" />
+        <button onClick={() => router.push('/business/your-business')} className="general-button">
+          Back to Your Business
+        </button>
       </div>
     </div>
   )
