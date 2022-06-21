@@ -14,7 +14,7 @@ import readCookie from './middleware/cookieReader'
 const app = express()
 const port = environmentConfig.port
 
-app.use(express.static(pathJoin(__dirname, '../../app/out')))
+app.use(express.static(environmentConfig.appCompiledStatic))
 app.use(cors())
 app.use(bodyParserJson())
 app.use(bodyParserUrlEncoded({ extended: true }))
@@ -24,7 +24,7 @@ app.use(readCookie)
 app.use('/api', router)
 
 app.get('/', (_req, res) => {
-  res.sendFile(pathJoin(__dirname, '../app/out/index.html'))
+  res.sendFile(pathJoin(environmentConfig.appCompiledStatic, '/index.html'))
 })
 
 app.listen(port, () => console.log(`Listening on port ${port}`))
