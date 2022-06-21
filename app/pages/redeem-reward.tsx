@@ -22,9 +22,6 @@ export default function RedeemReward () {
   // modal state for popup and info for qr-gen
   const [qrOpen, setQrOpen] = useState(false)
 
-  // eslint-disable-next-line no-unused-vars
-  const [dummy, setDummy] = useState(false)
-
   const [discounts, setDiscounts] = useState<ReedemableDiscount[]>([])
   const [initialLoad, setInitialLoad] = useState(true)
 
@@ -38,7 +35,7 @@ export default function RedeemReward () {
       getBusinessIds()
       setInitialLoad(false)
     }
-  }, [dummy])
+  })
 
   return (
     <div className="home-div">
@@ -49,10 +46,6 @@ export default function RedeemReward () {
         {discounts.length > 0
           ? discounts.map(DiscountEntry)
           : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
-
-        <div>
-          <button className="general-button" onClick={() => setDummy(true)}> Load </button>
-        </div>
 
         <HomeButton router={router} where="/" />
       </div>
