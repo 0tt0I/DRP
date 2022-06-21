@@ -93,7 +93,7 @@ export default function RedeemReward () {
                     </div>
                   </Dialog.Description>
 
-                  <div className="place-self-center">
+                  <div className="flex flex-col gap-2 place-self-center">
                     {discounts.length > 0
                       ? discounts.map(DiscountEntry)
                       : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
@@ -118,15 +118,15 @@ export default function RedeemReward () {
       <div
         key={createHash('sha256').update(JSON.stringify(discount)).digest('hex').toString()}
         className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max">
-        <div className="flex flex-row gap-4 place-content-start">
+        <div className="grid grid-cols-3 grid-flow-row-dense gap-4 place-content-start">
 
           <h1 className="font-bold text-dark-nonblack">Description</h1>
-          <p className="col-span-2 break-all w-80">{discount.description}</p>
+          <p className="col-span-2 break-words w-48">{discount.description}</p>
 
-          <h1 className="font-bold text-dark-nonblack w-32">Points Needed</h1>
+          <h1 className="font-bold text-dark-nonblack w-16">Points Needed</h1>
           <p className="col-span-2">{discount.points}</p>
 
-          <h1 className="font-bold text-dark-nonblack w-32">Points Earnt</h1>
+          <h1 className="font-bold text-dark-nonblack w-16">Points Earnt</h1>
           <p className="col-span-2">{selectedBusiness?.pointsEarned}</p>
 
         </div>
