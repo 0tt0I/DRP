@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Camera from '../components/Camera'
 
 export default function BusinessSignup () {
@@ -7,7 +7,9 @@ export default function BusinessSignup () {
   const [picOpen, setPicOpen] = useState(false)
   const [imageRef, setImageRef] = useState<string | undefined>(undefined)
 
-  // TODO: Not sure how to create an upload box, so here is a camera instead.
+  const selectedImageRef = useRef<HTMLInputElement | null>(null)
+  const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined)
+
   return (
     <div className="home-div">
       <Dialog open={picOpen} onClose={() => setPicOpen(false)} className="relative z-50">
@@ -30,7 +32,10 @@ export default function BusinessSignup () {
               }} />
             </div>
 
-            <button className="general-button" onClick={() => setPicOpen(false)}>
+            <button className="general-button" onClick={() => {
+              setPicOpen(false)
+              setSelectedImage(undefined)
+            }}>
               Confirm
             </button>
 
@@ -76,8 +81,19 @@ export default function BusinessSignup () {
           <h1 className="font-bold text-center">Business Image</h1>
 
           <div className="flex flex-row gap-2 p-2">
+            <input type="file" id="file" ref={selectedImageRef} style={{ display: 'none' }} onChange={e => {
+              const f = e.target.files?.item(0)
+              setSelectedImage(URL.createObjectURL(f!))
+              setImageRef(undefined)
+            }} />
+
             {imageRef === undefined
-              ? <div className="w-48 h-48 darker-div place-self-center"></div>
+              ? ( // Put the input in a div...
+                <div className="flex w-48 h-48 darker-div place-self-center items-center justify-center">
+                  {selectedImageRef.current !== null && selectedImage && (
+                    <img src={selectedImage} className="object-scale-down rounded-lg" />
+                  )}
+                </div>)
               : <img src={imageRef} className="w-48 h-48 rounded-lg place-self-center" />}
 
             <div className="flex flex-col gap-2 grow">
@@ -85,8 +101,15 @@ export default function BusinessSignup () {
                 Open Camera
               </button>
 
-              <button className="general-button">
+              <button className="general-button" onClick={() => selectedImageRef.current?.click()}>
                 Upload Image
+              </button>
+
+              <button className="general-button" onClick={() => {
+                setSelectedImage(undefined)
+                setImageRef(undefined)
+              }}>
+                Clear Image
               </button>
             </div>
           </div>
