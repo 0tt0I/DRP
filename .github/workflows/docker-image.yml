@@ -37,7 +37,7 @@ jobs:
         registry: gcr.io
         username: _json_key
         password: ${{ secrets.GCR_JSON_KEY }}
-    - run: docker push gcr.io/mira-drp-7c877/i_app_builder
+          #    - run: docker push gcr.io/mira-drp-7c877/i_app_builder
 
   build-deploy:
     runs-on: ubuntu-latest
@@ -59,10 +59,10 @@ jobs:
         registry: gcr.io
         username: _json_key
         password: ${{ secrets.GCR_JSON_KEY }}
-    - run: docker pull gcr.io/mira-drp-7c877/i_api_builder
-    - run: docker pull gcr.io/mira-drp-7c877/i_app_builder
-    - run: DOCKER_BUILDKIT=1 docker build --target=fullstack_local_deploy --tag gcr.io/mira-drp-7c877/i_fullstack_local_deploy .
-    - run: docker push gcr.io/mira-drp-7c877/i_fullstack_local_deploy
+          #     - run: docker pull gcr.io/mira-drp-7c877/i_api_builder
+          #     - run: docker pull gcr.io/mira-drp-7c877/i_app_builder
+          #     - run: DOCKER_BUILDKIT=1 docker build --target=fullstack_local_deploy --tag gcr.io/mira-drp-7c877/i_fullstack_local_deploy .
+          #     - run: docker push gcr.io/mira-drp-7c877/i_fullstack_local_deploy
 
   deploy:
     runs-on: ubuntu-latest
@@ -72,7 +72,7 @@ jobs:
     - uses: 'google-github-actions/auth@v0'
       with:
         credentials_json: ${{ secrets.GCR_JSON_KEY }}
-    - uses: 'google-github-actions/deploy-cloudrun@v0'
-      with:
-        service: 'i-fullstack-local-deploy'
-        image: 'gcr.io/mira-drp-7c877/i_fullstack_local_deploy'
+          #     - uses: 'google-github-actions/deploy-cloudrun@v0'
+          #       with:
+          #         service: 'i-fullstack-local-deploy'
+          #         image: 'gcr.io/mira-drp-7c877/i_fullstack_local_deploy'
