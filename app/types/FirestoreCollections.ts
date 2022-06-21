@@ -11,6 +11,7 @@ interface Referral {
 }
 
 interface Businesses {
+    id?: string
     name: string,
 }
 
