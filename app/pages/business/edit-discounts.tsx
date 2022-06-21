@@ -102,7 +102,7 @@ export default function SetDiscounts () {
             : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
 
           <button className="general-button" onClick={() => setInputOpen(true)}>  Add </button>
-          <HomeButton router={router} where="/business-home" />
+          <HomeButton router={router} where="/business/business-home" />
         </div>
       </div>
     </div>

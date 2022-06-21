@@ -16,7 +16,7 @@ export default function BusinessQRCode () {
         </h1>
         <QRUid uid={uid.current}/>
 
-        <HomeButton router={router} where="/business-home" />
+        <HomeButton router={router} where="/business/business-home" />
       </div>
     </div>
   )
