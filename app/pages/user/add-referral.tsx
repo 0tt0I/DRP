@@ -1,12 +1,12 @@
 import { Dialog } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
-import Camera from '../components/Camera'
-import HomeButton from '../components/HomeButton'
-import QRScanner from '../components/QRScanner'
-import { getUid, getUserEmail } from '../services/authInfo'
-import { getNameAndDiscount } from '../services/businessInfo'
-import { addReferral } from '../services/customerInfo'
+import Camera from '../../components/Camera'
+import HomeButton from '../../components/HomeButton'
+import QRScanner from '../../components/QRScanner'
+import { getUid, getUserEmail } from '../../services/authInfo'
+import { getNameAndDiscount } from '../../services/businessInfo'
+import { addReferral } from '../../services/customerInfo'
 
 export default function AddReferral () {
   const router = useRouter()

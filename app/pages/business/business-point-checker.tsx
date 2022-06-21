@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import QRScanner from '../components/QRScanner'
-import HomeButton from '../components/HomeButton'
+import QRScanner from '../../components/QRScanner'
+import HomeButton from '../../components/HomeButton'
 import { Dialog } from '@headlessui/react'
-import { getPointsEarned } from '../services/customerInfo'
-import { getUid } from '../services/authInfo'
+import { getPointsEarned } from '../../services/customerInfo'
+import { getUid } from '../../services/authInfo'
 
 export default function BusinessPointChecker () {
   // Request router.

@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { awardPoints, checkNewCustomer } from '../services/businessQrScan'
+import { awardPoints, checkNewCustomer } from '../../services/businessQrScan'
 import { useRouter } from 'next/router'
-import QRScanner from '../components/QRScanner'
-import HomeButton from '../components/HomeButton'
+import QRScanner from '../../components/QRScanner'
+import HomeButton from '../../components/HomeButton'
 import { Dialog } from '@headlessui/react'
-import { getUid } from '../services/authInfo'
+import { getUid } from '../../services/authInfo'
 
 export default function BusinessReferralScanner () {
   // Request router.

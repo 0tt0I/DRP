@@ -79,13 +79,12 @@ export const AuthProvider = ({ children }: ProviderProps) => {
       .then(async (userCredential) => {
         setUser(userCredential.user)
 
-
         // create business document in relevant collection a re-route to right page
         if (isBusiness) {
           await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
             name: 'todo!() name'
           })
-          router.push('business-home')
+          router.push('/business/business-home')
         } else {
           router.push('/')
         }
@@ -112,7 +111,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
         // push to business landing page if valid
         if (docSnap.exists()) {
-          router.push('/business-home')
+          router.push('/business/business-home')
         } else {
           router.push('/')
         }
@@ -128,6 +127,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
     signOut(auth).then(() => {
       setUser(null) // set user to null
+      cookie.set('auth_token', null)
     })
       .catch((error) => alert(error.message)) // catch errors
       .finally(() => setLoading(false)) // set loading to false
