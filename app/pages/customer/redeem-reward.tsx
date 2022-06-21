@@ -148,7 +148,7 @@ export default function RedeemReward () {
               </Dialog.Description>
 
               <div className="place-self-center">
-                <QRUid uid={uid.current + '-' + discount.id}/>
+                <QRUid uid={'points-' + uid.current + '-' + discount.id}/>
               </div>
 
               <button className="general-button" onClick={() => setQrOpen(false)}>
