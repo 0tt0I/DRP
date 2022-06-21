@@ -1,6 +1,12 @@
 import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from 'react'
 import Webcam from 'react-webcam'
 
+export type VideoConstraints = {
+  width: number;
+  height: number;
+  facingMode: string;
+}
+
 // add video constraints
 const videoConstraints = {
   width: 250,
@@ -11,6 +17,7 @@ const videoConstraints = {
 // interface for props to communicate imageRef back to parent
 interface PropsInterface {
     imageRef: Dispatch<SetStateAction<string | undefined>>;
+    constraints?: VideoConstraints,
     existingRef?: string;
 }
 
@@ -20,6 +27,8 @@ export default function Camera (props: PropsInterface) {
   const cameraRef = useRef<Webcam>(null)
   // state for captured image
   const [image, setImage] = useState<string | null>(null)
+
+  const usedConstraints = props.constraints ?? videoConstraints
 
   // capture function with react hook (to improve performance)
   const capture = useCallback(() => {
@@ -42,11 +51,11 @@ export default function Camera (props: PropsInterface) {
     <div className="camera grid gap-2 grid-cols-2 grid-flow-row-dense place-content-center">
       <Webcam
         audio = {false}
-        height = {videoConstraints.height}
+        height = {usedConstraints.height}
         ref = {cameraRef}
         screenshotFormat = "image/jpeg"
-        width = {videoConstraints.width}
-        videoConstraints = {videoConstraints}
+        width = {usedConstraints.width}
+        videoConstraints = {usedConstraints}
         className = "place-self-center rounded-lg"
       />
 

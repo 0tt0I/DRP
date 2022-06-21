@@ -130,7 +130,7 @@ export default function AddReferral () {
           </label>
         </div>
 
-        <Dialog open={picOpen} onClose={() => setPicOpen(false)} className="relateive z-50">
+        <Dialog open={picOpen} onClose={() => setPicOpen(false)} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
