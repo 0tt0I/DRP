@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
 // react state hooks
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
-import { auth, db } from '../firebase'
+import { auth, db } from '../plugins/firebase'
 
 import cookie from 'cookie-cutter'
 
