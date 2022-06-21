@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { Discount } from '../../types/FirestoreCollections'
 import { createHash } from 'crypto'
-import { addDiscount, getAllDiscounts } from '../../services/discountInfo'
+import { addDiscount, getAllDiscounts, deleteDiscount } from '../../services/discountInfo'
 import { getUid } from '../../services/authInfo'
 
 export default function SetDiscounts () {
@@ -24,9 +24,13 @@ export default function SetDiscounts () {
   const [discounts, setDiscounts] = useState<Discount[]>([])
   const [initialLoad, setInitialLoad] = useState(true)
 
-  const getDiscountList = async () => {
+  async function getDiscountList () {
     const jsonResponse = await getAllDiscounts(businessUid.current)
-    setDiscounts(jsonResponse.discounts)
+    setDiscounts([...jsonResponse.discounts])
+  }
+
+  function refreshPage () {
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -43,7 +47,12 @@ export default function SetDiscounts () {
     }
 
     await addDiscount(businessUid.current, newDiscount)
-    await getDiscountList()
+    setDiscounts((oldDiscounts) => oldDiscounts.concat([newDiscount]))
+  }
+
+  const removeDiscount = async (discountUid: string) => {
+    await deleteDiscount(businessUid.current, discountUid)
+    getDiscountList()
   }
 
   return (
@@ -57,7 +66,9 @@ export default function SetDiscounts () {
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
-                  <p>Ask to scan the QR code at the till to refer:</p>
+                  <p>Description: How this will appear to customers.</p>
+                  <br></br>
+                  <p>Points: The number of points to award the person who made the referral, if someone uses it.</p>
                 </div>
               </Dialog.Description>
 
@@ -82,6 +93,8 @@ export default function SetDiscounts () {
               <button className="general-button" onClick={() => {
                 createDiscount()
                 setInputOpen(false)
+                refreshPage()
+                // TODO: find better way to ensure new discount appears in list
               }}>
                 Submit
               </button>
@@ -113,15 +126,22 @@ export default function SetDiscounts () {
     return (
       <div
         key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
-        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg max-w-max">
-        <div className="flex flex-row gap-4 place-content-start">
+        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max grow">
+        <div className="flex flex-row gap-4 place-content-start min-w-max grow">
 
-          <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
+          <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 grow">
             <h1 className="font-bold text-dark-nonblack">Description: </h1>
             <p className="col-span-2">{ref.description}</p>
 
             <h1 className="font-bold text-dark-nonblack w-32">Points Worth: </h1>
             <p className="col-span-2">{ref.points}</p>
+          </div>
+          <div className='place-self-center'>
+            <button className='general-button' onClick={() => {
+              removeDiscount(ref.id ? ref.id : '')
+              refreshPage()
+              // TODO: find better way to ensure list is updated
+            }}>Delete</button>
           </div>
         </div>
       </div>
