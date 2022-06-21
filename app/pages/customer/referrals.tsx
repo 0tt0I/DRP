@@ -47,7 +47,8 @@ export default function Referrals () {
   )
 
   useEffect(() => {
-    const input = activeReferral.businessUid +
+    const input =
+      'referral-' + activeReferral.businessUid +
       '-' + activeReferral.customerUid +
       '-' + selectedDiscount.id +
       '-' + uid.current
