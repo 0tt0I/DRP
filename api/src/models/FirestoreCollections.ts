@@ -21,6 +21,12 @@ interface Discount {
     points: number
 }
 
+interface Reward {
+    id?: string
+    description: string,
+    points: number
+}
+
 interface VisitedBusiness {
     id?: string
     name: string,
@@ -34,4 +40,4 @@ interface RedeemableDiscount {
     place: string
   }
 
-export type { Referral, Businesses, Discount, VisitedBusiness, RedeemableDiscount }
+export type { Referral, Businesses, Discount, VisitedBusiness, RedeemableDiscount, Reward }
