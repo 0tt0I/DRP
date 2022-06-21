@@ -64,7 +64,8 @@ export async function customerGetUserDiscounts (req: Request, res: Response) {
   const acc: RedeemableDiscount[] = []
 
   const querySnapshot = await getDocs(visitedBusinessCollection)
-  querySnapshot.forEach(async (business) => {
+
+  for (const business of querySnapshot.docs) {
     const docPoints = business.data().pointsEarned
     const docSnap = await getDoc(doc(db, 'businesses', business.id))
 
@@ -78,7 +79,7 @@ export async function customerGetUserDiscounts (req: Request, res: Response) {
     } else {
       // error handling - should never happen
     }
-  })
+  }
 
   res.status(200).json({ discounts: acc })
 }
