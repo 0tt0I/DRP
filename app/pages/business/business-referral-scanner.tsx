@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { getDiscountInfo } from '../../services/discountInfo'
+import { getRewardInfo } from '../../services/rewardInfo'
 import { getPointsEarned, updatePointsEarned } from '../../services/customerInfo'
 import { awardPoints, checkNewCustomer } from '../../services/businessQrScan'
 import { useRouter } from 'next/router'
@@ -95,26 +95,26 @@ export default function BusinessReferralScanner () {
     // get points from customer collection
 
     // eslint-disable-next-line no-unused-vars
-    const [_, custUid, discountUid] = decodeResult.split('-', 3)
+    const [_, custUid, rewardUid] = decodeResult.split('-', 3)
 
     const businessUid = uid.current
 
     const custJson = await getPointsEarned(custUid, businessUid)
-    const discJson = await getDiscountInfo(businessUid, discountUid)
+    const rewardJson = await getRewardInfo(businessUid, rewardUid)
 
-    if (discJson.points === -1) {
-      setInputValidation('Invalid discount')
+    if (rewardJson.points === -1) {
+      setInputValidation('Invalid reward')
     } else {
       if (custJson.pointsEarned === -1) {
         setInputValidation('Invalid customer')
       } else {
-        if (custJson.pointsEarned < discJson.points) {
-          const pts = ' (' + custJson.pointsEarned + '/' + discJson.points + ')'
+        if (custJson.pointsEarned < rewardJson.points) {
+          const pts = ' (' + custJson.pointsEarned + '/' + rewardJson.points + ')'
           setInputValidation('Not enough points!' + pts)
         } else {
           setCurrentPoints(custJson.pointsEarned)
-          setCost(discJson.points)
-          setDescription(discJson.description)
+          setCost(rewardJson.points)
+          setDescription(rewardJson.description)
           setCustomerUid(custUid)
           setClaimOpen(true)
         }
@@ -178,11 +178,12 @@ export default function BusinessReferralScanner () {
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Claim Discount
+              Claim Reward
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
                   <p>This is a returning customer redeeming their loyalty points.</p>
+                  <p>They have earnt {currentPoints} points and need {cost} to redeem!</p>
                   <p>Click To Reward: {description}</p>
                 </div>
               </Dialog.Description>
