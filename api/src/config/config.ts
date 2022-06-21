@@ -1,9 +1,12 @@
 import { config } from 'dotenv'
+import { join } from 'path'
 
 config()
 
 export const environmentConfig = {
   /* Misc */
+  apiRoot: join(__dirname, '../../'),
+  appCompiledStatic: join(__dirname, '../../../app/out'),
   port: 8080,
 
   /* Firebase */
