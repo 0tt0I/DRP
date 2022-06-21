@@ -2,7 +2,7 @@ import { Dialog } from '@headlessui/react'
 import React, { useState } from 'react'
 import Camera from '../components/Camera'
 
-export default function UserSignup () {
+export default function BusinessSignup () {
   // Current image.
   const [picOpen, setPicOpen] = useState(false)
   const [imageRef, setImageRef] = useState<string | undefined>(undefined)
@@ -14,11 +14,11 @@ export default function UserSignup () {
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
           <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
             <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-            User Avatar
+            Business Picture
             </Dialog.Title>
             <Dialog.Description>
               <div className="flex flex-col grow text-center">
-                <p>Take a picture for your profile:</p>
+                <p>Take a picture to advertise your business:</p>
               </div>
             </Dialog.Description>
 
@@ -45,14 +45,19 @@ export default function UserSignup () {
       </Dialog>
 
       <div className="home-subdiv-l">
-        <h1>User Sign-Up</h1>
+        <h1>Business Sign-Up</h1>
 
         <div className="flex flex-col gap-2 w-96 p-2 default-div">
-          <h1 className="font-bold text-center">User Details</h1>
+          <h1 className="font-bold text-center">Business Details</h1>
 
           <label>
             <input type="text"
-              placeholder="Name"
+              placeholder="Business Name"
+              className="input" />
+          </label>
+          <label>
+            <input type="text"
+              placeholder="Address"
               className="input" />
           </label>
           <label>
@@ -68,7 +73,7 @@ export default function UserSignup () {
         </div>
 
         <div className="flex flex-col gap-2 w-96 p-2 default-div">
-          <h1 className="font-bold text-center">User Image</h1>
+          <h1 className="font-bold text-center">Business Image</h1>
 
           <div className="flex flex-row gap-2 p-2">
             {imageRef === undefined
