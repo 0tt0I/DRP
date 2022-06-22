@@ -5,7 +5,7 @@ import QRUid from '../../components/QRUid'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
 import { getUid } from '../../services/authInfo'
-import { Reward, VisitedBusiness } from '../../types/FirestoreCollections'
+import { Referral, Reward, VisitedBusiness } from '../../types/FirestoreCollections'
 import { getVisitedBusinesses } from '../../services/customerInfo'
 import { getAllRewards } from '../../services/rewardInfo'
 
@@ -19,10 +19,14 @@ export default function RedeemReward () {
   // modal state for popup and info for displaying rewards
   const [rewardOpen, setRewardOpen] = useState(false)
 
+  // modal state for popup and info for displaying referrals
+  const [referralOpen, setReferralOpen] = useState(false)
+
   const [rewards, setRewards] = useState<Reward[]>([])
   const [businesses, setBusinesses] = useState<VisitedBusiness[]>([])
   const [initialLoad, setInitialLoad] = useState(true)
   const [selectedBusiness, setSelectedBusiness] = useState<VisitedBusiness>()
+  const [selectedReferral, setSelectedReferral] = useState<Referral>()
 
   useEffect(() => {
     const getBusinesses = async () => {
@@ -68,18 +72,36 @@ export default function RedeemReward () {
       <div
         key={createHash('sha256').update(JSON.stringify(business)).digest('hex').toString()}
         className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max">
-        <div className="flex flex-row gap-4 place-content-start">
+        <div className="flex flex-row gap-4 place-content-center">
 
-          <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 min-w-max">
-            <h1 className="font-bold text-dark-nonblack">Place</h1>
-            <p className="col-span-2">{business.name}</p>
+          <div className="ref-info grid grid-rows grid-flow-row gap-2 w-full">
+            <div className='flex flex-row grow place-self-center text-center'>
+              <p className="col-span-4">{business.name}</p>
+            </div>
+            <div className='flex justify-between'>
+              <div>
+                <p className="col-span-4 w-max">{business.pointsEarned} points</p>
+              </div>
 
-            <button className="general-button" onClick={() => {
-              setSelectedBusiness(business)
-              setRewardOpen(true)
-            }}>
-            Redeem
-            </button>
+              <div>
+                <button className="general-button" onClick={() => {
+                  setSelectedBusiness(business)
+                  setRewardOpen(true)
+                }}>
+                Redeem
+                </button>
+              </div>
+            </div>
+            {business.referral
+              ? <div className='w-full place-self-end'>
+                <button className="general-button place-self-center w-full"onClick={() => {
+                  setSelectedReferral(business!.referral)
+                  setReferralOpen(true)
+                }}>
+                  View Active Referral
+                </button>
+              </div>
+              : <></>}
 
             <Dialog open={rewardOpen} onClose={() => setRewardOpen(false)} className="relative z-50">
               <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
@@ -100,6 +122,51 @@ export default function RedeemReward () {
                   </div>
 
                   <button className="general-button" onClick={() => setRewardOpen(false)}>
+                Back
+                  </button>
+                </Dialog.Panel>
+              </div>
+            </Dialog>
+
+            <Dialog open={referralOpen} onClose={() => setReferralOpen(false)} className="relative z-50">
+              <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
+                <Dialog.Panel className="w-fit max-w-lg overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
+                  <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
+                    Active Referral
+                  </Dialog.Title>
+                  <Dialog.Description>
+                    <div className="flex flex-col grow text-center">
+                      <p>Your referral at {selectedReferral ? selectedReferral.place : ''}:</p>
+                    </div>
+                  </Dialog.Description>
+
+                  {selectedReferral
+                    ? <div
+                      key={createHash('sha256').update(JSON.stringify(selectedReferral)).digest('hex').toString()}
+                      className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg max-w-max">
+                      <div className="flex flex-row gap-4 place-content-start">
+                        <img
+                          src={selectedReferral.image}
+                          className=" object-contain h-60 w-40 place-self-center p-1 darker-div" />
+
+                        <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
+                          <h1 className="font-bold text-dark-nonblack">PLACE</h1>
+                          <p className="col-span-2">{selectedReferral.place}</p>
+
+                          <h1 className="font-bold text-dark-nonblack w-32">DISCOUNT</h1>
+                          <p className="col-span-2">{selectedReferral.discount}</p>
+
+                          <h1 className="font-bold text-dark-nonblack">DATE</h1>
+                          <p className="col-span-2">{selectedReferral.date}</p>
+
+                          <h1 className="font-bold text-dark-nonblack row-span-3">REVIEW</h1>
+                          <p className="col-span-2 row-span-3 w-full">{selectedReferral.review}</p>
+                        </div>
+                      </div>
+                    </div>
+                    : <></>}
+
+                  <button className="general-button" onClick={() => setReferralOpen(false)}>
                 Back
                   </button>
                 </Dialog.Panel>
