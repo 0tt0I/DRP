@@ -14,7 +14,8 @@ export async function customerGetPointsController (req: Request, res: Response) 
   const docSnap = await getDoc(docRef)
 
   if (docSnap.exists()) {
-    const pointsEarned = docSnap.data().pointsEarned
+    const pointsEarnedData = docSnap.data().pointsEarned
+    const pointsEarned = pointsEarnedData || 0
     res.status(200).json({ pointsEarned })
   } else {
     res.status(200).json({ pointsEarned: -1 })
@@ -119,6 +120,9 @@ export async function customerAddReferral (req: Request, res: Response) {
       })
     }
   )
+
+  const customerRef = doc(db, 'customers', referral.customerUid)
+  await updateDoc(doc(customerRef, 'businesses', referral.businessUid), { })
 
   res.status(200)
 }
