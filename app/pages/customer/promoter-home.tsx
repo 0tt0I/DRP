@@ -32,6 +32,8 @@ export default function Home () {
           <p>See the businesses you&apos;ve referred and the loyalty points you&apos;ve earnt.</p>
 
           <HomeButton router={router} />
+
+          <p>Go back and see what you can do.</p>
         </div>
       </div>
     </div>

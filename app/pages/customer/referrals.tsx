@@ -140,7 +140,7 @@ export default function Referrals () {
       <div
         key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
         className="flex flex-col gap-4 place-content-center p-2 sm:p-4 default-div rounded-lg max-h-max">
-        <div className="flex flex-row gap-4 place-content-start">
+        <div className="flex flex-col sm:flex-row gap-4 place-content-start">
           <img
             src={ref.image}
             className="aspect-square object-contain h-32 sm:h-60 place-self-center p-1 default-div" />
@@ -156,7 +156,7 @@ export default function Referrals () {
             <p className="col-span-2">{ref.date}</p>
 
             <h1 className="font-bold text-dark-nonblack row-span-3">Review</h1>
-            <p className="col-span-2 row-span-3 w-32 sm:w-48">{ref.review}</p>
+            <p className="col-span-2 row-span-3">{ref.review}</p>
           </div>
         </div>
 
