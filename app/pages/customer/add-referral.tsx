@@ -176,7 +176,7 @@ export default function AddReferral () {
 
         <br />
 
-        <HomeButton router={router} />
+        <HomeButton router={router} where='/customer/promoter-home' text='Back to My Account' />
       </div>
     </div>
   )

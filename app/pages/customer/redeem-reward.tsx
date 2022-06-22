@@ -57,7 +57,7 @@ export default function RedeemReward () {
           ? businesses.map(BusinessEntry)
           : <p className="text-warning text-2xl p-8">Go visit some businesses!</p>}
 
-        <HomeButton router={router} where="/" />
+        <HomeButton router={router} where='/customer/promoter-home' text='Back to My Account' />
       </div>
 
     </div>
