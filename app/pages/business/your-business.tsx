@@ -20,7 +20,7 @@ export default function YourBusiness () {
           Your Business
         </h1>
 
-        <div className="home-buttondiv">
+        <div className="home-bus-buttondiv">
           <button onClick={() => router.push('/business/edit-discounts')} className="general-button">
             Edit Referral Discounts
           </button>
@@ -40,6 +40,8 @@ export default function YourBusiness () {
           <p>Fetch the unique location-identifying QR code for your businesss.</p>
 
           <HomeButton router={router} where="/business/business-home" />
+
+          <p>Go back to the main business management page.</p>
         </div>
       </div>
     </div>
