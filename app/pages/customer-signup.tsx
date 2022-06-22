@@ -21,7 +21,7 @@ export default function BusinessSignup () {
   const selectedImageRef = useRef<HTMLInputElement | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined)
 
-  const { signUp } = useAuth()
+  const { customerSignUp } = useAuth()
   const router = useRouter()
 
   // form hooks
@@ -38,7 +38,7 @@ export default function BusinessSignup () {
 
   const signUpHandler: SubmitHandler<Inputs> = async ({ email, password }) => {
     // sign up as business
-    await signUp(email, password, false, '', '')
+    await customerSignUp(email, password)
     router.push('/')
   }
 

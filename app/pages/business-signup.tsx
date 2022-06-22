@@ -1,4 +1,5 @@
 import { Dialog } from '@headlessui/react'
+import { GeoPoint } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -9,7 +10,8 @@ import useAuth from '../hooks/useAuth'
 interface Inputs {
   email: string
   password: string
-  address: string
+  longitude: number
+  latitude: number
   name: string
 }
 
@@ -21,7 +23,7 @@ export default function BusinessSignup () {
   const selectedImageRef = useRef<HTMLInputElement | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined)
 
-  const { signUp } = useAuth()
+  const { businessSignUp } = useAuth()
   const router = useRouter()
 
   // form hooks
@@ -36,10 +38,11 @@ export default function BusinessSignup () {
     formState: { errors }
   } = useForm<Inputs>()
 
-  const signUpHandler: SubmitHandler<Inputs> = async ({ email, password, name, address }) => {
+  const signUpHandler: SubmitHandler<Inputs> = async ({ email, password, name, longitude, latitude }) => {
     // sign up as business
-    await signUp(email, password, true, name, address)
-    router.push('/business/business-home')
+    businessSignUp(email, password, { name, location: new GeoPoint(longitude, latitude) }).then((_) =>
+      router.push('/business/business-home')
+    )
   }
 
   return (
@@ -93,12 +96,6 @@ export default function BusinessSignup () {
               {...register('name', { required: true })}/>
           </label>
           <label>
-            <input type="text"
-              placeholder="Address"
-              className="input"
-              {...register('address', { required: true })}/>
-          </label>
-          <label>
             <input type="email"
               placeholder="Email"
               className="input"
@@ -109,6 +106,20 @@ export default function BusinessSignup () {
               placeholder="Password"
               className="input"
               {...register('password', { required: true })}/>
+          </label>
+          <label>
+            <input type="number"
+              step="any"
+              placeholder="Longitude"
+              className="input"
+              {...register('longitude', { required: true })}/>
+          </label>
+          <label>
+            <input type="number"
+              step="any"
+              placeholder="Latitude"
+              className="input"
+              {...register('latitude', { required: true })}/>
           </label>
         </div>
 
