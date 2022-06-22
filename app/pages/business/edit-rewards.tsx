@@ -57,7 +57,7 @@ export default function SetRewards () {
 
   return (
     <div className="home-div">
-      <div className="flex flex-col gap-8 p-4 lighter-div">
+      <div className="home-subdiv-l">
         <Dialog open={inputOpen} onClose={() => setInputOpen(false)} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
@@ -72,7 +72,7 @@ export default function SetRewards () {
                 </div>
               </Dialog.Description>
 
-              <div className="place-self-center">
+              <div className="flex flex-col default-div p-2 gap-2 grow">
                 <label>
                   <input
                     placeholder="Description: "
@@ -112,7 +112,7 @@ export default function SetRewards () {
 
           {rewards.length > 0
             ? rewards.map(RewardEntry)
-            : <p className="text-warning text-2xl p-8">There are no active Rewards.</p>}
+            : <p className="text-warning text-center text-2xl p-8">There are no active Rewards.</p>}
 
           <button className="general-button" onClick={() => setInputOpen(true)}>  Add </button>
           <button onClick={() => router.push('/business/your-business')} className="general-button">
@@ -134,7 +134,7 @@ export default function SetRewards () {
             <h1 className="font-bold text-dark-nonblack">Description: </h1>
             <p className="col-span-2">{ref.description}</p>
 
-            <h1 className="font-bold text-dark-nonblack w-32">Points Worth: </h1>
+            <h1 className="font-bold text-dark-nonblack w-16 sm:w-32">Points Worth: </h1>
             <p className="col-span-2">{ref.points}</p>
           </div>
           <div className='place-self-center'>

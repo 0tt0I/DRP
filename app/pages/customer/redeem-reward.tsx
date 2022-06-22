@@ -71,19 +71,18 @@ export default function RedeemReward () {
     return (
       <div
         key={createHash('sha256').update(JSON.stringify(business)).digest('hex').toString()}
-        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max">
+        className="flex flex-col gap-4 p-4 default-div rounded-lg min-w-max">
         <div className="flex flex-row gap-4 place-content-center">
 
-          <div className="ref-info grid grid-rows grid-flow-row gap-2 w-full">
-            <div className='flex flex-row grow place-self-center text-center'>
-              <p className="col-span-4">{business.name}</p>
-            </div>
-            <div className='flex justify-between'>
-              <div>
-                <p className="col-span-4 w-max">{business.pointsEarned} points</p>
+          <div className="ref-info grid grid-flow-row gap-2 w-full">
+            <p className="font-bold font-1xl text-center">{business.name}</p>
+
+            <div className='grid grid-cols-2 grid-flow-row gap-4'>
+              <div className="place-self-start p-2">
+                <p className="place-self-center">{business.pointsEarned} Points</p>
               </div>
 
-              <div>
+              <div className="place-self-end">
                 <button className="general-button" onClick={() => {
                   setSelectedBusiness(business)
                   setRewardOpen(true)
@@ -92,6 +91,7 @@ export default function RedeemReward () {
                 </button>
               </div>
             </div>
+
             {business.referral
               ? <div className='w-full place-self-end'>
                 <button className="general-button place-self-center w-full"onClick={() => {
@@ -101,7 +101,7 @@ export default function RedeemReward () {
                   View Active Referral
                 </button>
               </div>
-              : <></>}
+              : <div></div>}
 
             <Dialog open={rewardOpen} onClose={() => setRewardOpen(false)} className="relative z-50">
               <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
@@ -144,22 +144,22 @@ export default function RedeemReward () {
                     ? <div
                       key={createHash('sha256').update(JSON.stringify(selectedReferral)).digest('hex').toString()}
                       className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg max-w-max">
-                      <div className="flex flex-row gap-4 place-content-start">
+                      <div className="flex flex-col sm:flex-row gap-4 place-content-start">
                         <img
                           src={selectedReferral.image}
                           className=" object-contain h-60 w-40 place-self-center p-1 darker-div" />
 
                         <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
-                          <h1 className="font-bold text-dark-nonblack">PLACE</h1>
+                          <h1 className="font-bold text-dark-nonblack">Place</h1>
                           <p className="col-span-2">{selectedReferral.place}</p>
 
-                          <h1 className="font-bold text-dark-nonblack w-32">DISCOUNT</h1>
+                          <h1 className="font-bold text-dark-nonblack w-32">Discount</h1>
                           <p className="col-span-2">{selectedReferral.discount}</p>
 
-                          <h1 className="font-bold text-dark-nonblack">DATE</h1>
+                          <h1 className="font-bold text-dark-nonblack">Date</h1>
                           <p className="col-span-2">{selectedReferral.date}</p>
 
-                          <h1 className="font-bold text-dark-nonblack row-span-3">REVIEW</h1>
+                          <h1 className="font-bold text-dark-nonblack row-span-3">Review</h1>
                           <p className="col-span-2 row-span-3 w-full">{selectedReferral.review}</p>
                         </div>
                       </div>
