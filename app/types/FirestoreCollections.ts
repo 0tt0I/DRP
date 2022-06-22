@@ -1,3 +1,5 @@
+import { GeoPoint } from 'firebase/firestore'
+
 interface Referral {
     id?: string
     date: string,
@@ -11,9 +13,10 @@ interface Referral {
     distance?: number,
 }
 
-interface Businesses {
+interface Business {
     id?: string
-    name: string,
+    name: string
+    location: GeoPoint
 }
 
 interface Discount {
@@ -43,4 +46,4 @@ interface RedeemableDiscount {
     place: string
   }
 
-export type { Referral, Businesses, Discount, VisitedBusiness, RedeemableDiscount, Reward }
+export type { Referral, Business, Discount, VisitedBusiness, RedeemableDiscount, Reward }

@@ -17,11 +17,13 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import { auth, db } from '../plugins/firebase'
 
 import cookie from 'cookie-cutter'
+import { Business } from '../types/FirestoreCollections'
 
 // AuthContext type, promises signify the completion of an async function
 interface IAuth {
   user: User | null
-  signUp: (email: string, password: string, isBusiness: boolean, name: string, address: string) => Promise<void>
+  customerSignUp: (email: string, password: string) => Promise<void>
+  businessSignUp: (email: string, password: string, business: Business) => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   error: string | null
@@ -31,7 +33,8 @@ interface IAuth {
 // default AuthContext
 const AuthContext = createContext<IAuth>({
   user: null,
-  signUp: async () => {},
+  customerSignUp: async () => {},
+  businessSignUp: async () => {},
   signIn: async () => {},
   logout: async () => {},
   error: null,
@@ -73,7 +76,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     [auth]
   )
 
-  const signUp = async (email: string, password: string, isBusiness: boolean, name: string, address: string) => {
+  const businessSignUp = async (email: string, password: string, business: Business) => {
     setLoading(true) // user is signing up
 
     // create firebase entry, and push user to home screen using next router
@@ -82,14 +85,24 @@ export const AuthProvider = ({ children }: ProviderProps) => {
         setUser(userCredential.user)
 
         // create business document in relevant collection a re-route to right page
-        if (isBusiness) {
-          await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
-            name, address
-          })
-          router.push('/business/business-home')
-        } else {
-          router.push('/')
-        }
+        await setDoc(doc(db, 'businesses', auth.currentUser!.uid), business)
+        router.push('/business/business-home')
+
+        setLoading(false)
+      })
+      .catch((error) => alert(error.message)) // catch errors
+      .finally(() => setLoading(false)) // always set loading back to false
+  }
+
+  const customerSignUp = async (email: string, password: string) => {
+    setLoading(true) // user is signing up
+
+    // create firebase entry, and push user to home screen using next router
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        setUser(userCredential.user)
+
+        router.push('/')
 
         setLoading(false)
       })
@@ -137,7 +150,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
   // memoized value for user's session, don't recompute if it's the same user
   const memoizedVal = useMemo(() => ({
-    user, signUp, signIn, loading, logout, error
+    user, customerSignUp, businessSignUp, signIn, loading, logout, error
   }), [user, loading])
 
   // return AuthContext component
