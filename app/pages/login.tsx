@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import useAuth from '../hooks/useAuth'
@@ -10,13 +11,12 @@ interface Inputs {
 }
 
 function Login () {
+  const router = useRouter()
+
   // react state to check whether user clicked login
   const [login, setLogin] = useState(false)
 
-  // react state for whether the sign up is for a business
-  const [isBusiness, setIsBusiness] = useState(false)
-
-  const { signIn, signUp } = useAuth()
+  const { signIn } = useAuth()
 
   // form hooks
   const {
@@ -34,8 +34,6 @@ function Login () {
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
     if (login) {
       await signIn(email, password)
-    } else {
-      await signUp(email, password, isBusiness)
     }
   }
 
@@ -71,15 +69,16 @@ function Login () {
           Submit
         </button>
 
+        <p>Haven&apos;t made an account yet?</p>
+
         <div className="grid gap-4 grid-cols-2 place-content-center">
-          <button onClick={() => setLogin(false)} type="submit" className="general-button">
+          <button onClick={() => router.push('/customer-signup')} className="general-button">
             User Sign Up
           </button>
 
           <button onClick={() => {
-            setLogin(false)
-            setIsBusiness(true)
-          }} type="submit" className="general-button">
+            router.push('/business-signup')
+          }} className="general-button">
             Business Sign Up
           </button>
         </div>

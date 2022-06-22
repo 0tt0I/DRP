@@ -1,6 +1,17 @@
 import { Dialog } from '@headlessui/react'
+import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import Camera from '../components/Camera'
+import useAuth from '../hooks/useAuth'
+
+// typescript interface for form input
+interface Inputs {
+  email: string
+  password: string
+  address: string
+  name: string
+}
 
 export default function BusinessSignup () {
   // Current image.
@@ -9,6 +20,27 @@ export default function BusinessSignup () {
 
   const selectedImageRef = useRef<HTMLInputElement | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined)
+
+  const { signUp } = useAuth()
+  const router = useRouter()
+
+  // form hooks
+  const {
+    register,
+    handleSubmit,
+    // TODO: Fix this unused variable
+    // eslint-disable-next-line no-unused-vars
+    watch,
+    // TODO: Fix this unused variable
+    // eslint-disable-next-line no-unused-vars
+    formState: { errors }
+  } = useForm<Inputs>()
+
+  const signUpHandler: SubmitHandler<Inputs> = async ({ email, password, name, address }) => {
+    // sign up as business
+    await signUp(email, password, true, name, address)
+    router.push('/business/business-home')
+  }
 
   return (
     <div className="home-div">
@@ -49,31 +81,34 @@ export default function BusinessSignup () {
         </div>
       </Dialog>
 
-      <div className="home-subdiv-l">
+      <form className="home-subdiv-l" onSubmit={handleSubmit(signUpHandler)}>
         <h1>Business Sign-Up</h1>
-
         <div className="flex flex-col gap-2 w-96 p-2 default-div">
           <h1 className="font-bold text-center">Business Details</h1>
 
           <label>
             <input type="text"
               placeholder="Business Name"
-              className="input" />
+              className="input"
+              {...register('name', { required: true })}/>
           </label>
           <label>
             <input type="text"
               placeholder="Address"
-              className="input" />
+              className="input"
+              {...register('address', { required: true })}/>
           </label>
           <label>
             <input type="email"
               placeholder="Email"
-              className="input" />
+              className="input"
+              {...register('email', { required: true })}/>
           </label>
           <label>
             <input type="password"
               placeholder="Password"
-              className="input" />
+              className="input"
+              {...register('password', { required: true })}/>
           </label>
         </div>
 
@@ -117,14 +152,18 @@ export default function BusinessSignup () {
 
         <br />
 
-        <p className="white-div font-bold text-nondark p-2 text-center">
-          [TODO: INPUT VALIDATION STATUS]
-        </p>
+        <div className='flex flex-row gap-2'>
+          <button
+            onClick={() => router.push('/login')} className="general-button place-self-center">
+            Back to Login
+          </button>
 
-        <button className="general-button">
-          Sign Up
-        </button>
-      </div>
+          <button
+            type='submit' className="general-button place-self-center">
+            Sign Up as a Business
+          </button>
+        </div>
+      </form>
     </div>
   )
 }

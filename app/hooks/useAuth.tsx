@@ -12,7 +12,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 
 // react state hooks
-import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 import { auth, db } from '../plugins/firebase'
 
@@ -21,7 +21,7 @@ import cookie from 'cookie-cutter'
 // AuthContext type, promises signify the completion of an async function
 interface IAuth {
   user: User | null
-  signUp: (email: string, password: string, isBusiness: boolean) => Promise<void>
+  signUp: (email: string, password: string, isBusiness: boolean, name: string, address: string) => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   error: string | null
@@ -63,7 +63,9 @@ export const AuthProvider = ({ children }: ProviderProps) => {
           // Not logged in, route to login page
           setUser(null)
           setLoading(true)
-          router.push('/login')
+          if (router.asPath.search('signup') === -1) {
+            router.push('/login')
+          }
         }
 
         setInitialLoading(false) // block UI
@@ -71,7 +73,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     [auth]
   )
 
-  const signUp = async (email: string, password: string, isBusiness: boolean) => {
+  const signUp = async (email: string, password: string, isBusiness: boolean, name: string, address: string) => {
     setLoading(true) // user is signing up
 
     // create firebase entry, and push user to home screen using next router
@@ -82,7 +84,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
         // create business document in relevant collection a re-route to right page
         if (isBusiness) {
           await setDoc(doc(db, 'businesses', auth.currentUser!.uid), {
-            name: 'todo!() name'
+            name, address
           })
           router.push('/business/business-home')
         } else {

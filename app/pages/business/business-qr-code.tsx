@@ -13,6 +13,7 @@ export default function BusinessQRCode () {
         <h1>
               Your Unique Business QR Code
         </h1>
+        <p className='place-self-center'>Customers need to scan this to make a referral.</p>
         <QRUid uid={uid.current}/>
 
         <button onClick={() => router.push('/business/your-business')} className="general-button">
