@@ -8,7 +8,7 @@ import QRUid from '../../components/QRUid'
 import { getOtherReferrals } from '../../services/customerInfo'
 import { getAllDiscounts } from '../../services/discountInfo'
 import { getUid } from '../../services/authInfo'
-import updateCurrentLocation from '../../services/updateCurrentLocation'
+import registerLocationSetter from '../../services/registerLocationSetter'
 
 export default function Referrals () {
   const router = useRouter()
@@ -29,7 +29,7 @@ export default function Referrals () {
   // api call to firestore to run on page load
   // get all user referrals and businesses
   useEffect(() => {
-    updateCurrentLocation(setCurrentLocation)
+    registerLocationSetter(setCurrentLocation)
   }, [])
 
   useEffect(() => {
