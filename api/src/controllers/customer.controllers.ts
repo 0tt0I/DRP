@@ -49,12 +49,20 @@ export async function customerGetUserReferrals (req: Request, res: Response) {
 
 export async function customerGetOtherReferrals (req: Request, res: Response) {
   const customerUid: string = req.body.customerUid
+  const customerLocation: number = req.body.customerLocation
+
+  // TODO: Replace this placeholder
+  const businessLocation: number = 500
 
   const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
   const data = await getDocs(query(collectionsRef, where('customerUid', '!=', customerUid)))
 
+  const calculateDistance = (customerLocation: number, businessLocation: number) => {
+    return businessLocation - customerLocation
+  }
+
   // get relevant information from document
-  const referrals = (data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+  const referrals = (data.docs.map((doc) => ({ ...doc.data(), id: doc.id, distance: calculateDistance(customerLocation, businessLocation) })))
 
   res.status(200).json({ referrals })
 }
