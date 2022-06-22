@@ -1,4 +1,5 @@
 import { Referral } from '../types/FirestoreCollections'
+import { Location } from '../types/Location'
 
 export async function getPointsEarned (customerUid: string, businessUid: string) {
   const res = await fetch('/api/customer/get-points', {
@@ -36,7 +37,7 @@ export async function getUserReferrals (customerUid: string) {
   return await res.json()
 }
 
-export async function getOtherReferrals (customerUid: string, customerLocation: number) {
+export async function getOtherReferrals (customerUid: string, customerLocation: Location) {
   const res = await fetch('/api/customer/get-other-referrals', {
     method: 'POST',
     body: JSON.stringify({ customerUid, customerLocation }),
