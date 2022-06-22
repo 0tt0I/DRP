@@ -20,7 +20,7 @@ export default function YourBusiness () {
           Your Business
         </h1>
 
-        <div className="home-bus-buttondiv">
+        <div className="home-buttondiv">
           <button onClick={() => router.push('/business/edit-discounts')} className="general-button">
             Edit Referral Discounts
           </button>

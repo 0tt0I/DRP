@@ -44,21 +44,12 @@
     }
 
     .button-grid-normal {
-        @apply grid grid-cols-3 grid-rows-5 grid-flow-row gap-4;
-    }
-
-    .button-grid-ext {
-        @apply grid grid-cols-3 grid-rows-6 grid-flow-row gap-4;
+        @apply grid grid-cols-3 grid-rows-3 grid-flow-row gap-4;
     }
 
     .button-grid-narrow {
         @apply grid grid-flow-col gap-1;
-        grid-template-rows: repeat(10, minmax(0, 1fr));
-    }
-
-    .button-grid-narrow-ext {
-        @apply grid grid-flow-col gap-1;
-        grid-template-rows: repeat(12, minmax(0, 1fr));
+        grid-template-rows: repeat(6, minmax(0, 1fr));
     }
 }
 
@@ -94,11 +85,7 @@ body {
     @apply button-grid-narrow sm:button-grid-normal place-content-center;
 }
 
-.home-bus-buttondiv {
-    @apply button-grid-narrow-ext sm:button-grid-ext place-content-center;
-}
-
-.home-buttondiv > p, .home-bus-buttondiv > p {
+.home-buttondiv > p {
     @apply justify-center items-center place-self-center sm:col-span-2 break-words w-80 font-semibold;
 }
 
