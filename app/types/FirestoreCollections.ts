@@ -8,6 +8,7 @@ interface Referral {
     discount: string,
     businessUid: string,
     customerUid: string,
+    distance?: number,
 }
 
 interface Businesses {
