@@ -1,8 +1,19 @@
 import { Dialog } from '@headlessui/react'
+import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import Camera from '../components/Camera'
+import useAuth from '../hooks/useAuth'
 
-export default function UserSignup () {
+// typescript interface for form input
+interface Inputs {
+  email: string
+  password: string
+  address: string
+  name: string
+}
+
+export default function BusinessSignup () {
   // Current image.
   const [picOpen, setPicOpen] = useState(false)
   const [imageRef, setImageRef] = useState<string | undefined>(undefined)
@@ -10,17 +21,38 @@ export default function UserSignup () {
   const selectedImageRef = useRef<HTMLInputElement | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined)
 
+  const { signUp } = useAuth()
+  const router = useRouter()
+
+  // form hooks
+  const {
+    register,
+    handleSubmit,
+    // TODO: Fix this unused variable
+    // eslint-disable-next-line no-unused-vars
+    watch,
+    // TODO: Fix this unused variable
+    // eslint-disable-next-line no-unused-vars
+    formState: { errors }
+  } = useForm<Inputs>()
+
+  const signUpHandler: SubmitHandler<Inputs> = async ({ email, password }) => {
+    // sign up as business
+    await signUp(email, password, false, '', '')
+    router.push('/')
+  }
+
   return (
     <div className="home-div">
       <Dialog open={picOpen} onClose={() => setPicOpen(false)} className="relative z-50">
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
           <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
             <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-            User Avatar
+            Profile Picture
             </Dialog.Title>
             <Dialog.Description>
               <div className="flex flex-col grow text-center">
-                <p>Take a picture for your profile:</p>
+                <p>Take a picture</p>
               </div>
             </Dialog.Description>
 
@@ -49,31 +81,26 @@ export default function UserSignup () {
         </div>
       </Dialog>
 
-      <div className="home-subdiv-l">
-        <h1>User Sign-Up</h1>
-
+      <form className="home-subdiv-l" onSubmit={handleSubmit(signUpHandler)}>
+        <h1>Customer Sign-Up</h1>
         <div className="flex flex-col gap-2 w-96 p-2 default-div">
-          <h1 className="font-bold text-center">User Details</h1>
-
-          <label>
-            <input type="text"
-              placeholder="Name"
-              className="input" />
-          </label>
+          <h1 className="font-bold text-center">Your Details</h1>
           <label>
             <input type="email"
               placeholder="Email"
-              className="input" />
+              className="input"
+              {...register('email', { required: true })}/>
           </label>
           <label>
             <input type="password"
               placeholder="Password"
-              className="input" />
+              className="input"
+              {...register('password', { required: true })}/>
           </label>
         </div>
 
         <div className="flex flex-col gap-2 w-96 p-2 default-div">
-          <h1 className="font-bold text-center">Profile Image</h1>
+          <h1 className="font-bold text-center">Profile Picture</h1>
 
           <div className="flex flex-row gap-2 p-2">
             <input type="file" id="file" ref={selectedImageRef} style={{ display: 'none' }} onChange={e => {
@@ -112,14 +139,18 @@ export default function UserSignup () {
 
         <br />
 
-        <p className="white-div font-bold text-nondark p-2 text-center">
-          [TODO: INPUT VALIDATION STATUS]
-        </p>
+        <div className='flex flex-row gap-2'>
+          <button
+            onClick={() => router.push('/login')} className="general-button place-self-center">
+            Back to Login
+          </button>
 
-        <button className="general-button">
-          Sign Up
-        </button>
-      </div>
+          <button
+            type='submit' className="general-button place-self-center">
+            Sign Up as a Customer
+          </button>
+        </div>
+      </form>
     </div>
   )
 }
