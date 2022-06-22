@@ -108,6 +108,7 @@ export default function SetDiscounts () {
 
         <div className="flex flex-col gap-4 p-4">
           <h2 className="font-bold text-center text-4xl text-dark-nonblack">Set Discounts</h2>
+          <p className='place-self-center'>These are the discounts you are offering to new customers when they follow someone&apos;s referral.</p>
 
           {discounts.length > 0
             ? discounts.map(DiscountEntry)
