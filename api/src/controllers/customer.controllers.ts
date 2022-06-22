@@ -1,6 +1,8 @@
 import { doc, getDoc, updateDoc, collection, CollectionReference, getDocs, query, where, addDoc } from '@firebase/firestore'
 import { ref, getDownloadURL, uploadString } from '@firebase/storage'
 import { Request, Response } from 'express'
+import { deleteDoc, QueryDocumentSnapshot } from 'firebase/firestore'
+import { deleteObject } from 'firebase/storage'
 import { RedeemableDiscount, Referral, VisitedBusiness } from '../models/FirestoreCollections'
 import { db, storage } from '../plugins/firebase'
 
@@ -90,6 +92,17 @@ export async function customerAddReferral (req: Request, res: Response) {
 
   const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
 
+  const oldReferrals = await getDocs(query(collectionsRef,
+    where('customerUid', '==', referral.customerUid),
+    where('businessUid', '==', referral.businessUid)))
+
+  if (oldReferrals.docs[0]) {
+    const oldReferralRef = oldReferrals.docs[0]
+    const oldPhoto = ref(storage, oldReferralRef.data().image)
+    await deleteObject(oldPhoto)
+    await deleteDoc(doc(collectionsRef, oldReferralRef.id))
+  }
+
   // add doc to firestore
   const docRef = await addDoc(collectionsRef, referral)
 
@@ -118,12 +131,17 @@ export async function customerGetVisitedBusinesses (req: Request, res: Response)
   const collectionsRef = collection(db, 'customers', customerUid, 'businesses')
   const querySnapshot = await getDocs(collectionsRef)
 
+  const referrals = (await getDocs(query(collection(db, 'referrals'),
+    where('customerUid', '==', customerUid)))).docs as QueryDocumentSnapshot<Referral>[]
+
   // get relevant information from document
   for (const business of querySnapshot.docs) {
     const docSnap = await getDoc(doc(db, 'businesses', business.id))
 
+    const referral = referrals.find(referral => referral.data().businessUid === business.id)?.data()
+
     if (docSnap.exists()) {
-      acc.push({ name: docSnap.data().name, id: business.id, pointsEarned: business.data().pointsEarned })
+      acc.push({ name: docSnap.data().name, id: business.id, pointsEarned: business.data().pointsEarned, referral })
     }
   }
 

@@ -31,6 +31,7 @@ interface VisitedBusiness {
     id?: string
     name: string,
     pointsEarned: number
+    referral?: Referral
 }
 interface RedeemableDiscount {
     pointsEarned: number,

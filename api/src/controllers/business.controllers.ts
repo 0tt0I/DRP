@@ -2,7 +2,8 @@ import { Request, Response } from 'express'
 import { db } from '../plugins/firebase'
 // import { Businesses } from "src/models/FirestoreCollections"
 import { doc, getDoc, setDoc } from '@firebase/firestore'
-import { updateDoc } from 'firebase/firestore'
+import { getDocs, updateDoc, collection, QueryDocumentSnapshot } from 'firebase/firestore'
+import { Discount } from 'src/models/FirestoreCollections'
 
 export async function businessQRScanController (req: Request, res: Response) {
   let newCustomer, discount
@@ -72,7 +73,8 @@ export async function businessGetNameAndDiscount (req: Request, res: Response) {
 
   if (businessDoc.exists()) {
     const name: string = businessDoc.get('name')
-    const discount: string = businessDoc.get('new_customer_discount')
+    const discounts = (await getDocs(collection(businessDocRef, 'discounts'))).docs as QueryDocumentSnapshot<Discount>[]
+    const discount: string = discounts[0] ? discounts[0].data().description : ''
     res.status(200).json({ name, discount })
   } else {
     res.status(200).json({ name: '', discount: '' })
