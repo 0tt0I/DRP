@@ -66,7 +66,7 @@ export async function customerGetOtherReferrals (req: Request, res: Response) {
   }))
 
   // get relevant information from document
-  const referrals = (referralsData.docs.map((referral) => {
+  const sortedReferrals = (referralsData.docs.map((referral) => {
     const business = businesses.find((business) =>
       business.id === referral.data().businessUid)
 
@@ -81,9 +81,9 @@ export async function customerGetOtherReferrals (req: Request, res: Response) {
         customerLocation,
         businessLocation)
     })
-  }))
+  })).sort(({ distance: a }, { distance: b }) => a - b)
 
-  res.status(200).json({ referrals })
+  res.status(200).json({ referrals: sortedReferrals })
 }
 
 // wip: forEach loop doesn't finish before the response is sent
