@@ -36,10 +36,10 @@ export async function getUserReferrals (customerUid: string) {
   return await res.json()
 }
 
-export async function getOtherReferrals (customerUid: string) {
+export async function getOtherReferrals (customerUid: string, customerLocation: number) {
   const res = await fetch('/api/customer/get-other-referrals', {
     method: 'POST',
-    body: JSON.stringify({ customerUid }),
+    body: JSON.stringify({ customerUid, customerLocation }),
     headers: {
       'Content-Type': 'application/json'
     }
