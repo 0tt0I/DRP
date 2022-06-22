@@ -128,8 +128,7 @@ export default function SetRewards () {
       <div
         key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
         className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max grow">
-        <div className="flex flex-row gap-4 place-content-start min-w-max grow">
-
+        <div className="flex flex-col sm:flex-row gap-4 place-content-start min-w-max grow">
           <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 grow">
             <h1 className="font-bold text-dark-nonblack">Description: </h1>
             <p className="col-span-2">{ref.description}</p>
@@ -137,7 +136,8 @@ export default function SetRewards () {
             <h1 className="font-bold text-dark-nonblack w-16 sm:w-32">Points Worth: </h1>
             <p className="col-span-2">{ref.points}</p>
           </div>
-          <div className='place-self-center'>
+
+          <div className='place-self-end sm:place-self-center'>
             <button className='general-button' onClick={() => {
               removeReward(ref.id ? ref.id : '')
               refreshPage()
