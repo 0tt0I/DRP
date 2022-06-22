@@ -1,11 +1,11 @@
 import { doc, getDoc, updateDoc, collection, CollectionReference, getDocs, query, where, addDoc } from '@firebase/firestore'
 import { ref, getDownloadURL, uploadString } from '@firebase/storage'
 import { Request, Response } from 'express'
-import { deleteDoc, QueryDocumentSnapshot } from 'firebase/firestore'
+import { deleteDoc, QueryDocumentSnapshot, QuerySnapshot } from 'firebase/firestore'
 import { deleteObject } from 'firebase/storage'
-import { RedeemableDiscount, Referral, VisitedBusiness } from '../models/FirestoreCollections'
+import { RedeemableDiscount, Referral, VisitedBusiness, Business } from '../models/FirestoreCollections'
 import { db, storage } from '../plugins/firebase'
-import { Location } from '../models/Location'
+import { Location, locationFromGeoPoint } from '../models/Location'
 import { getDistance } from 'geolib'
 
 export async function customerGetPointsController (req: Request, res: Response) {
@@ -53,16 +53,35 @@ export async function customerGetOtherReferrals (req: Request, res: Response) {
   const customerUid: string = req.body.customerUid
   const customerLocation: Location = req.body.customerLocation
 
-  console.log(customerLocation)
-
-  // TODO: Replace this placeholder
-  const businessLocation: Location = { longitude: 100, latitude: 100 }
+  // // TODO: Replace this placeholder
+  // const businessLocation: Location = { longitude: 100, latitude: 100 }
 
   const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
-  const data = await getDocs(query(collectionsRef, where('customerUid', '!=', customerUid)))
+  const referralsData = await getDocs(query(collectionsRef, where('customerUid', '!=', customerUid)))
+
+  const businessesReference = (await getDocs(collection(db, 'businesses'))) as QuerySnapshot<Business>
+  const businesses: Business[] = businessesReference.docs.map((bus) => ({
+    ...bus.data(),
+    id: bus.id
+  }))
 
   // get relevant information from document
-  const referrals = (data.docs.map((doc) => ({ ...doc.data(), id: doc.id, distance: getDistance(customerLocation, businessLocation) })))
+  const referrals = (referralsData.docs.map((referral) => {
+    const business = businesses.find((business) =>
+      business.id === referral.data().businessUid)
+
+    const businessLocation = business
+      ? locationFromGeoPoint(business.location)
+      : { longitude: -1, latitude: -1 }
+
+    return ({
+      ...referral.data(),
+      id: referral.id,
+      distance: getDistance(
+        customerLocation,
+        businessLocation)
+    })
+  }))
 
   res.status(200).json({ referrals })
 }
