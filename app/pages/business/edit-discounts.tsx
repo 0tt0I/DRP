@@ -57,7 +57,7 @@ export default function SetDiscounts () {
 
   return (
     <div className="home-div">
-      <div className="flex flex-col gap-8 p-4 lighter-div">
+      <div className="home-subdiv-l">
         <Dialog open={inputOpen} onClose={() => setInputOpen(false)} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
@@ -127,16 +127,16 @@ export default function SetDiscounts () {
       <div
         key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
         className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max grow">
-        <div className="flex flex-row gap-4 place-content-start min-w-max grow">
-
+        <div className="flex flex-col sm:flex-row gap-4 place-content-start min-w-max grow">
           <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 grow">
             <h1 className="font-bold text-dark-nonblack">Description: </h1>
             <p className="col-span-2">{ref.description}</p>
 
-            <h1 className="font-bold text-dark-nonblack w-32">Points Worth: </h1>
+            <h1 className="font-bold text-dark-nonblack w-16">Points Worth: </h1>
             <p className="col-span-2">{ref.points}</p>
           </div>
-          <div className='place-self-center'>
+
+          <div className='place-self-end sm:place-self-center'>
             <button className='general-button' onClick={() => {
               removeDiscount(ref.id ? ref.id : '')
               refreshPage()
