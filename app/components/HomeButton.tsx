@@ -9,8 +9,8 @@ export type HomeButtonProps = {
 
 export default function HomeButton (props: HomeButtonProps) {
   return (
-    <div onClick={() => props.router.push(props.where ?? '/')} className="general-button">
+    <button onClick={() => props.router.push(props.where ?? '/')} className="general-button">
       {props.text ?? 'Go back to Home'}
-    </div>
+    </button>
   )
 }
