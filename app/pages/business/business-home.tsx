@@ -19,7 +19,7 @@ export default function BusinessHome () {
           Business Home
         </h1>
 
-        <div className="home-bus-buttondiv">
+        <div className="home-buttondiv">
           <button onClick={() => router.push('/business/business-referral-scanner')} className="general-button">
             Scan a Customer&apos;s Code
           </button>
