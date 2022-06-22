@@ -8,14 +8,14 @@ import QRUid from '../../components/QRUid'
 import { getOtherReferrals } from '../../services/customerInfo'
 import { getAllDiscounts } from '../../services/discountInfo'
 import { getUid } from '../../services/authInfo'
-import { getCurrentLocation } from '../../services/getCurrentLocation'
+import updateCurrentLocation from '../../services/updateCurrentLocation'
 
 export default function Referrals () {
   const router = useRouter()
 
   // set state for referrals
   const [referrals, setReferrals] = useState<Referral[]>([])
-  const [initialLoad, setInitialLoad] = useState(true)
+  const [currentLocation, setCurrentLocation] = useState({ longitude: -1, latitude: -1 })
 
   // modal state for popup and info for qr-gen
   const [referralOpen, setReferralOpen] = useState(false)
@@ -29,16 +29,18 @@ export default function Referrals () {
   // api call to firestore to run on page load
   // get all user referrals and businesses
   useEffect(() => {
+    updateCurrentLocation(setCurrentLocation)
+  }, [])
+
+  useEffect(() => {
     const getUsers = async () => {
-      const jsonResponse = await getOtherReferrals(uid.current, getCurrentLocation())
+      console.log(currentLocation.latitude)
+      const jsonResponse = await getOtherReferrals(uid.current, currentLocation)
       setReferrals(jsonResponse.referrals)
     }
 
-    if (initialLoad) {
-      getUsers()
-      setInitialLoad(false)
-    }
-  }, [])
+    getUsers()
+  }, [currentLocation])
 
   // Create QR code image.
   const [qrOpen, setQrOpen] = useState(false)
@@ -125,7 +127,7 @@ export default function Referrals () {
       </Dialog>
 
       <div className="flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 lighter-div">
-        <h1 className="font-bold text-center text-4xl text-dark-nonblack">Current Referrals</h1>
+        <h1 className="font-bold text-center text-4xl text-dark-nonblack">Current Referrals </h1>
 
         {referrals.length > 0
           ? referrals.map(ReferralEntry)
