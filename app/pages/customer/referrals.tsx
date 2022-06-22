@@ -8,6 +8,7 @@ import QRUid from '../../components/QRUid'
 import { getOtherReferrals } from '../../services/customerInfo'
 import { getAllDiscounts } from '../../services/discountInfo'
 import { getUid } from '../../services/authInfo'
+import { getCurrentLocation } from '../../services/getCurrentLocation'
 
 export default function Referrals () {
   const router = useRouter()
@@ -29,7 +30,7 @@ export default function Referrals () {
   // get all user referrals and businesses
   useEffect(() => {
     const getUsers = async () => {
-      const jsonResponse = await getOtherReferrals(uid.current)
+      const jsonResponse = await getOtherReferrals(uid.current, getCurrentLocation())
       setReferrals(jsonResponse.referrals)
     }
 
@@ -157,6 +158,9 @@ export default function Referrals () {
 
             <h1 className="font-bold text-dark-nonblack row-span-3">Review</h1>
             <p className="col-span-2 row-span-3">{ref.review}</p>
+
+            <h1 className="font-bold text-dark-nonblack">Distance</h1>
+            <p className="col-span-2">{ref.distance}</p>
           </div>
         </div>
 
