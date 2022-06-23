@@ -52,6 +52,7 @@ export async function customerGetUserReferrals (req: Request, res: Response) {
 export async function customerGetOtherReferrals (req: Request, res: Response) {
   const customerUid: string = req.body.customerUid
   const customerLocation: Location = req.body.customerLocation
+  const maxReferrals: number = req.body.maxReferrals
 
   const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
   const referralsData = await getDocs(
@@ -72,7 +73,7 @@ export async function customerGetOtherReferrals (req: Request, res: Response) {
       : { longitude: -1, latitude: -1 }
   }
 
-  const referrals = referralsData.docs.map(referral => {
+  let referrals = referralsData.docs.map(referral => {
     const businessLocation = getLocationOrDefault(referral)
     return ({
       ...referral.data(),
@@ -85,7 +86,8 @@ export async function customerGetOtherReferrals (req: Request, res: Response) {
   // Order referrals by distance ascending
   referrals.sort(({ distance: a }, { distance: b }) => a - b)
 
-  // TODO: Truncate the first N referrals
+  // Truncate the referrals to give only the N closest results
+  referrals = referrals.slice(0, Math.min(referrals.length, maxReferrals))
 
   res.status(200).json({ referrals })
 }
