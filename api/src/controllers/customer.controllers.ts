@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc, collection, CollectionReference, getDocs, query, where, addDoc } from '@firebase/firestore'
+import { doc, getDoc, updateDoc, collection, CollectionReference, getDocs, query, where, addDoc, setDoc } from '@firebase/firestore'
 import { ref, getDownloadURL, uploadString } from '@firebase/storage'
 import { Request, Response } from 'express'
 import { deleteDoc, QueryDocumentSnapshot, QuerySnapshot } from 'firebase/firestore'
@@ -131,10 +131,14 @@ export async function customerAddReferral (req: Request, res: Response) {
     where('businessUid', '==', referral.businessUid)))
 
   if (oldReferrals.docs[0]) {
+    // if referral made before, delete old referral
     const oldReferralRef = oldReferrals.docs[0]
     const oldPhoto = ref(storage, oldReferralRef.data().image)
     await deleteObject(oldPhoto)
     await deleteDoc(doc(collectionsRef, oldReferralRef.id))
+  } else {
+    // generate business doc for customer's first referral made
+    customerAddBusinessDoc(referral.customerUid, referral.businessUid)
   }
 
   // add doc to firestore
@@ -158,6 +162,14 @@ export async function customerAddReferral (req: Request, res: Response) {
   await updateDoc(doc(customerRef, 'businesses', referral.businessUid), { })
 
   res.status(200)
+}
+
+async function customerAddBusinessDoc (customerUid: string, businessUid: string) {
+  // Add a new document to customer's business collection.
+  const customerBusinessDocRef = doc(db, 'customers', customerUid, 'businesses', businessUid)
+  await setDoc(customerBusinessDocRef, {
+    pointsEarned: 0
+  })
 }
 
 export async function customerGetVisitedBusinesses (req: Request, res: Response) {
