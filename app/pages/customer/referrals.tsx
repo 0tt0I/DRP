@@ -35,7 +35,7 @@ export default function Referrals () {
   useEffect(() => {
     const getUsers = async () => {
       console.log(currentLocation.latitude)
-      const jsonResponse = await getOtherReferrals(uid.current, currentLocation)
+      const jsonResponse = await getOtherReferrals(uid.current, currentLocation, 10)
       setReferrals(jsonResponse.referrals)
     }
 
