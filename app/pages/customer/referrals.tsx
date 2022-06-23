@@ -77,7 +77,7 @@ export default function Referrals () {
   }, [referralOpen])
 
   const qrDialogue = (
-    <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
+    <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
       <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
         <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
           <Dialog.Title as="h3" className="font-bold text-center text-2xl text-dark-nonblack">
@@ -102,7 +102,7 @@ export default function Referrals () {
   // display each referral from state, use combobox for dropdown menu
   return (
     <div className="relative grid h-screen justify-center items-center p-2 sm:p-4">
-      <Dialog open={referralOpen} onClose={() => setReferralOpen(false)} className="relative z-50">
+      <Dialog open={referralOpen} onClose={() => null} className="relative z-40">
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
           <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
             <Dialog.Title as="h3" className="font-bold text-center text-2xl text-dark-nonblack">
@@ -116,9 +116,11 @@ export default function Referrals () {
 
             {qrDialogue}
 
-            {discounts.length > 0
-              ? discounts.map(DiscountEntry)
-              : <p className="text-warning text-2xl p-8">There are no active disounts at this business.</p>}
+            <div className="flex flex-col p-2 gap-2">
+              {discounts.length > 0
+                ? discounts.map(DiscountEntry)
+                : <p className="text-warning text-2xl p-8">There are no active disounts at this business.</p>}
+            </div>
 
             <button className="general-button"
               onClick={() => setReferralOpen(false)}>Cancel</button>
@@ -180,10 +182,10 @@ export default function Referrals () {
         onClick = {() => {
           setSelectedDiscount(discount)
         }}
-        className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+        className="flex items-center p-2 transition duration-150 ease-in-out lighter-div hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
       >
         <div className="ml-4">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-700">
             {discount.description}
           </p>
         </div>
