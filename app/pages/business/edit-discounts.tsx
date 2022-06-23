@@ -72,7 +72,7 @@ export default function SetDiscounts () {
                 </div>
               </Dialog.Description>
 
-              <div className="place-self-center">
+              <div className="flex flex-col gap-2 p-2 lighter-div">
                 <label>
                   <input
                     placeholder="Description: "

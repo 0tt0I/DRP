@@ -58,7 +58,7 @@ export default function SetRewards () {
   return (
     <div className="home-div">
       <div className="home-subdiv-l">
-        <Dialog open={inputOpen} onClose={() => setInputOpen(false)} className="relative z-50">
+        <Dialog open={inputOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
@@ -72,7 +72,7 @@ export default function SetRewards () {
                 </div>
               </Dialog.Description>
 
-              <div className="flex flex-col default-div p-2 gap-2 grow">
+              <div className="flex flex-col lighter-div p-2 gap-2 grow">
                 <label>
                   <input
                     placeholder="Description: "
@@ -95,6 +95,7 @@ export default function SetRewards () {
                 setInputOpen(false)
                 refreshPage()
                 // TODO: find better way to ensure new Reward appears in list
+                // TODO: validate that all fields are filled first
               }}>
                 Submit
               </button>

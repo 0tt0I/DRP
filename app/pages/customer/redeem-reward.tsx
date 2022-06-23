@@ -94,7 +94,7 @@ export default function RedeemReward () {
 
             {business.referral
               ? <div className='w-full place-self-end'>
-                <button className="general-button place-self-center w-full"onClick={() => {
+                <button className="general-button place-self-center w-full" onClick={() => {
                   setSelectedReferral(business!.referral)
                   setReferralOpen(true)
                 }}>
@@ -103,7 +103,7 @@ export default function RedeemReward () {
               </div>
               : <div></div>}
 
-            <Dialog open={rewardOpen} onClose={() => setRewardOpen(false)} className="relative z-50">
+            <Dialog open={rewardOpen} onClose={() => null} className="relative z-30">
               <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
                 <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
                   <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
@@ -128,7 +128,7 @@ export default function RedeemReward () {
               </div>
             </Dialog>
 
-            <Dialog open={referralOpen} onClose={() => setReferralOpen(false)} className="relative z-50">
+            <Dialog open={referralOpen} onClose={() => null} className="relative z-40">
               <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
                 <Dialog.Panel className="w-fit max-w-lg overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
                   <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
@@ -205,7 +205,7 @@ export default function RedeemReward () {
           : <div></div>
         }
 
-        <Dialog open={qrOpen} onClose={() => setQrOpen(false)} className="relative z-50">
+        <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
