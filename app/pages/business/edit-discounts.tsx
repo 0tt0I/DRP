@@ -14,11 +14,15 @@ export default function SetDiscounts () {
 
   // state for description inpu
   const [newDescription, setNewDescription] = useState('')
+
   // state for points input
   const [newPoints, setNewPoints] = useState(0)
-  // state for discount collection ref
 
+  // state for discount collection ref
   const businessUid = useRef(getUid())
+
+  // state for validation status
+  const [inputValidation, setInputValidation] = useState('')
 
   // set state for referrals
   const [discounts, setDiscounts] = useState<Discount[]>([])
@@ -41,6 +45,10 @@ export default function SetDiscounts () {
   }, [])
 
   const createDiscount = async () => {
+    if (newPoints <= 0 || newDescription === '') {
+      return false
+    }
+
     const newDiscount: Discount = {
       description: newDescription,
       points: newPoints
@@ -48,6 +56,8 @@ export default function SetDiscounts () {
 
     await addDiscount(businessUid.current, newDiscount)
     setDiscounts((oldDiscounts) => oldDiscounts.concat([newDiscount]))
+
+    return true
   }
 
   const removeDiscount = async (discountUid: string) => {
@@ -90,10 +100,19 @@ export default function SetDiscounts () {
                 </label>
               </div>
 
+              {inputValidation !== ''
+                ? <p className="white-div p-2 text-dark-nonblack font-bold text-center">{inputValidation}</p>
+                : <></>}
+
               <button className="general-button" onClick={() => {
-                createDiscount()
-                setInputOpen(false)
-                refreshPage()
+                createDiscount().then(succ => {
+                  if (succ) {
+                    setInputOpen(false)
+                    refreshPage()
+                  } else {
+                    setInputValidation('Please fill in both the description and points field.')
+                  }
+                })
                 // TODO: find better way to ensure new discount appears in list
               }}>
                 Submit

@@ -14,11 +14,15 @@ export default function SetRewards () {
 
   // state for description inpu
   const [newDescription, setNewDescription] = useState('')
+
   // state for points input
   const [newPoints, setNewPoints] = useState(0)
-  // state for Reward collection ref
 
+  // state for Reward collection ref
   const businessUid = useRef(getUid())
+
+  // state for validation status
+  const [inputValidation, setInputValidation] = useState('')
 
   // set state for referrals
   const [rewards, setRewards] = useState<Reward[]>([])
@@ -41,6 +45,11 @@ export default function SetRewards () {
   }, [])
 
   const createReward = async () => {
+    // Fields not filled.
+    if (newPoints <= 0 || newDescription === '') {
+      return false
+    }
+
     const newReward: Reward = {
       description: newDescription,
       points: newPoints
@@ -48,6 +57,8 @@ export default function SetRewards () {
 
     await addReward(businessUid.current, newReward)
     setRewards((oldRewards) => oldRewards.concat([newReward]))
+
+    return true
   }
 
   const removeReward = async (rewardUid: string) => {
@@ -90,12 +101,20 @@ export default function SetRewards () {
                 </label>
               </div>
 
+              {inputValidation !== ''
+                ? <p className="white-div p-2 text-dark-nonblack font-bold text-center">{inputValidation}</p>
+                : <></>}
+
               <button className="general-button" onClick={() => {
-                createReward()
-                setInputOpen(false)
-                refreshPage()
+                createReward().then(succ => {
+                  if (succ) {
+                    setInputOpen(false)
+                    refreshPage()
+                  } else {
+                    setInputValidation('Please fill in both the description and points field.')
+                  }
+                })
                 // TODO: find better way to ensure new Reward appears in list
-                // TODO: validate that all fields are filled first
               }}>
                 Submit
               </button>
@@ -115,7 +134,11 @@ export default function SetRewards () {
             ? rewards.map(RewardEntry)
             : <p className="text-warning text-center text-2xl p-8">There are no active Rewards.</p>}
 
-          <button className="general-button" onClick={() => setInputOpen(true)}>  Add </button>
+          <button className="general-button" onClick={() => {
+            setInputOpen(true)
+            setInputValidation('')
+          }}>Add</button>
+
           <button onClick={() => router.push('/business/your-business')} className="general-button">
             Back to Your Business
           </button>
