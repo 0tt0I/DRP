@@ -115,7 +115,6 @@ export default function SetRewards () {
                   }
                 })
                 // TODO: find better way to ensure new Reward appears in list
-                // TODO: validate that all fields are filled first
               }}>
                 Submit
               </button>
