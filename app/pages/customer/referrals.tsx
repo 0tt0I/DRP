@@ -150,7 +150,7 @@ export default function Referrals () {
 
           <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 w-fit">
             <h1 className="font-bold text-dark-nonblack">Place</h1>
-            <p className="col-span-2">{ref.place}</p>
+            <p className="col-span-2">{ref.place} ({ref.distance}km)</p>
 
             <h1 className="font-bold text-dark-nonblack w-18 sm:w-24">Discount</h1>
             <p className="col-span-2">{ref.discount}</p>
@@ -160,9 +160,6 @@ export default function Referrals () {
 
             <h1 className="font-bold text-dark-nonblack row-span-3">Review</h1>
             <p className="col-span-2 row-span-3">{ref.review}</p>
-
-            <h1 className="font-bold text-dark-nonblack">Distance</h1>
-            <p className="col-span-2">{ref.distance}</p>
           </div>
         </div>
 
