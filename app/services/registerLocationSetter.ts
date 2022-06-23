@@ -4,7 +4,7 @@ import React from 'react'
 export default function registerLocationSetter (setCurrentLocation: React.Dispatch<React.SetStateAction<Location>>) {
   navigator.geolocation.getCurrentPosition((pos) => {
     // Location has been successfully acquired
-    setCurrentLocation({ longitude: pos.coords.latitude, latitude: pos.coords.longitude })
+    setCurrentLocation({ longitude: pos.coords.longitude, latitude: pos.coords.latitude })
   },
   (err) => {
     // TODO: Handle this case properly
