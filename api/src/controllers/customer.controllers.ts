@@ -53,38 +53,41 @@ export async function customerGetOtherReferrals (req: Request, res: Response) {
   const customerUid: string = req.body.customerUid
   const customerLocation: Location = req.body.customerLocation
 
-  // // TODO: Replace this placeholder
-  // const businessLocation: Location = { longitude: 100, latitude: 100 }
-
   const collectionsRef = collection(db, 'referrals') as CollectionReference<Referral>
-  const referralsData = await getDocs(query(collectionsRef, where('customerUid', '!=', customerUid)))
+  const referralsData = await getDocs(
+    query(collectionsRef, where('customerUid', '!=', customerUid)))
 
-  const businessesReference = (await getDocs(collection(db, 'businesses'))) as QuerySnapshot<Business>
+  const businessesReference = await getDocs(collection(db, 'businesses')) as QuerySnapshot<Business>
   const businesses: Business[] = businessesReference.docs.map((bus) => ({
     ...bus.data(),
     id: bus.id
   }))
 
-  // get relevant information from document
-  const sortedReferrals = (referralsData.docs.map((referral) => {
-    const business = businesses.find((business) =>
-      business.id === referral.data().businessUid)
+  // Function to get the location of the business associated with a referrals
+  const getLocationOrDefault = (referral: QueryDocumentSnapshot<Referral>) => {
+    const business = businesses.find((bus) => bus.id === referral.data().businessUid)
 
-    const businessLocation = business
+    return business
       ? locationFromGeoPoint(business.location)
       : { longitude: -1, latitude: -1 }
+  }
 
+  const referrals = referralsData.docs.map(referral => {
+    const businessLocation = getLocationOrDefault(referral)
     return ({
       ...referral.data(),
       id: referral.id,
-      distance: getDistance(
-        customerLocation,
-        businessLocation,
-        100) / 1000 // Accurate down to 100 metres, in kilometres
+      // Distance accurate to 100 metres, stored in kilometres
+      distance: getDistance(customerLocation, businessLocation, 100) / 1000
     })
-  })).sort(({ distance: a }, { distance: b }) => a - b)
+  })
 
-  res.status(200).json({ referrals: sortedReferrals })
+  // Order referrals by distance ascending
+  referrals.sort(({ distance: a }, { distance: b }) => a - b)
+
+  // TODO: Truncate the first N referrals
+
+  res.status(200).json({ referrals })
 }
 
 // wip: forEach loop doesn't finish before the response is sent
