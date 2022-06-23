@@ -79,7 +79,8 @@ export async function customerGetOtherReferrals (req: Request, res: Response) {
       id: referral.id,
       distance: getDistance(
         customerLocation,
-        businessLocation)
+        businessLocation,
+        100) / 1000 // Accurate down to 100 metres, in kilometres
     })
   })).sort(({ distance: a }, { distance: b }) => a - b)
 
