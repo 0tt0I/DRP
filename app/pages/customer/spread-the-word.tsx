@@ -102,11 +102,12 @@ export default function AddReferral () {
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Place QR Code
+                Scan QR Code
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
-                  <p>Ask to scan the QR code at the till to refer:</p>
+                  <p>Grant exclusive discounts to new customers that follow your review! </p>
+                  <p>Just ask at the till if you can post a Mira review, and scan their QR code. </p>
                 </div>
               </Dialog.Description>
 
