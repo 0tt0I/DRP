@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import HomeButton from '../../components/HomeButton'
 import QRUid from '../../components/QRUid'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
@@ -8,6 +7,7 @@ import { getUid } from '../../services/authInfo'
 import { Referral, Reward, VisitedBusiness } from '../../types/FirestoreCollections'
 import { getVisitedBusinesses } from '../../services/customerInfo'
 import { getAllRewards } from '../../services/rewardInfo'
+import Header from '../../components/Header'
 
 export default function RedeemReward () {
   const router = useRouter()
@@ -54,18 +54,13 @@ export default function RedeemReward () {
   return (
     <div className="home-div">
       <div className="home-subdiv-l">
-        <h1>
-          Spend points
-        </h1>
+        <Header router={router} text='Redeem Referrals' />
         <p>See the points you&apos;ve earned,<br />spend them at your favourite spots. </p>
 
         {businesses.length > 0
           ? businesses.map(BusinessEntry)
           : <p className="text-warning text-2xl p-8">Go visit some businesses!</p>}
-
-        <HomeButton router={router} />
       </div>
-
     </div>
   )
 
