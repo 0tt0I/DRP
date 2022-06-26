@@ -139,7 +139,7 @@ export default function SetRewards () {
             setInputValidation('')
           }}>Add</button>
 
-          <button onClick={() => router.push('/business/your-business')} className="general-button">
+          <button onClick={() => router.push('/business/manage')} className="general-button">
             Back to Your Business
           </button>
         </div>

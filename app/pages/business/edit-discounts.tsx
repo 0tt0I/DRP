@@ -134,7 +134,7 @@ export default function SetDiscounts () {
             : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
 
           <button className="general-button" onClick={() => setInputOpen(true)}>  Add </button>
-          <button onClick={() => router.push('/business/your-business')} className="general-button">
+          <button onClick={() => router.push('/business/manage')} className="general-button">
             Back to Your Business
           </button>
         </div>
