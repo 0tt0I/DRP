@@ -100,8 +100,8 @@ export default function AddReferral () {
         <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
-              <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-                Scan QR Code
+              <Dialog.Title>
+                <Header onClick={() => setQrOpen(false)} text="Scan QR Code" />
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
@@ -112,10 +112,6 @@ export default function AddReferral () {
               <div className="place-self-center">
                 <QRScanner resultSetter={setBusinessUid} afterScan={() => setQrOpen(false)} />
               </div>
-
-              <button className="general-button" onClick={() => setQrOpen(false)}>
-                Cancel
-              </button>
             </Dialog.Panel>
           </div>
         </Dialog>
@@ -134,7 +130,12 @@ export default function AddReferral () {
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Review Picture
+                <Header
+                  onClick={() => {
+                    setPicOpen(false)
+                    setImageRef(undefined)
+                  }}
+                  text="Review Picture" />
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
@@ -148,13 +149,6 @@ export default function AddReferral () {
 
               <button className="general-button" onClick={() => setPicOpen(false)}>
                 Confirm
-              </button>
-
-              <button className="general-button" onClick={() => {
-                setPicOpen(false)
-                setImageRef(undefined)
-              }}>
-                Cancel
               </button>
             </Dialog.Panel>
           </div>
