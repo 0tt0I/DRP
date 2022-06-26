@@ -24,7 +24,7 @@ export default function Home () {
 
           <p>Find a referral you like and discover a new place.</p>
 
-          <button onClick={() => router.push('/customer/add-referral')} className="general-button">
+          <button onClick={() => router.push('/customer/spread-the-word')} className="general-button">
             Spread the Word
           </button>
 
