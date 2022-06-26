@@ -161,10 +161,6 @@ export default function AddReferral () {
           </div>
         </Dialog>
 
-        <button className="general-button" onClick={() => setQrOpen(true)}>
-          Scan Place QR Code
-        </button>
-
         <button className="general-button" onClick={() => setPicOpen(true)}>
           Add Picture to Review
         </button>
@@ -172,6 +168,10 @@ export default function AddReferral () {
         <h1 className="white-div font-bold text-nondark p-2 text-center">{inputValidation}</h1>
 
         <br />
+
+        <button className="general-button" onClick={() => setQrOpen(true)}>
+          Grant discounts
+        </button>
 
         <button onClick={createReferral} className="general-button">Post</button>
 
