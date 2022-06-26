@@ -76,22 +76,20 @@ export default function SetDiscounts () {
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
-                  <p>Description: How this will appear to customers.</p>
-                  <br></br>
-                  <p>Points: The number of points to award the person who made the referral, if someone uses it.</p>
+                  <p></p>
                 </div>
               </Dialog.Description>
 
               <div className="flex flex-col gap-2 p-2 lighter-div">
                 <label>
                   <input
-                    placeholder="Description: "
+                    placeholder="Description: Spend £10 and get a free pint!"
                     className="input"
                     onChange={(event) => setNewDescription(event.target.value)}/>
                 </label>
                 <label>
                   <input
-                    placeholder="Points: "
+                    placeholder="Points: Number of points to award the promoter"
                     className="input"
                     type="tel"
                     onChange={(event) => {
