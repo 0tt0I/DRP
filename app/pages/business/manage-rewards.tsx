@@ -75,24 +75,17 @@ export default function SetRewards () {
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
               Add Reward
               </Dialog.Title>
-              <Dialog.Description>
-                <div className="flex flex-col grow text-center">
-                  <p>Description: How this will appear to customers.</p>
-                  <br></br>
-                  <p>Points: The number of points needed to be spent to redeem this reward.</p>
-                </div>
-              </Dialog.Description>
 
               <div className="flex flex-col lighter-div p-2 gap-2 grow">
                 <label>
                   <input
-                    placeholder="Description: "
+                    placeholder="Description: Coffee on the house! "
                     className="input"
                     onChange={(event) => setNewDescription(event.target.value)}/>
                 </label>
                 <label>
                   <input
-                    placeholder="Points: "
+                    placeholder="Points: 15"
                     className="input"
                     type="tel"
                     onChange={(event) => {
