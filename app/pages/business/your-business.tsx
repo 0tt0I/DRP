@@ -33,12 +33,6 @@ export default function YourBusiness () {
 
           <p>Edit the rewards that customers can trade loyalty points for.</p>
 
-          <button onClick={() => router.push('/business/business-qr-code')} className="general-button">
-            Your QR code
-          </button>
-
-          <p>Fetch the unique location-identifying QR code for your businesss.</p>
-
           <HomeButton router={router} where="/business/business-home" />
 
           <p>Go back to the main business management page.</p>
