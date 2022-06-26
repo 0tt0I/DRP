@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import QRUid from '../../components/QRUid'
 import { Dialog } from '@headlessui/react'
@@ -10,7 +9,6 @@ import { getAllRewards } from '../../services/rewardInfo'
 import Header from '../../components/Header'
 
 export default function RedeemReward () {
-  const router = useRouter()
   const uid = useRef(getUid())
 
   // modal state for popup and info for qr-gen
@@ -54,7 +52,8 @@ export default function RedeemReward () {
   return (
     <div className="home-div">
       <div className="home-subdiv-l">
-        <Header router={router} text='Redeem Referrals' />
+        <Header text='Redeem Referrals' />
+
         <p>See the points you&apos;ve earned,<br />spend them at your favourite spots. </p>
 
         {businesses.length > 0

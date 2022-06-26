@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { Discount, Referral } from '../../types/FirestoreCollections'
 import { Dialog } from '@headlessui/react'
@@ -11,8 +10,6 @@ import registerLocationSetter from '../../services/registerLocationSetter'
 import Header from '../../components/Header'
 
 export default function Referrals () {
-  const router = useRouter()
-
   // set state for referrals
   const [referrals, setReferrals] = useState<Referral[]>([])
   const [currentLocation, setCurrentLocation] = useState({ longitude: -1, latitude: -1 })
@@ -80,8 +77,8 @@ export default function Referrals () {
     <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
       <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
         <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
-          <Dialog.Title as="h3" className="font-bold text-center text-2xl text-dark-nonblack">
-            Discount QR code
+          <Dialog.Title>
+            <Header onClick={() => setQrOpen(false)} text="Discount QR Code" />
           </Dialog.Title>
           <Dialog.Description>
             <div className="flex flex-col grow text-center">
@@ -92,9 +89,6 @@ export default function Referrals () {
           </Dialog.Description>
 
           {qrComponent}
-
-          <button className="general-button"
-            onClick={() => setQrOpen(false)}>Cancel</button>
         </Dialog.Panel>
       </div>
     </Dialog>
@@ -106,8 +100,8 @@ export default function Referrals () {
       <Dialog open={referralOpen} onClose={() => null} className="relative z-40">
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
           <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
-            <Dialog.Title as="h3" className="font-bold text-center text-2xl text-dark-nonblack">
-              Available discounts
+            <Dialog.Title>
+              <Header onClick={() => setReferralOpen(false)} text="Available Discounts" />
             </Dialog.Title>
 
             {qrDialogue}
@@ -117,15 +111,12 @@ export default function Referrals () {
                 ? discounts.map(DiscountEntry)
                 : <p className="text-warning text-2xl p-8">There are no active disounts at this business.</p>}
             </div>
-
-            <button className="general-button"
-              onClick={() => setReferralOpen(false)}>Cancel</button>
           </Dialog.Panel>
         </div>
       </Dialog>
 
       <div className="flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 lighter-div">
-        <Header router={router} text="Discover" />
+        <Header text="Discover" />
 
         {referrals.length > 0
           ? referrals.map(ReferralEntry)
