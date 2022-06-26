@@ -96,7 +96,7 @@ export default function AddReferral () {
     <div className="relative flex w-screen h-screen items-center justify-center">
       <div className="default-div rounded-lg flex flex-col p-4 gap-2 w-fit sm:w-96">
         <h2 className="font-bold text-center text-4xl text-dark-nonblack">
-          Make a Referral
+          Spread the word
         </h2>
         <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
