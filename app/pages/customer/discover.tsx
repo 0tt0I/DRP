@@ -106,13 +106,8 @@ export default function Referrals () {
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
           <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
             <Dialog.Title as="h3" className="font-bold text-center text-2xl text-dark-nonblack">
-              Referral code
+              Available discounts
             </Dialog.Title>
-            <Dialog.Description>
-              <div className="flex flex-col grow text-center">
-                <p>Select one of {activeReferral.place}&apos;s discounts to redeem:</p>
-              </div>
-            </Dialog.Description>
 
             {qrDialogue}
 
