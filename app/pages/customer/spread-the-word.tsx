@@ -163,7 +163,7 @@ export default function AddReferral () {
         </Dialog>
 
         <button className="general-button" onClick={() => setPicOpen(true)}>
-          Add Picture to Review
+          Add Picture
         </button>
 
         <h1 className="white-div font-bold text-nondark p-2 text-center">{inputValidation}</h1>
