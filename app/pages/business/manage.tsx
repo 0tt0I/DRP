@@ -17,25 +17,23 @@ export default function YourBusiness () {
     <div className="home-div">
       <div className="home-subdiv">
         <h1>
-          Your Business
+          Manage discounts and rewards
         </h1>
 
         <div className="home-bus-buttondiv">
           <button onClick={() => router.push('/business/edit-discounts')} className="general-button">
-            Edit Referral Discounts
+            Manage new <br /> customer discounts
           </button>
 
-          <p>Edit the available discounts offered to new customers.</p>
+          <p>Manage discounts offered to customers gained through Mira.</p>
 
           <button onClick={() => router.push('/business/edit-rewards')} className="general-button">
-            Edit Loyalty Rewards
+            Manage promoter <br /> rewards
           </button>
 
-          <p>Edit the rewards that customers can trade loyalty points for.</p>
+          <p>Manage what successful promoters of your business can spend points on.</p>
 
           <HomeButton router={router} where="/business/home" />
-
-          <p>Go back to the main business management page.</p>
         </div>
       </div>
     </div>
