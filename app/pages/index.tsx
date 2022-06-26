@@ -28,7 +28,7 @@ export default function Home () {
             Spread the Word
           </button>
 
-          <p>Create promotions and earn points by attracting new customers. </p>
+          <p>Promote a local business and earn points by attracting new customers. </p>
 
           <button onClick={() => router.push('/customer/redeem-reward')} className="general-button">
             Spend points
