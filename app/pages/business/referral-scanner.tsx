@@ -202,7 +202,7 @@ export default function BusinessReferralScanner () {
           </div>
         </Dialog>
 
-        <HomeButton router={router} where="/business/business-home" />
+        <HomeButton router={router} where="/business/home" />
       </div>
     </div>
   )

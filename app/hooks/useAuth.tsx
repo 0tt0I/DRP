@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
         // create business document in relevant collection a re-route to right page
         await setDoc(doc(db, 'businesses', auth.currentUser!.uid), business)
-        router.push('/business/business-home')
+        router.push('/business/home')
 
         setLoading(false)
       })
@@ -126,7 +126,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
         // push to business landing page if valid
         if (docSnap.exists()) {
-          router.push('/business/business-home')
+          router.push('/business/home')
         } else {
           router.push('/')
         }

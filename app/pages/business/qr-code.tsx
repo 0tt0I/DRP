@@ -17,7 +17,7 @@ export default function BusinessQRCode () {
         <p className='place-self-center'>Customers need to scan this to make a referral.</p>
         <QRUid uid={uid.current}/>
 
-        <HomeButton router={router} where="/business/business-home" />
+        <HomeButton router={router} where="/business/home" />
       </div>
     </div>
   )
