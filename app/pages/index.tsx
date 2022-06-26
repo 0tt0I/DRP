@@ -34,7 +34,7 @@ export default function Home () {
             Spend points
           </button>
 
-          <p>See the businesses you&apos;ve promoted and the points you&apos;ve earnt.</p>
+          <p>See the businesses you&apos;ve promoted and spend the points you&apos;ve earnt.</p>
 
           <button onClick={logout} className="general-button">
             Log Out
