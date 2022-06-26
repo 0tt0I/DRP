@@ -2,7 +2,7 @@ import { Dialog } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import Camera from '../../components/Camera'
-import HomeButton from '../../components/HomeButton'
+import Header from '../../components/Header'
 import QRScanner from '../../components/QRScanner'
 import { getUid, getUserEmail } from '../../services/authInfo'
 import { getNameAndDiscount } from '../../services/businessInfo'
@@ -95,9 +95,7 @@ export default function AddReferral () {
   return (
     <div className="relative flex w-screen h-screen items-center justify-center">
       <div className="default-div rounded-lg flex flex-col p-4 gap-2 w-fit sm:w-96">
-        <h2 className="font-bold text-center text-4xl text-dark-nonblack">
-          Spread the word
-        </h2>
+        <Header text="Spread the word" />
 
         <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
@@ -178,8 +176,6 @@ export default function AddReferral () {
         <br />
 
         <button onClick={createReferral} className="general-button">Post</button>
-
-        <HomeButton router={router} />
 
       </div>
     </div>

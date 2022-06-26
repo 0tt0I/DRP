@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Discount, Referral } from '../../types/FirestoreCollections'
 import { Dialog } from '@headlessui/react'
 import { createHash } from 'crypto'
-import HomeButton from '../../components/HomeButton'
 import QRUid from '../../components/QRUid'
 import { getOtherReferrals } from '../../services/customerInfo'
 import { getAllDiscounts } from '../../services/discountInfo'
@@ -131,8 +130,6 @@ export default function Referrals () {
         {referrals.length > 0
           ? referrals.map(ReferralEntry)
           : <p className="text-warning text-2xl p-8">There are no active referrals from others.</p>}
-
-        <HomeButton router={router} />
       </div>
     </div>
   )
