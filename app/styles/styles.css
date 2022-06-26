@@ -43,8 +43,16 @@
         @apply bg-violet-700 hover:bg-violet-600 p-2 text-white transition duration-200;
     }
 
+    .arrow-colors {
+        @apply fill-violet-700 hover:fill-violet-600 stroke-violet-700 hover:stroke-violet-600 transition duration-200;
+    }
+
     .text-warning {
         @apply font-bold text-rose-600;
+    }
+
+    .button-grid-short {
+        @apply grid grid-cols-3 grid-rows-2 grid-flow-row gap-4;
     }
 
     .button-grid-normal {
@@ -53,6 +61,11 @@
 
     .button-grid-ext {
         @apply grid grid-cols-3 grid-rows-4 grid-flow-row gap-4;
+    }
+
+    .button-grid-narrow-short {
+        @apply grid grid-flow-col gap-1;
+        grid-template-rows: repeat(4, minmax(0, 1fr));
     }
 
     .button-grid-narrow {
@@ -66,7 +79,7 @@
     }
 
     .header-text {
-        @apply text-4xl text-dark-nonblack font-bold text-center;
+        @apply text-4xl text-dark-nonblack font-bold text-center sm:ml-12 sm:mr-12;
     }
 }
 
@@ -79,14 +92,7 @@ body {
 }
 
 .arr {
-    @apply drop-shadow-md transition duration-200 w-8 h-8;
-    fill: #e0e0e0;
-    stroke: #e0e0e0;
-}
-
-.arr:hover {
-    fill: white;
-    stroke: white;
+    @apply drop-shadow-md transition duration-200 w-8 h-8 arrow-colors;
 }
 
 .general-button {
@@ -117,11 +123,15 @@ body {
     @apply button-grid-narrow sm:button-grid-normal place-content-center;
 }
 
+.home-short-buttondiv {
+    @apply button-grid-narrow-short sm:button-grid-short place-content-center;
+}
+
 .home-bus-buttondiv {
     @apply button-grid-narrow-ext sm:button-grid-ext place-content-center;
 }
 
-.home-buttondiv > p, .home-bus-buttondiv > p {
+.home-short-buttondiv > p, .home-buttondiv > p, .home-bus-buttondiv > p {
     @apply justify-center items-center place-self-center sm:col-span-2 break-words w-80 font-semibold;
 }
 
