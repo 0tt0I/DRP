@@ -30,7 +30,7 @@ export default function Home () {
 
           <p>Promote a local business and earn points by attracting new customers. </p>
 
-          <button onClick={() => router.push('/customer/redeem-reward')} className="general-button">
+          <button onClick={() => router.push('/customer/spend-points')} className="general-button">
             Spend points
           </button>
 
