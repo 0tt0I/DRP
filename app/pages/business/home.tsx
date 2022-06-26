@@ -32,7 +32,7 @@ export default function BusinessHome () {
 
           <p>Allow a customer to leave a &ldquo;Mira review&rdquo; and offer an exclusive discount to other new customers. </p>
 
-          <button onClick={() => router.push('/business/your-business')} className="general-button">
+          <button onClick={() => router.push('/business/manage')} className="general-button">
             Manage discounts <br />and rewards
           </button>
 
