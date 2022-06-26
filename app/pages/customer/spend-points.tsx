@@ -55,7 +55,7 @@ export default function RedeemReward () {
     <div className="home-div">
       <div className="home-subdiv-l">
         <h1>
-              Redeem Referrals
+          Spend points
         </h1>
         {businesses.length > 0
           ? businesses.map(BusinessEntry)
@@ -87,7 +87,7 @@ export default function RedeemReward () {
                   setSelectedBusiness(business)
                   setRewardOpen(true)
                 }}>
-                Redeem
+                  Spend
                 </button>
               </div>
             </div>
