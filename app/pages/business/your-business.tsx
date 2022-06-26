@@ -33,7 +33,7 @@ export default function YourBusiness () {
 
           <p>Edit the rewards that customers can trade loyalty points for.</p>
 
-          <HomeButton router={router} where="/business/business-home" />
+          <HomeButton router={router} where="/business/home" />
 
           <p>Go back to the main business management page.</p>
         </div>

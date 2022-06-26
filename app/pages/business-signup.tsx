@@ -41,7 +41,7 @@ export default function BusinessSignup () {
   const signUpHandler: SubmitHandler<Inputs> = async ({ email, password, name, longitude, latitude }) => {
     // sign up as business
     businessSignUp(email, password, { name, location: new GeoPoint(longitude, latitude) }).then((_) =>
-      router.push('/business/business-home')
+      router.push('/business/home')
     )
   }
 

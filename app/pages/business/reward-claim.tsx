@@ -136,7 +136,7 @@ export default function BusinessRewardClaim () {
 
         <h2 className="white-div font-bold text-nondark p-2 text-center">{inputValidation}</h2>
 
-        <HomeButton router={router} where="/business/business-home" />
+        <HomeButton router={router} where="/business/home" />
       </div>
     </div>
   )

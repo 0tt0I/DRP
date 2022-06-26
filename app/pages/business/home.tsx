@@ -20,13 +20,13 @@ export default function BusinessHome () {
         </h1>
 
         <div className="home-buttondiv">
-          <button onClick={() => router.push('/business/business-referral-scanner')} className="general-button">
+          <button onClick={() => router.push('/business/referral-scanner')} className="general-button">
             Scan a Customer&apos;s Code
           </button>
 
           <p>Grant a customer their &ldquo;Mira discount&rdquo; or allow them to redeem points.</p>
 
-          <button onClick={() => router.push('/business/business-qr-code')} className="general-button">
+          <button onClick={() => router.push('/business/qr-code')} className="general-button">
             Your QR Code
           </button>
 

@@ -51,7 +51,7 @@ export default function SetDiscount () {
 
         <button onClick={businessSetDiscount} className="general-button">Apply</button>
 
-        <HomeButton router={router} where="/business/business-home" />
+        <HomeButton router={router} where="/business/home" />
       </div>
     </div>
   )
