@@ -129,7 +129,7 @@ export default function Referrals () {
       </Dialog>
 
       <div className="flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 lighter-div">
-        <h1 className="font-bold text-center text-4xl text-dark-nonblack">Current Referrals </h1>
+        <h1 className="font-bold text-center text-4xl text-dark-nonblack">Discover</h1>
 
         {referrals.length > 0
           ? referrals.map(ReferralEntry)
