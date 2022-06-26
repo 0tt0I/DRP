@@ -9,6 +9,7 @@ import { getOtherReferrals } from '../../services/customerInfo'
 import { getAllDiscounts } from '../../services/discountInfo'
 import { getUid } from '../../services/authInfo'
 import registerLocationSetter from '../../services/registerLocationSetter'
+import Header from '../../components/Header'
 
 export default function Referrals () {
   const router = useRouter()
@@ -125,7 +126,7 @@ export default function Referrals () {
       </Dialog>
 
       <div className="flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 lighter-div">
-        <h1 className="font-bold text-center text-4xl text-dark-nonblack">Discover</h1>
+        <Header router={router} text="Discover" />
 
         {referrals.length > 0
           ? referrals.map(ReferralEntry)
