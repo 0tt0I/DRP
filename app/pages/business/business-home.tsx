@@ -32,6 +32,12 @@ export default function BusinessHome () {
 
           <p>Edit the discounts you are offering or check your unique QR code.</p>
 
+          <button onClick={() => router.push('/business/business-qr-code')} className="general-button">
+            Your QR Code
+          </button>
+
+          <p>Fetch the unique location-identifying QR code for your businesss.</p>
+
           <button onClick={logout} className="general-button">
             Log Out
           </button>
