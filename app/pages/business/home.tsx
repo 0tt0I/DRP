@@ -36,7 +36,7 @@ export default function BusinessHome () {
             Manage discounts <br />and rewards
           </button>
 
-          <p>Edit the discounts and rewards you are offering. </p>
+          <p>Manage the discounts and rewards you are offering. </p>
 
           <button onClick={logout} className="general-button">
             Log Out

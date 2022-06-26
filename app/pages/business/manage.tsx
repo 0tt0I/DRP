@@ -21,13 +21,13 @@ export default function YourBusiness () {
         </h1>
 
         <div className="home-bus-buttondiv">
-          <button onClick={() => router.push('/business/edit-discounts')} className="general-button">
+          <button onClick={() => router.push('/business/manage-discounts')} className="general-button">
             Manage new <br /> customer discounts
           </button>
 
           <p>Manage discounts offered to customers gained through Mira.</p>
 
-          <button onClick={() => router.push('/business/edit-rewards')} className="general-button">
+          <button onClick={() => router.push('/business/manage-rewards')} className="general-button">
             Manage promoter <br /> rewards
           </button>
 
