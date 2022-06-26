@@ -78,12 +78,23 @@ body {
     @apply w-full rounded px-5 py-3.5 focus:bg-[#e6e6e6];
 }
 
+.arr {
+    @apply drop-shadow-md transition duration-200 w-8 h-8;
+    fill: #e0e0e0;
+    stroke: #e0e0e0;
+}
+
+.arr:hover {
+    fill: white;
+    stroke: white;
+}
+
 .general-button {
     @apply button-colors p-2 font-bold text-center rounded-lg grow;
 }
 
-.general-button-nogrow {
-    @apply button-colors p-2 font-bold text-center rounded-lg;
+.back-button {
+    @apply p-0.5 font-bold text-center rounded-lg;
 }
 
 .home-div {

@@ -9,8 +9,8 @@ export type BackButtonProps = {
 
 export default function BackButton (props: BackButtonProps) {
   return (
-    <button onClick={() => props.router.push(props.where ?? '/')} className="general-button-nogrow p-4">
-      <ArrowBack fill='white' stroke='white' />
+    <button onClick={() => props.router.push(props.where ?? '/')} className="back-button p-2">
+      <ArrowBack viewBox="0 0 48 48" className="arr" />
     </button>
   )
 }
