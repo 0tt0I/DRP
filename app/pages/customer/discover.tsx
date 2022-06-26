@@ -81,12 +81,13 @@ export default function Referrals () {
       <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
         <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
           <Dialog.Title as="h3" className="font-bold text-center text-2xl text-dark-nonblack">
-            Referral code
+            Discount QR code
           </Dialog.Title>
           <Dialog.Description>
             <div className="flex flex-col grow text-center">
-              <p>Scan this at {activeReferral.place} to redeem:</p>
-              <p>&quot;{selectedDiscount.description}&quot;</p>
+              <p>Just ask to redeem a Mira discount at {activeReferral.place}</p>
+              <p>Show this QR Code at the till and redeem your</p>
+              <p><strong>{selectedDiscount.description}</strong></p>
             </div>
           </Dialog.Description>
 
