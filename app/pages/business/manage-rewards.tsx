@@ -127,8 +127,8 @@ export default function SetRewards () {
         </Dialog>
 
         <div className="flex flex-col gap-4 p-4">
-          <h2 className="font-bold text-center text-4xl text-dark-nonblack">Set Rewards</h2>
-          <p>These are the &apos;loyalty card&apos; rewards available to returning customers.</p>
+          <h2 className="font-bold text-center text-4xl text-dark-nonblack">Manage Rewards</h2>
+          <p>Define how promoters of your business can spend  points they earned by <br /> bringing you new customers. </p>
 
           {rewards.length > 0
             ? rewards.map(RewardEntry)
@@ -137,7 +137,7 @@ export default function SetRewards () {
           <button className="general-button" onClick={() => {
             setInputOpen(true)
             setInputValidation('')
-          }}>Add</button>
+          }}>Add Reward</button>
 
           <button onClick={() => router.push('/business/manage')} className="general-button">
             Back to Your Business
