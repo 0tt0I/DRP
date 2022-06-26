@@ -98,6 +98,7 @@ export default function AddReferral () {
         <h2 className="font-bold text-center text-4xl text-dark-nonblack">
           Spread the word
         </h2>
+
         <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
@@ -106,7 +107,6 @@ export default function AddReferral () {
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
-                  <p>Grant exclusive discounts to new customers that follow your review! </p>
                   <p>Just ask at the till if you can post a Mira review, and scan their QR code. </p>
                 </div>
               </Dialog.Description>
@@ -170,9 +170,12 @@ export default function AddReferral () {
 
         <br />
 
+        <p>Reward newcomers for trusting and following your review by granting them exclusive discounts</p>
         <button className="general-button" onClick={() => setQrOpen(true)}>
-          Grant new customer discounts
+          Grant discounts
         </button>
+
+        <br />
 
         <button onClick={createReferral} className="general-button">Post</button>
 
