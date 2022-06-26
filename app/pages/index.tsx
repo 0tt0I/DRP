@@ -24,11 +24,17 @@ export default function Home () {
 
           <p>Find a referral you like and discover a new place.</p>
 
-          <button onClick={() => router.push('/customer/promoter-home')} className="general-button">
+          <button onClick={() => router.push('/customer/add-referral')} className="general-button">
             Spread the Word
           </button>
 
-          <p>Create your own referrals to earn loyalty points and then redeem those points.</p>
+          <p>Create promotions and earn points by attracting new customers. </p>
+
+          <button onClick={() => router.push('/customer/redeem-reward')} className="general-button">
+            Spend points
+          </button>
+
+          <p>See the businesses you&apos;ve promoted and the points you&apos;ve earnt.</p>
 
           <button onClick={logout} className="general-button">
             Log Out
