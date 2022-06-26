@@ -170,7 +170,7 @@ export default function Referrals () {
           setReferralOpen(true)
           setQrOpen(false)
         }}>
-          Use Referral
+          Get discounts
         </button>
       </div>
     )
