@@ -102,8 +102,8 @@ export default function RedeemReward () {
             <Dialog open={rewardOpen} onClose={() => null} className="relative z-30">
               <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
                 <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
-                  <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Available Rewards
+                  <Dialog.Title>
+                    <Header onClick={() => setRewardOpen(false)} text="Available Rewards" />
                   </Dialog.Title>
                   <Dialog.Description>
                     <div className="flex flex-col grow text-center">
@@ -116,10 +116,6 @@ export default function RedeemReward () {
                       ? rewards.map(RewardEntry)
                       : <p className="text-warning text-2xl p-8">There are no active rewards.</p>}
                   </div>
-
-                  <button className="general-button" onClick={() => setRewardOpen(false)}>
-                Back
-                  </button>
                 </Dialog.Panel>
               </div>
             </Dialog>
@@ -127,8 +123,8 @@ export default function RedeemReward () {
             <Dialog open={referralOpen} onClose={() => null} className="relative z-40">
               <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
                 <Dialog.Panel className="w-fit max-w-lg overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
-                  <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-                    Active Referral
+                  <Dialog.Title>
+                    <Header onClick={() => setReferralOpen(false)} text="Active Referral" />
                   </Dialog.Title>
                   <Dialog.Description>
                     <div className="flex flex-col grow text-center">
@@ -161,10 +157,6 @@ export default function RedeemReward () {
                       </div>
                     </div>
                     : <></>}
-
-                  <button className="general-button" onClick={() => setReferralOpen(false)}>
-                Back
-                  </button>
                 </Dialog.Panel>
               </div>
             </Dialog>
@@ -180,7 +172,7 @@ export default function RedeemReward () {
     return (
       <div
         key={createHash('sha256').update(JSON.stringify(reward)).digest('hex').toString()}
-        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max">
+        className="flex flex-col gap-4 place-content-center p-4 lighter-div rounded-lg min-w-max">
         <div className="grid grid-cols-3 grid-flow-row-dense gap-4 place-content-start">
 
           <h1 className="font-bold text-dark-nonblack">Description</h1>
@@ -204,8 +196,8 @@ export default function RedeemReward () {
         <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
-              <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Your QR Code
+              <Dialog.Title>
+                <Header onClick={() => setQrOpen(false)} text="Your QR Code" />
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
@@ -216,10 +208,6 @@ export default function RedeemReward () {
               <div className="place-self-center">
                 <QRUid uid={'points-' + uid.current + '-' + reward.id}/>
               </div>
-
-              <button className="general-button" onClick={() => setQrOpen(false)}>
-                Cancel
-              </button>
             </Dialog.Panel>
           </div>
         </Dialog>
