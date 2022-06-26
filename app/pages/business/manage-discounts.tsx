@@ -126,14 +126,15 @@ export default function SetDiscounts () {
         </Dialog>
 
         <div className="flex flex-col gap-4 p-4">
-          <h2 className="font-bold text-center text-4xl text-dark-nonblack">Set Discounts</h2>
-          <p className='place-self-center'>These are the discounts you are offering to new customers when they follow someone&apos;s referral.</p>
+          <h2 className="font-bold text-center text-4xl text-dark-nonblack">Manage Discounts</h2>
+          <p className='place-self-center'>These are the discounts you are offering to new customers gained by Mira. </p>
+          <p className='place-self-center'>Define the amount of points a promoter should receive for bringing <br /> in a customer that redeems one of these discounts. </p>
 
           {discounts.length > 0
             ? discounts.map(DiscountEntry)
             : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
 
-          <button className="general-button" onClick={() => setInputOpen(true)}>  Add </button>
+          <button className="general-button" onClick={() => setInputOpen(true)}>  Add Discount </button>
           <button onClick={() => router.push('/business/manage')} className="general-button">
             Back to Your Business
           </button>
