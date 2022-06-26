@@ -169,13 +169,11 @@ export default function AddReferral () {
           Add Picture to Review
         </button>
 
-        <br />
-
-        <button onClick={createReferral} className="general-button">Finalise Referral</button>
-
         <h1 className="white-div font-bold text-nondark p-2 text-center">{inputValidation}</h1>
 
         <br />
+
+        <button onClick={createReferral} className="general-button">Post</button>
 
         <HomeButton router={router} />
 
