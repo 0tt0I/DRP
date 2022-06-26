@@ -123,8 +123,9 @@ export default function AddReferral () {
 
         <div className="gap-2 flex flex-col p-2 darker-div">
           <label>
-            <input
-              placeholder="Review: "
+            <textarea
+              rows={3}
+              placeholder="How was your food / drink / experience? What makes this place unique? "
               className="input"
               onChange={(event) => setNewReview(event.target.value)}/>
           </label>
