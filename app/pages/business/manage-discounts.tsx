@@ -74,11 +74,6 @@ export default function SetDiscounts () {
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
               Add Discount
               </Dialog.Title>
-              <Dialog.Description>
-                <div className="flex flex-col grow text-center">
-                  <p></p>
-                </div>
-              </Dialog.Description>
 
               <div className="flex flex-col gap-2 p-2 lighter-div">
                 <label>
@@ -89,7 +84,7 @@ export default function SetDiscounts () {
                 </label>
                 <label>
                   <input
-                    placeholder="Points: Number of points to award the promoter"
+                    placeholder="Points: 5"
                     className="input"
                     type="tel"
                     onChange={(event) => {
