@@ -171,7 +171,7 @@ export default function AddReferral () {
         <br />
 
         <button className="general-button" onClick={() => setQrOpen(true)}>
-          Grant discounts
+          Grant new customer discounts
         </button>
 
         <button onClick={createReferral} className="general-button">Post</button>
