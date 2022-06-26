@@ -23,6 +23,7 @@
     "react-webcam": "^7.0.1"
   },
   "devDependencies": {
+    "@svgr/webpack": "^6.2.1",
     "@types/express": "^4.17.13",
     "@types/node": "17.0.41",
     "@types/react": "18.0.12",

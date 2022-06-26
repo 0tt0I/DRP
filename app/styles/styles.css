@@ -19,6 +19,10 @@
         @apply bg-violet-400 roundness;
     }
 
+    .darkerer-div {
+        @apply bg-violet-700 roundness;
+    }
+
     .ultralight-div {
         @apply bg-violet-100 roundness;
     }
@@ -60,6 +64,10 @@
         @apply grid grid-flow-col gap-1;
         grid-template-rows: repeat(8, minmax(0, 1fr));
     }
+
+    .header-text {
+        @apply text-4xl text-dark-nonblack font-bold text-center;
+    }
 }
 
 body {
@@ -74,6 +82,10 @@ body {
     @apply button-colors p-2 font-bold text-center rounded-lg grow;
 }
 
+.general-button-nogrow {
+    @apply button-colors p-2 font-bold text-center rounded-lg;
+}
+
 .home-div {
     @apply relative flex flex-col gap-4 p-8 w-screen min-h-screen items-center justify-center;
 }
@@ -86,8 +98,8 @@ body {
     @apply place-self-center flex flex-col gap-4 lighter-div p-2 sm:p-4;
 }
 
-.home-subdiv > h1, .home-subdiv-l > h1 {
-    @apply text-3xl text-dark-nonblack font-bold text-center;
+.home-subdiv > h1, .home-subdiv-l > h1, .home-header > h1 {
+    @apply header-text;
 }
 
 .home-buttondiv {
