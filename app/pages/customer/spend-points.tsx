@@ -57,6 +57,8 @@ export default function RedeemReward () {
         <h1>
           Spend points
         </h1>
+        <p>See the points you&apos;ve earned,<br />spend them at your favourite spots. </p>
+
         {businesses.length > 0
           ? businesses.map(BusinessEntry)
           : <p className="text-warning text-2xl p-8">Go visit some businesses!</p>}
