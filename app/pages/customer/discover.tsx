@@ -154,9 +154,6 @@ export default function Referrals () {
             <h1 className="font-bold text-dark-nonblack">Place</h1>
             <p className="col-span-2">{ref.place} ({ref.distance}km)</p>
 
-            <h1 className="font-bold text-dark-nonblack w-18 sm:w-24">Discount</h1>
-            <p className="col-span-2">{ref.discount}</p>
-
             <h1 className="font-bold text-dark-nonblack">Date</h1>
             <p className="col-span-2">{ref.date}</p>
 
