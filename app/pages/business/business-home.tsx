@@ -24,19 +24,19 @@ export default function BusinessHome () {
             Scan a Customer&apos;s Code
           </button>
 
-          <p>Scan a customer&apos;s QR code to verify their discount.</p>
-
-          <button onClick={() => router.push('/business/your-business')} className="general-button">
-            Your Business
-          </button>
-
-          <p>Edit the discounts you are offering or check your unique QR code.</p>
+          <p>Grant a customer their &ldquo;Mira discount&rdquo; or allow them to redeem points.</p>
 
           <button onClick={() => router.push('/business/business-qr-code')} className="general-button">
             Your QR Code
           </button>
 
-          <p>Fetch the unique location-identifying QR code for your businesss.</p>
+          <p>Allow a customer to leave a &ldquo;Mira review&rdquo; and offer an exclusive discount to other new customers. </p>
+
+          <button onClick={() => router.push('/business/your-business')} className="general-button">
+            Manage discounts <br />and rewards
+          </button>
+
+          <p>Edit the discounts and rewards you are offering. </p>
 
           <button onClick={logout} className="general-button">
             Log Out
