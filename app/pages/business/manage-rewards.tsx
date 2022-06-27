@@ -23,7 +23,7 @@ export default function SetRewards () {
   const [inputValidation, setInputValidation] = useState('')
 
   // set state for referrals
-  const [rewards, setRewards] = useState<Reward[]>([])
+  const [rewards, setRewards] = useState<Reward[] | undefined>(undefined)
   const [initialLoad, setInitialLoad] = useState(true)
 
   async function getRewardList () {
@@ -54,7 +54,7 @@ export default function SetRewards () {
     }
 
     await addReward(businessUid.current, newReward)
-    setRewards((oldRewards) => oldRewards.concat([newReward]))
+    setRewards((oldRewards) => oldRewards!.concat([newReward]))
 
     return true
   }
@@ -62,6 +62,10 @@ export default function SetRewards () {
   const removeReward = async (rewardUid: string) => {
     await deleteReward(businessUid.current, rewardUid)
     getRewardList()
+  }
+
+  if (rewards === undefined) {
+    return <></>
   }
 
   return (
@@ -118,8 +122,8 @@ export default function SetRewards () {
 
           <p>Define how promoters of your business can spend  points they earned by <br /> bringing you new customers. </p>
 
-          {rewards.length > 0
-            ? rewards.map(RewardEntry)
+          {rewards!.length > 0
+            ? rewards!.map(RewardEntry)
             : <p className="text-warning text-center text-2xl p-8">There are no active Rewards.</p>}
 
           <button className="general-button" onClick={() => {
