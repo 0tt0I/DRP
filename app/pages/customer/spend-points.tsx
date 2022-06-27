@@ -7,6 +7,7 @@ import { Referral, Reward, VisitedBusiness } from '../../types/FirestoreCollecti
 import { getVisitedBusinesses } from '../../services/customerInfo'
 import { getAllRewards } from '../../services/rewardInfo'
 import Header from '../../components/Header'
+import LoadingPlaceholder from '../../components/LoadingPlaceholder'
 
 export default function RedeemReward () {
   const uid = useRef(getUid())
@@ -50,8 +51,12 @@ export default function RedeemReward () {
   }, [rewardOpen])
 
   const rewardDialog = () => {
-    if (rewards === undefined) {
+    if (!rewardOpen) {
       return <></>
+    }
+
+    if (rewards === undefined) {
+      return <LoadingPlaceholder />
     }
 
     return (
@@ -113,6 +118,7 @@ export default function RedeemReward () {
 
               <div className="place-self-end">
                 <button className="general-button" onClick={() => {
+                  setRewards(undefined)
                   setSelectedBusiness(business)
                   setRewardOpen(true)
                 }}>
@@ -132,7 +138,9 @@ export default function RedeemReward () {
               </div>
               : <div></div>}
 
-            {rewardDialog()}
+            <div>
+              {rewardDialog()}
+            </div>
 
             <Dialog open={referralOpen} onClose={() => null} className="relative z-40">
               <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
