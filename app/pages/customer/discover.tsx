@@ -109,7 +109,7 @@ export default function Referrals () {
             <div className="flex flex-col p-2 gap-2">
               {discounts.length > 0
                 ? discounts.map(DiscountEntry)
-                : <p className="text-warning text-2xl p-8">There are no active disounts at this business.</p>}
+                : <p className="text-warning text-center text-2xl p-8">There are no active disounts at this business.</p>}
             </div>
           </Dialog.Panel>
         </div>

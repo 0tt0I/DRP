@@ -136,7 +136,7 @@ export default function BusinessReferralScanner () {
   return (
     <div className="home-div">
       <div className="home-subdiv">
-        <Header where="/business/business-home" text="Scan a Customer QR Code" />
+        <Header where="/business/home" text="Scan a Customer QR Code" />
 
         <QRScanner resultSetter={setDecodeResult} showReset={true} />
 
