@@ -8,6 +8,7 @@ import { getAllDiscounts } from '../../services/discountInfo'
 import { getUid } from '../../services/authInfo'
 import registerLocationSetter from '../../services/registerLocationSetter'
 import Header from '../../components/Header'
+import LoadingPlaceholder from '../../components/LoadingPlaceholder'
 
 export default function Referrals () {
   // set state for referrals
@@ -95,8 +96,12 @@ export default function Referrals () {
   )
 
   const discountDialog = () => {
-    if (discounts === undefined) {
+    if (!referralOpen) {
       return <></>
+    }
+
+    if (discounts === undefined) {
+      return <LoadingPlaceholder />
     }
 
     return (
@@ -127,7 +132,9 @@ export default function Referrals () {
   // display each referral from state, use combobox for dropdown menu
   return (
     <div className="relative grid h-screen justify-center items-center p-2 sm:p-4">
-      {discountDialog()}
+      <div>
+        {discountDialog()}
+      </div>
 
       <div className="flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 lighter-div">
         <Header text="Discover" />
@@ -162,12 +169,12 @@ export default function Referrals () {
         </div>
 
         <button className="general-button" onClick={() => {
+          setDiscounts(undefined)
           setActiveReferral(ref)
           setReferralOpen(true)
           setQrOpen(false)
-          setDiscounts(undefined)
         }}>
-          Get discounts
+          Get Discounts
         </button>
       </div>
     )
