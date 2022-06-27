@@ -1,7 +1,7 @@
 import React from 'react'
 import useAuth from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
-import HomeButton from '../../components/HomeButton'
+import Header from '../../components/Header'
 
 export default function YourBusiness () {
   // states for logged in from useAuth hook
@@ -16,11 +16,9 @@ export default function YourBusiness () {
   return (
     <div className="home-div">
       <div className="home-subdiv">
-        <h1>
-          Manage discounts and rewards
-        </h1>
+        <Header where="/business/home" text="Manage discounts and rewards" />
 
-        <div className="home-bus-buttondiv">
+        <div className="home-short-buttondiv">
           <button onClick={() => router.push('/business/manage-discounts')} className="general-button">
             Manage new <br /> customer discounts
           </button>
@@ -32,8 +30,6 @@ export default function YourBusiness () {
           </button>
 
           <p>Manage what successful promoters of your business can spend points on.</p>
-
-          <HomeButton router={router} where="/business/home" />
         </div>
       </div>
     </div>

@@ -119,7 +119,7 @@ export default function SetDiscounts () {
 
           {discounts.length > 0
             ? discounts.map(DiscountEntry)
-            : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
+            : <p className="text-warning text-center text-2xl p-8">There are no active discounts.</p>}
 
           <button className="general-button" onClick={() => setInputOpen(true)}>Add Discount</button>
         </div>

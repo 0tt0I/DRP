@@ -17,7 +17,7 @@ export default function Home () {
           User Home
         </h1>
 
-        <div className="home-buttondiv">
+        <div className="home-bus-buttondiv">
           <button onClick={() => router.push('/customer/discover')} className="general-button">
             Discover
           </button>

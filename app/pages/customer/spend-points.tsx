@@ -58,7 +58,7 @@ export default function RedeemReward () {
 
         {businesses.length > 0
           ? businesses.map(BusinessEntry)
-          : <p className="text-warning text-2xl p-8">Go visit some businesses!</p>}
+          : <p className="text-warning text-center text-2xl p-8">Go visit some businesses!</p>}
       </div>
     </div>
   )
