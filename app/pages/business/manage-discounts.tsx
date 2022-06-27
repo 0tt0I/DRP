@@ -1,14 +1,12 @@
 import { Dialog } from '@headlessui/react'
-import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { Discount } from '../../types/FirestoreCollections'
 import { createHash } from 'crypto'
 import { addDiscount, getAllDiscounts, deleteDiscount } from '../../services/discountInfo'
 import { getUid } from '../../services/authInfo'
+import Header from '../../components/Header'
 
 export default function SetDiscounts () {
-  const router = useRouter()
-
   // modal state for popup and info for qr-scan
   const [inputOpen, setInputOpen] = useState(false)
 
@@ -68,11 +66,11 @@ export default function SetDiscounts () {
   return (
     <div className="home-div">
       <div className="home-subdiv-l">
-        <Dialog open={inputOpen} onClose={() => setInputOpen(false)} className="relative z-50">
+        <Dialog open={inputOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
-              <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Add Discount
+              <Dialog.Title>
+                <Header onClick={() => setInputOpen(false)} text="Add Discount" />
               </Dialog.Title>
 
               <div className="flex flex-col gap-2 p-2 lighter-div">
@@ -110,16 +108,12 @@ export default function SetDiscounts () {
               }}>
                 Submit
               </button>
-              <button className="general-button" onClick={() => setInputOpen(false)}>
-                Cancel
-              </button>
-
             </Dialog.Panel>
           </div>
         </Dialog>
 
         <div className="flex flex-col gap-4 p-4">
-          <h2 className="font-bold text-center text-4xl text-dark-nonblack">Manage Discounts</h2>
+          <Header where="/business/manage" text="Manage Discounts" />
           <p className='place-self-center'>These are the discounts you are offering to new customers gained by Mira. </p>
           <p className='place-self-center'>Define the amount of points a promoter should receive for bringing <br /> in a customer that redeems one of these discounts. </p>
 
@@ -127,10 +121,7 @@ export default function SetDiscounts () {
             ? discounts.map(DiscountEntry)
             : <p className="text-warning text-2xl p-8">There are no active discounts.</p>}
 
-          <button className="general-button" onClick={() => setInputOpen(true)}>  Add Discount </button>
-          <button onClick={() => router.push('/business/manage')} className="general-button">
-            Back to Your Business
-          </button>
+          <button className="general-button" onClick={() => setInputOpen(true)}>Add Discount</button>
         </div>
       </div>
     </div>
