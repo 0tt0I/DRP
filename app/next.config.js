@@ -4,14 +4,7 @@ const nextConfig = {
   // should be using with custom backend but bug in next:
   // https://github.com/vercel/next.js/issues/2682
   // useFileSystemPublicRoutes: false
-  trailingSlash: true,
-  webpack: (config, _) => {
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack']
-    })
-    return config
-  }
+  trailingSlash: true
 }
 
 module.exports = nextConfig
