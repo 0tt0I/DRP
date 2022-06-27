@@ -11,7 +11,7 @@ import Header from '../../components/Header'
 
 export default function Referrals () {
   // set state for referrals
-  const [referrals, setReferrals] = useState<Referral[]>([])
+  const [referrals, setReferrals] = useState<Referral[] | undefined>(undefined)
   const [currentLocation, setCurrentLocation] = useState({ longitude: -1, latitude: -1 })
 
   // modal state for popup and info for qr-gen
@@ -60,7 +60,7 @@ export default function Referrals () {
     setQrOpen(true)
   }, [qrComponent])
 
-  const [discounts, setDiscounts] = useState<Discount[]>([])
+  const [discounts, setDiscounts] = useState<Discount[] | undefined>(undefined)
 
   useEffect(() => {
     const getDiscounts = async () => {
@@ -94,9 +94,12 @@ export default function Referrals () {
     </Dialog>
   )
 
-  // display each referral from state, use combobox for dropdown menu
-  return (
-    <div className="relative grid h-screen justify-center items-center p-2 sm:p-4">
+  const discountDialog = () => {
+    if (discounts === undefined) {
+      return <></>
+    }
+
+    return (
       <Dialog open={referralOpen} onClose={() => null} className="relative z-40">
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
           <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
@@ -107,19 +110,30 @@ export default function Referrals () {
             {qrDialogue}
 
             <div className="flex flex-col p-2 gap-2">
-              {discounts.length > 0
-                ? discounts.map(DiscountEntry)
+              {discounts!.length > 0
+                ? discounts!.map(DiscountEntry)
                 : <p className="text-warning text-center text-2xl p-8">There are no active disounts at this business.</p>}
             </div>
           </Dialog.Panel>
         </div>
       </Dialog>
+    )
+  }
+
+  if (referrals === undefined) {
+    return <></>
+  }
+
+  // display each referral from state, use combobox for dropdown menu
+  return (
+    <div className="relative grid h-screen justify-center items-center p-2 sm:p-4">
+      {discountDialog()}
 
       <div className="flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 lighter-div">
         <Header text="Discover" />
 
-        {referrals.length > 0
-          ? referrals.map(ReferralEntry)
+        {referrals!.length > 0
+          ? referrals!.map(ReferralEntry)
           : <p className="text-warning text-2xl p-8">There are no active referrals from others.</p>}
       </div>
     </div>
@@ -151,6 +165,7 @@ export default function Referrals () {
           setActiveReferral(ref)
           setReferralOpen(true)
           setQrOpen(false)
+          setDiscounts(undefined)
         }}>
           Get discounts
         </button>
