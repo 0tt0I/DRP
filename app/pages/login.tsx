@@ -69,7 +69,9 @@ function Login () {
           Submit
         </button>
 
-        <p>Haven&apos;t made an account yet?</p>
+        <p className="text-center text-dark-nonblack font-bold text-xl">
+          Haven&apos;t made an account yet?
+        </p>
 
         <div className="grid gap-4 grid-cols-2 place-content-center">
           <button onClick={() => router.push('/customer-signup')} className="general-button">
