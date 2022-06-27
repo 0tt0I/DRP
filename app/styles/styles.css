@@ -79,7 +79,7 @@
     }
 
     .header-text {
-        @apply text-4xl text-dark-nonblack font-bold text-center sm:ml-12 sm:mr-12;
+        @apply text-3xl sm:text-4xl text-dark-nonblack font-bold text-center sm:ml-12 sm:mr-12;
     }
 
     .resp-scale {
