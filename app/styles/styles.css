@@ -144,5 +144,10 @@ body {
 }
 
 .loader-div:only-child {
-    display: flex;
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 99999999 !important;
+    @apply -translate-x-1/2 -translate-y-1/2 bg-black p-6 rounded-full;
 }
