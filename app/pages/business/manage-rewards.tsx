@@ -1,14 +1,12 @@
 import { Dialog } from '@headlessui/react'
-import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { Reward } from '../../types/FirestoreCollections'
 import { createHash } from 'crypto'
 import { addReward, getAllRewards, deleteReward } from '../../services/rewardInfo'
 import { getUid } from '../../services/authInfo'
+import Header from '../../components/Header'
 
 export default function SetRewards () {
-  const router = useRouter()
-
   // modal state for popup and info for qr-scan
   const [inputOpen, setInputOpen] = useState(false)
 
@@ -72,8 +70,8 @@ export default function SetRewards () {
         <Dialog open={inputOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
-              <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Add Reward
+              <Dialog.Title>
+                <Header onClick={() => setInputOpen(false)} text="Add Reward" />
               </Dialog.Title>
 
               <div className="flex flex-col lighter-div p-2 gap-2 grow">
@@ -111,16 +109,13 @@ export default function SetRewards () {
               }}>
                 Submit
               </button>
-              <button className="general-button" onClick={() => setInputOpen(false)}>
-                Cancel
-              </button>
-
             </Dialog.Panel>
           </div>
         </Dialog>
 
         <div className="flex flex-col gap-4 p-4">
-          <h2 className="font-bold text-center text-4xl text-dark-nonblack">Manage Rewards</h2>
+          <Header where="/business/manage" text="Manage Rewards" />
+
           <p>Define how promoters of your business can spend  points they earned by <br /> bringing you new customers. </p>
 
           {rewards.length > 0
@@ -131,10 +126,6 @@ export default function SetRewards () {
             setInputOpen(true)
             setInputValidation('')
           }}>Add Reward</button>
-
-          <button onClick={() => router.push('/business/manage')} className="general-button">
-            Back to Your Business
-          </button>
         </div>
       </div>
     </div>

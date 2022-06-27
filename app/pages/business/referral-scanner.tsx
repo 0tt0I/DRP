@@ -2,16 +2,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import { getRewardInfo } from '../../services/rewardInfo'
 import { getPointsEarned, updatePointsEarned } from '../../services/customerInfo'
 import { awardPoints, checkNewCustomer } from '../../services/businessQrScan'
-import { useRouter } from 'next/router'
 import QRScanner from '../../components/QRScanner'
-import HomeButton from '../../components/HomeButton'
 import { Dialog } from '@headlessui/react'
 import { getUid } from '../../services/authInfo'
+import Header from '../../components/Header'
 
 export default function BusinessReferralScanner () {
-  // Request router.
-  const router = useRouter()
-
   // Result box.
   const [inputValidation, setInputValidation] = useState('No Result')
   const [decodeResult, setDecodeResult] = useState('')
@@ -140,7 +136,7 @@ export default function BusinessReferralScanner () {
   return (
     <div className="home-div">
       <div className="home-subdiv">
-        <h1>Scan a Customer QR Code</h1>
+        <Header where="/business/business-home" text="Scan a Customer QR Code" />
 
         <QRScanner resultSetter={setDecodeResult} showReset={true} />
 
@@ -201,8 +197,6 @@ export default function BusinessReferralScanner () {
             </Dialog.Panel>
           </div>
         </Dialog>
-
-        <HomeButton router={router} where="/business/home" />
       </div>
     </div>
   )
