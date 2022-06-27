@@ -93,8 +93,8 @@ export default function AddReferral () {
   }, [imageRef])
 
   return (
-    <div className="relative flex w-screen h-screen items-center justify-center">
-      <div className="default-div rounded-lg flex flex-col p-4 gap-2 w-fit sm:w-96">
+    <div className="home-div">
+      <div className="home-subdiv w-96">
         <Header text="Spread the word" />
 
         <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
@@ -158,7 +158,7 @@ export default function AddReferral () {
           Add Picture
         </button>
 
-        <h1 className="white-div font-bold text-nondark p-2 text-center">{inputValidation}</h1>
+        <p className="white-div font-bold text-nondark p-2 text-center">{inputValidation}</p>
 
         <br />
 

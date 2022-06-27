@@ -94,9 +94,11 @@ export default function RedeemReward () {
 
         <p>See the points you&apos;ve earned,<br />spend them at your favourite spots. </p>
 
-        {businesses!.length > 0
-          ? businesses!.map(BusinessEntry)
-          : <p className="text-warning text-center text-2xl p-8">Go visit some businesses!</p>}
+        <div className="flex flex-col gap-2 sm:gap-4">
+          {businesses!.length > 0
+            ? businesses!.map(BusinessEntry)
+            : <p className="text-warning text-center text-2xl p-8">Go visit some businesses!</p>}
+        </div>
       </div>
     </div>
   )

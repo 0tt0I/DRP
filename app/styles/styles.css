@@ -81,6 +81,10 @@
     .header-text {
         @apply text-4xl text-dark-nonblack font-bold text-center sm:ml-12 sm:mr-12;
     }
+
+    .resp-scale {
+        @apply scale-[0.85] sm:scale-100;
+    }
 }
 
 body {
@@ -108,11 +112,15 @@ body {
 }
 
 .home-subdiv {
-    @apply place-self-center flex flex-col gap-4 default-div p-2 sm:p-4;
+    @apply resp-scale place-self-center flex flex-col gap-4 default-div p-2 sm:p-4;
 }
 
 .home-subdiv-l {
-    @apply place-self-center flex flex-col gap-4 lighter-div p-2 sm:p-4;
+    @apply resp-scale place-self-center flex flex-col gap-4 lighter-div p-2 sm:p-4;
+}
+
+.home-div > form {
+    @apply resp-scale;
 }
 
 .home-subdiv > h1, .home-subdiv-l > h1, .home-header > h1 {

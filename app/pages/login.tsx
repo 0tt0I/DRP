@@ -47,7 +47,7 @@ function Login () {
         <link rel="icon" href="coffee-icon.png" />
       </Head>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 default-div rounded-lg p-4 min-w-max">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 default-div rounded-lg p-4 min-w-fit">
         <h1 className="font-bold text-center text-6xl text-dark-nonblack p-2">Sign In</h1>
 
         <div className="flex flex-col gap-2 w-96 p-2 darker-div">
