@@ -20,8 +20,8 @@ export default function RedeemReward () {
   // modal state for popup and info for displaying referrals
   const [referralOpen, setReferralOpen] = useState(false)
 
-  const [rewards, setRewards] = useState<Reward[]>([])
-  const [businesses, setBusinesses] = useState<VisitedBusiness[]>([])
+  const [rewards, setRewards] = useState<Reward[] | undefined>(undefined)
+  const [businesses, setBusinesses] = useState<VisitedBusiness[] | undefined>(undefined)
   const [initialLoad, setInitialLoad] = useState(true)
   const [selectedBusiness, setSelectedBusiness] = useState<VisitedBusiness>()
   const [selectedReferral, setSelectedReferral] = useState<Referral>()
@@ -49,6 +49,39 @@ export default function RedeemReward () {
     relevantRewards()
   }, [rewardOpen])
 
+  const rewardDialog = () => {
+    if (rewards === undefined) {
+      return <></>
+    }
+
+    return (
+      <Dialog open={rewardOpen} onClose={() => null} className="relative z-30">
+        <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
+          <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
+            <Dialog.Title>
+              <Header onClick={() => setRewardOpen(false)} text="Available Rewards" />
+            </Dialog.Title>
+            <Dialog.Description>
+              <div className="flex flex-col grow text-center">
+                <p>Rewards Available:</p>
+              </div>
+            </Dialog.Description>
+
+            <div className="flex flex-col gap-2 place-self-center">
+              {rewards!.length > 0
+                ? rewards!.map(RewardEntry)
+                : <p className="text-warning text-2xl p-8">There are no active rewards.</p>}
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+    )
+  }
+
+  if (businesses === undefined) {
+    return <></>
+  }
+
   return (
     <div className="home-div">
       <div className="home-subdiv-l">
@@ -56,8 +89,8 @@ export default function RedeemReward () {
 
         <p>See the points you&apos;ve earned,<br />spend them at your favourite spots. </p>
 
-        {businesses.length > 0
-          ? businesses.map(BusinessEntry)
+        {businesses!.length > 0
+          ? businesses!.map(BusinessEntry)
           : <p className="text-warning text-center text-2xl p-8">Go visit some businesses!</p>}
       </div>
     </div>
@@ -99,26 +132,7 @@ export default function RedeemReward () {
               </div>
               : <div></div>}
 
-            <Dialog open={rewardOpen} onClose={() => null} className="relative z-30">
-              <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
-                <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
-                  <Dialog.Title>
-                    <Header onClick={() => setRewardOpen(false)} text="Available Rewards" />
-                  </Dialog.Title>
-                  <Dialog.Description>
-                    <div className="flex flex-col grow text-center">
-                      <p>Rewards Available:</p>
-                    </div>
-                  </Dialog.Description>
-
-                  <div className="flex flex-col gap-2 place-self-center">
-                    {rewards.length > 0
-                      ? rewards.map(RewardEntry)
-                      : <p className="text-warning text-2xl p-8">There are no active rewards.</p>}
-                  </div>
-                </Dialog.Panel>
-              </div>
-            </Dialog>
+            {rewardDialog()}
 
             <Dialog open={referralOpen} onClose={() => null} className="relative z-40">
               <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
@@ -194,7 +208,7 @@ export default function RedeemReward () {
         }
 
         <Dialog open={qrOpen} onClose={() => null} className="relative z-50">
-          <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
+          <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-sm">
             <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title>
                 <Header onClick={() => setQrOpen(false)} text="Your QR Code" />
