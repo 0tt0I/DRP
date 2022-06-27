@@ -138,3 +138,11 @@ body {
 .ref-info {
     @apply break-all;
 }
+
+.loader-div {
+    display: none;
+}
+
+.loader-div:only-child {
+    display: flex;
+}
