@@ -23,7 +23,7 @@ export default function SetDiscounts () {
   const [inputValidation, setInputValidation] = useState('')
 
   // set state for referrals
-  const [discounts, setDiscounts] = useState<Discount[]>([])
+  const [discounts, setDiscounts] = useState<Discount[] | undefined>(undefined)
   const [initialLoad, setInitialLoad] = useState(true)
 
   async function getDiscountList () {
@@ -53,7 +53,7 @@ export default function SetDiscounts () {
     }
 
     await addDiscount(businessUid.current, newDiscount)
-    setDiscounts((oldDiscounts) => oldDiscounts.concat([newDiscount]))
+    setDiscounts((oldDiscounts) => oldDiscounts!.concat([newDiscount]))
 
     return true
   }
@@ -61,6 +61,10 @@ export default function SetDiscounts () {
   const removeDiscount = async (discountUid: string) => {
     await deleteDiscount(businessUid.current, discountUid)
     getDiscountList()
+  }
+
+  if (discounts === undefined) {
+    return <></>
   }
 
   return (
@@ -117,8 +121,8 @@ export default function SetDiscounts () {
           <p className='place-self-center'>These are the discounts you are offering to new customers gained by Mira. </p>
           <p className='place-self-center'>Define the amount of points a promoter should receive for bringing <br /> in a customer that redeems one of these discounts. </p>
 
-          {discounts.length > 0
-            ? discounts.map(DiscountEntry)
+          {discounts!.length > 0
+            ? discounts!.map(DiscountEntry)
             : <p className="text-warning text-center text-2xl p-8">There are no active discounts.</p>}
 
           <button className="general-button" onClick={() => setInputOpen(true)}>Add Discount</button>
