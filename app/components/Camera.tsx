@@ -11,7 +11,7 @@ export type VideoConstraints = {
 const videoConstraints = {
   width: 250,
   height: 400,
-  facingMode: 'user'
+  facingMode: 'environment'
 }
 
 // interface for props to communicate imageRef back to parent
