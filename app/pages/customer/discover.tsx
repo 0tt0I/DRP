@@ -31,13 +31,8 @@ export default function Referrals () {
   }, [])
 
   useEffect(() => {
-    const getUsers = async () => {
-      console.log(currentLocation.latitude)
-      const jsonResponse = await getOtherReferrals(uid.current, currentLocation, 10)
-      setReferrals(jsonResponse.referrals)
-    }
-
-    getUsers()
+    getOtherReferrals(uid.current, currentLocation, 10)
+      .then(jsonResponse => setReferrals(jsonResponse.referrals))
   }, [currentLocation])
 
   // Create QR code image.
