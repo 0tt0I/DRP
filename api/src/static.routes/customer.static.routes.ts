@@ -4,6 +4,6 @@ import { environmentConfig } from '../config/config'
 
 export const customerRouter = Router()
 
-customerRouter.get('*', (req, res) => {
+customerRouter.get('/', (req, res) => {
   res.sendFile(join(environmentConfig.appCompiledStatic, req.path + '.html'))
 })
