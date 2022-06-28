@@ -7,7 +7,6 @@ import {
 } from 'body-parser'
 
 import { router } from './routes'
-import { router as staticRouter } from './static.routes'
 import { environmentConfig } from './config/config'
 
 const app = express()
@@ -18,8 +17,13 @@ app.use(cors())
 app.use(bodyParserJson())
 app.use(bodyParserUrlEncoded({ extended: true }))
 
-app.use('/customer', staticRouter)
-app.use('/business', staticRouter)
+app.use('/customer', (req, res) => {
+  res.sendFile(pathJoin(environmentConfig.appCompiledStatic, '/customer' + req.path + '.html'))
+})
+
+app.use('/business', (req, res) => {
+  res.sendFile(pathJoin(environmentConfig.appCompiledStatic, '/business' + req.path + '.html'))
+})
 
 app.get('/login', (_req, res) => {
   res.sendFile(pathJoin(environmentConfig.appCompiledStatic, '/index.html'))
