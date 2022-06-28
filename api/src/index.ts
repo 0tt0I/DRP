@@ -18,8 +18,8 @@ app.use(cors())
 app.use(bodyParserJson())
 app.use(bodyParserUrlEncoded({ extended: true }))
 
-app.use('/customer/*', staticRouter)
-app.use('/business/*', staticRouter)
+app.use('/customer', staticRouter)
+app.use('/business', staticRouter)
 
 app.get('/login', (_req, res) => {
   res.sendFile(pathJoin(environmentConfig.appCompiledStatic, '/index.html'))
