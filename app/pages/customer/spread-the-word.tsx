@@ -144,7 +144,11 @@ export default function AddReferral () {
               </Dialog.Description>
 
               <div className="place-self-center">
-                <Camera imageRef={setImageRef} existingRef={imageRef} />
+                <Camera constraints={{
+                  width: 512,
+                  height: 512,
+                  facingMode: 'environment'
+                }} imageRef={setImageRef} existingRef={imageRef} />
               </div>
 
               <button className="general-button" onClick={() => setPicOpen(false)}>
