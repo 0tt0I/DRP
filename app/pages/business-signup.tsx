@@ -86,8 +86,8 @@ export default function BusinessSignup () {
 
       <form className="home-subdiv-l" onSubmit={handleSubmit(signUpHandler)}>
         <h1>Business Sign-Up</h1>
-        <div className="flex flex-col gap-2 w-96 p-2 default-div">
-          <h1 className="font-bold text-center">Business Details</h1>
+        <div className="flex flex-col gap-2 p-2 default-div">
+          <h1 className="font-bold text-dark-nonblack text-center">Business Details</h1>
 
           <label>
             <input type="text"
@@ -123,8 +123,8 @@ export default function BusinessSignup () {
           </label>
         </div>
 
-        <div className="flex flex-col gap-2 w-96 p-2 default-div">
-          <h1 className="font-bold text-center">Business Image</h1>
+        <div className="flex flex-col gap-2 p-2 default-div">
+          <h1 className="font-bold text-dark-nonblack text-center">Business Image</h1>
 
           <div className="flex flex-row gap-2 p-2">
             <input type="file" id="file" ref={selectedImageRef} style={{ display: 'none' }} onChange={e => {
@@ -161,17 +161,15 @@ export default function BusinessSignup () {
           </div>
         </div>
 
-        <br />
-
-        <div className='flex flex-row gap-2'>
+        <div className='grid grid-cols-2 gap-2'>
           <button
-            onClick={() => router.push('/login')} className="general-button place-self-center">
+            onClick={() => router.push('/login')} className="general-button">
             Back to Login
           </button>
 
           <button
-            type='submit' className="general-button place-self-center">
-            Sign Up as a Business
+            type='submit' className="general-button">
+            Sign Up
           </button>
         </div>
       </form>
