@@ -13,7 +13,7 @@ import LoadingPlaceholder from '../../components/LoadingPlaceholder'
 export default function Referrals () {
   // set state for referrals
   const [referrals, setReferrals] = useState<Referral[] | undefined>(undefined)
-  const [currentLocation, setCurrentLocation] = useState({ longitude: -1, latitude: -1 })
+  const [currentLocation, setCurrentLocation] = useState({ longitude: 404, latitude: 404 })
 
   // modal state for popup and info for qr-gen
   const [referralOpen, setReferralOpen] = useState(false)
@@ -24,6 +24,26 @@ export default function Referrals () {
 
   const uid = useRef(getUid())
 
+  // Only render when everything finishes.
+  const [finishStates, setFinishStates] = useState({
+    referrals: false,
+    location: false
+  })
+
+  const [locFailed, setLocFailed] = useState<boolean | undefined>(undefined)
+
+  const shouldRender = () => finishStates.referrals && finishStates.location
+
+  const referralsFinished = () => setFinishStates({
+    referrals: true,
+    location: finishStates.location
+  })
+
+  const locationFinished = () => setFinishStates({
+    referrals: finishStates.referrals,
+    location: true
+  })
+
   // api call to firestore to run on page load
   // get all user referrals and businesses
   useEffect(() => {
@@ -31,8 +51,21 @@ export default function Referrals () {
   }, [])
 
   useEffect(() => {
-    getOtherReferrals(uid.current, currentLocation, 10)
-      .then(jsonResponse => setReferrals(jsonResponse.referrals))
+    if (!locFailed) {
+      locationFinished()
+
+      getOtherReferrals(uid.current, currentLocation, 10)
+        .then(jsonResponse => setReferrals(jsonResponse.referrals))
+        .then(_ => referralsFinished())
+    }
+  }, [locFailed])
+
+  useEffect(() => {
+    if (currentLocation.latitude === 404 || currentLocation.longitude === 404) {
+      setLocFailed(true)
+    } else {
+      setLocFailed(false)
+    }
   }, [currentLocation])
 
   // Create QR code image.
@@ -120,13 +153,26 @@ export default function Referrals () {
     )
   }
 
-  if (referrals === undefined) {
+  if (locFailed) {
+    return (
+      <div className="home-div">
+        <div className="home-subdiv-l">
+          <Header text="Discover" />
+          <p className="text-warning">
+            Sorry, but this page requires location information to sort referrals.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!shouldRender()) {
     return <></>
   }
 
   // display each referral from state, use combobox for dropdown menu
   return (
-    <div className="relative grid h-screen justify-center items-center p-2 sm:p-4">
+    <div className="home-div">
       <div>
         {discountDialog()}
       </div>
