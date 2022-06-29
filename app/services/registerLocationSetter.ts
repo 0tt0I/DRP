@@ -10,6 +10,6 @@ export default function registerLocationSetter (setCurrentLocation: React.Dispat
     // TODO: Handle this case properly
     console.log('ERROR:')
     console.log(err)
-    setCurrentLocation({ longitude: -1, latitude: -1 })
+    setCurrentLocation({ longitude: 404, latitude: 404 })
   })
 }
