@@ -85,10 +85,14 @@
     .resp-scale {
         @apply scale-[0.85] sm:scale-100;
     }
+
+    .main-bg {
+        background-color: #414243;
+    }
 }
 
 body {
-    background-color: #414243;
+    @apply main-bg;
 }
 
 .input {
@@ -108,7 +112,7 @@ body {
 }
 
 .home-div {
-    @apply relative flex flex-col gap-4 p-8 max-w-full min-h-screen items-center justify-center;
+    @apply relative flex flex-col gap-4 items-center justify-center;
 }
 
 .home-subdiv {
@@ -149,12 +153,13 @@ body {
 
 .loader-div {
     display: none;
+    background: none;
 }
 
 .loader-div:only-child {
     display: block;
     position: fixed;
-    top: 50%;
+    top: 65%;
     left: 50%;
     z-index: 99999999 !important;
     @apply -translate-x-1/2 -translate-y-1/2 bg-black p-6 rounded-full;

@@ -8,8 +8,13 @@ function MyApp ({ Component, pageProps }: AppProps) {
   // wrap entire application in authentication
   return (
     <AuthProvider>
-      <LoadingPlaceholder />
-      <Component {...pageProps} />
+      <div className="max-w-full min-h-screen flex flex-col items-center justify-center gap-8 p-8">
+        <img src="/ml.png" />
+        <div id="loading-and-content">
+          <LoadingPlaceholder />
+          <Component {...pageProps} />
+        </div>
+      </div>
     </AuthProvider>
   )
 }
