@@ -34,7 +34,7 @@ export default function AddReferral () {
   // Modal state for the picture-taking popup
   const [picOpen, setPicOpen] = useState(false)
 
-  const createReferral = async () => {
+  const createReferral = () => {
     if (newReview === '' || imageRef === undefined || imageRef === '' || businessUid === '' || businessName === '') {
       // set error message to be displayed
       setInputValidation('Fill in all fields and take a picture!')
@@ -55,11 +55,9 @@ export default function AddReferral () {
 
         const newReferral = { place: businessName, review: newReview, date, userEmail, image: '', discount: discountString, businessUid, customerUid: getUid() }
 
-        await addReferral(newReferral, imageRef!)
-
-        // set taken image to empty again
-        setImageRef(undefined)
-        router.push('/my-referrals')
+        addReferral(newReferral, imageRef!)
+          .then(() => setImageRef(undefined))
+          .catch(console.table)
       }
     }
   }
@@ -173,7 +171,12 @@ export default function AddReferral () {
 
         <br />
 
-        <button onClick={createReferral} className="general-button">Post</button>
+        <button
+          onClick={() => {
+            createReferral()
+            router.push('/')
+          }}
+          className="general-button">Post</button>
 
       </div>
     </div>
