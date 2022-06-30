@@ -31,7 +31,7 @@ export default function SetRewards () {
     setRewards([...jsonResponse.rewards])
   }
 
-  function refreshPage () {
+  const refreshPage = () => {
     window.location.reload()
   }
 
@@ -42,7 +42,7 @@ export default function SetRewards () {
     }
   }, [])
 
-  const createReward = async () => {
+  const createReward = () => {
     // Fields not filled.
     if (newPoints <= 0 || newDescription === '') {
       return false
@@ -53,8 +53,9 @@ export default function SetRewards () {
       points: newPoints
     }
 
-    await addReward(businessUid.current, newReward)
-    setRewards((oldRewards) => oldRewards!.concat([newReward]))
+    addReward(businessUid.current, newReward)
+      .then(() => setRewards((oldRewards) => oldRewards!.concat([newReward])))
+      .catch(console.table)
 
     return true
   }
@@ -101,14 +102,12 @@ export default function SetRewards () {
                 : <></>}
 
               <button className="general-button" onClick={() => {
-                createReward().then(succ => {
-                  if (succ) {
-                    setInputOpen(false)
-                    refreshPage()
-                  } else {
-                    setInputValidation('Please fill in both the description and points field.')
-                  }
-                })
+                if (createReward()) {
+                  setInputOpen(false)
+                  refreshPage()
+                } else {
+                  setInputValidation('Please fill in both the description and points field.')
+                }
                 // TODO: find better way to ensure new Reward appears in list
               }}>
                 Submit
