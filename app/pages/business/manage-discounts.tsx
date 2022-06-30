@@ -31,7 +31,7 @@ export default function SetDiscounts () {
     setDiscounts([...jsonResponse.discounts])
   }
 
-  function refreshPage () {
+  const refreshPage = () => {
     window.location.reload()
   }
 
@@ -42,7 +42,7 @@ export default function SetDiscounts () {
     }
   }, [])
 
-  const createDiscount = async () => {
+  const createDiscount = () => {
     if (newPoints <= 0 || newDescription === '') {
       return false
     }
@@ -52,8 +52,9 @@ export default function SetDiscounts () {
       points: newPoints
     }
 
-    await addDiscount(businessUid.current, newDiscount)
-    setDiscounts((oldDiscounts) => oldDiscounts!.concat([newDiscount]))
+    addDiscount(businessUid.current, newDiscount)
+      .then(() => setDiscounts((oldDiscounts) => oldDiscounts!.concat([newDiscount])))
+      .catch(console.table)
 
     return true
   }
@@ -100,14 +101,12 @@ export default function SetDiscounts () {
                 : <></>}
 
               <button className="general-button" onClick={() => {
-                createDiscount().then(succ => {
-                  if (succ) {
-                    setInputOpen(false)
-                    refreshPage()
-                  } else {
-                    setInputValidation('Please fill in both the description and points field.')
-                  }
-                })
+                if (createDiscount()) {
+                  setInputOpen(false)
+                  refreshPage()
+                } else {
+                  setInputValidation('Please fill in both the description and points field.')
+                }
                 // TODO: find better way to ensure new discount appears in list
               }}>
                 Submit
