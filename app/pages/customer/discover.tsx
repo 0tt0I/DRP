@@ -102,7 +102,7 @@ export default function Referrals () {
     return (
       <Dialog open={referralOpen} onClose={() => null} className="relative z-40">
         <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
-          <Dialog.Panel className="w-full max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
+          <Dialog.Panel className="w-fit max-w-md overflow-hidden ultralight-div p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4">
             <Dialog.Title>
               <Header onClick={() => setReferralOpen(false)} text="Available Discounts" />
             </Dialog.Title>
@@ -126,12 +126,12 @@ export default function Referrals () {
 
   // display each referral from state, use combobox for dropdown menu
   return (
-    <div className="relative grid h-screen justify-center items-center p-2 sm:p-4">
+    <div className="home-div">
       <div>
         {discountDialog()}
       </div>
 
-      <div className="flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 lighter-div">
+      <div className="home-subdiv-l">
         <Header text="Discover" />
 
         {referrals!.length > 0
