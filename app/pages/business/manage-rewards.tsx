@@ -117,20 +117,20 @@ export default function SetRewards () {
           </div>
         </Dialog>
 
-        <div className="flex flex-col gap-4 p-4">
-          <Header where="/business/manage" text="Manage Rewards" />
+        <Header where="/business/manage" text="Manage Rewards" />
 
-          <p>Define how promoters of your business can spend  points they earned by <br /> bringing you new customers. </p>
+        <p className="break-words">
+          Define how promoters of your business can spend points they earned by bringing you new customers.
+        </p>
 
-          {rewards!.length > 0
-            ? rewards!.map(RewardEntry)
-            : <p className="text-warning text-center text-2xl p-8">There are no active Rewards.</p>}
+        {rewards!.length > 0
+          ? rewards!.map(RewardEntry)
+          : <p className="text-warning text-center text-2xl p-8">There are no active Rewards.</p>}
 
-          <button className="general-button" onClick={() => {
-            setInputOpen(true)
-            setInputValidation('')
-          }}>Add Reward</button>
-        </div>
+        <button className="general-button" onClick={() => {
+          setInputOpen(true)
+          setInputValidation('')
+        }}>Add Reward</button>
       </div>
     </div>
   )

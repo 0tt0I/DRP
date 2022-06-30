@@ -116,17 +116,15 @@ export default function SetDiscounts () {
           </div>
         </Dialog>
 
-        <div className="flex flex-col gap-4 p-4">
-          <Header where="/business/manage" text="Manage Discounts" />
-          <p className='place-self-center'>These are the discounts you are offering to new customers gained by Mira. </p>
-          <p className='place-self-center'>Define the amount of points a promoter should receive for bringing <br /> in a customer that redeems one of these discounts. </p>
+        <Header where="/business/manage" text="Manage Discounts" />
+        <p>These are the discounts you are offering to new customers gained by Mira. </p>
+        <p>Define the amount of points a promoter should receive for bringing <br /> in a customer that redeems one of these discounts. </p>
 
-          {discounts!.length > 0
-            ? discounts!.map(DiscountEntry)
-            : <p className="text-warning text-center text-2xl p-8">There are no active discounts.</p>}
+        {discounts!.length > 0
+          ? discounts!.map(DiscountEntry)
+          : <p className="text-warning text-center text-2xl p-8">There are no active discounts.</p>}
 
-          <button className="general-button" onClick={() => setInputOpen(true)}>Add Discount</button>
-        </div>
+        <button className="general-button" onClick={() => setInputOpen(true)}>Add Discount</button>
       </div>
     </div>
   )
@@ -135,11 +133,11 @@ export default function SetDiscounts () {
     return (
       <div
         key={createHash('sha256').update(JSON.stringify(ref)).digest('hex').toString()}
-        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-max grow">
-        <div className="flex flex-col sm:flex-row gap-4 place-content-start min-w-max grow">
+        className="flex flex-col gap-4 place-content-center p-4 default-div rounded-lg min-w-fit grow">
+        <div className="flex flex-col sm:flex-row gap-4 place-content-start min-w-fit grow">
           <div className="ref-info grid grid-cols-3 grid-flow-row-dense place-content-center gap-2 grow">
             <h1 className="font-bold text-dark-nonblack">Description: </h1>
-            <p className="col-span-2">{ref.description}</p>
+            <p className="col-span-2 break-words">{ref.description}</p>
 
             <h1 className="font-bold text-dark-nonblack w-16">Points Worth: </h1>
             <p className="col-span-2">{ref.points}</p>
