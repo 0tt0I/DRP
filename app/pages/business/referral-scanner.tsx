@@ -142,11 +142,12 @@ export default function BusinessReferralScanner () {
 
         <h2 className="white-div font-bold text-nondark p-2 text-center">{inputValidation}</h2>
 
-        <Dialog open={redeemOpen} onClose={() => setRedeemOpen(false)} className="relative z-50">
+        <Dialog
+          open={redeemOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
-            <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
+            <Dialog.Panel className="w-fit max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Claim Discount
+                <Header onClick={() => setRedeemOpen(false)} text="Claim Discount" />
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
@@ -170,11 +171,11 @@ export default function BusinessReferralScanner () {
           </div>
         </Dialog>
 
-        <Dialog open={claimOpen} onClose={() => setClaimOpen(false)} className="relative z-50">
+        <Dialog open={claimOpen} onClose={() => null} className="relative z-50">
           <div className="fixed inset-0 flex items-center justify-center p-4 drop-shadow-lg">
-            <Dialog.Panel className="w-full max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
+            <Dialog.Panel className="w-fit max-w-md overflow-hidden p-4 text-left align-middle shadow-xl transition-all flex flex-col gap-4 ultralight-div">
               <Dialog.Title as="h3" className="font-bold text-center text-4xl text-dark-nonblack">
-              Claim Reward
+                <Header onClick={() => setClaimOpen(false)} text="Claim Reward" />
               </Dialog.Title>
               <Dialog.Description>
                 <div className="flex flex-col grow text-center">
