@@ -16,7 +16,7 @@ export default function YourBusiness () {
   return (
     <div className="home-div">
       <div className="home-subdiv">
-        <Header where="/business/home" text="Manage discounts and rewards" />
+        <Header where="/business/home" text="Management" />
 
         <div className="home-short-buttondiv">
           <button onClick={() => router.push('/business/manage-discounts')} className="general-button">
