@@ -9,7 +9,7 @@ export default function BusinessQRCode () {
   return (
     <div className="home-div">
       <div className="home-subdiv">
-        <Header where='/business/home' text="Your Business QR Code" />
+        <Header where='/business/home' text="Your QR Code" />
 
         <p className='place-self-center'>Customers need to scan this to make a referral.</p>
 
