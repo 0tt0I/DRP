@@ -116,15 +116,11 @@ body {
 }
 
 .home-subdiv {
-    @apply resp-scale place-self-center flex flex-col gap-4 default-div p-2 sm:p-4;
+    @apply place-self-center flex flex-col gap-4 default-div p-2 sm:p-4;
 }
 
 .home-subdiv-l {
-    @apply resp-scale place-self-center flex flex-col gap-4 lighter-div p-2 sm:p-4;
-}
-
-.home-div > form {
-    @apply resp-scale;
+    @apply place-self-center flex flex-col gap-4 lighter-div p-2 sm:p-4;
 }
 
 .home-subdiv > h1, .home-subdiv-l > h1, .home-header > h1 {
